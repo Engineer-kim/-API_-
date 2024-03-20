@@ -37,7 +37,6 @@ public class MovieListService {
                 new ParameterizedTypeReference<List<Movie>>() {});
         List<Movie> movies = response.getBody();
 
-        // Movie 객체 리스트를 MovieListResponseDto 리스트로 변환합니다.
         return movies.stream().map(movie -> new MovieListResponseDto(
                 movie.getMovieCd(),
                 movie.getMovieNm(),
@@ -47,7 +46,7 @@ public class MovieListService {
                 movie.getGenreAlt(),
                 movie.getDirectors().stream().map(director -> new Director(
                         director.getPeopleNm(),
-                        director.getPeopleNmEn() // Optional 처리는 Director 클래스 내부에서 수행
+                        director.getPeopleNmEn()
                 )).collect(Collectors.toList()),
                 movie.getCompanies().stream().map(company -> new Company(
                         company.getCompanyCd(),

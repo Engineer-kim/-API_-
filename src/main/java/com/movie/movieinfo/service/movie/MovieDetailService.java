@@ -28,7 +28,7 @@ public class MovieDetailService {
 
 
         try {
-            // JSON 문자열을 MovieInfoResponseDto 객체로 변환
+
             MovieInfoResponseDto movieInfoResponseDto = objectMapper.readValue(response, MovieInfoResponseDto.class);
             return movieInfoResponseDto;
         } catch (Exception e) {
