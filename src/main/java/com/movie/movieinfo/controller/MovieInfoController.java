@@ -3,8 +3,11 @@ package com.movie.movieinfo.controller;
 import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
 import com.movie.movieinfo.dto.movie.movieRank.MovieRankResponseDto;
+import com.movie.movieinfo.service.movie.MovieDetailService;
 import com.movie.movieinfo.service.movie.MovieListService;
+import com.movie.movieinfo.service.movie.MovieRankService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,8 @@ import java.util.List;
 public class MovieInfoController {
 
     private  final MovieListService movieListService;
+    private  final MovieDetailService movieDetailService;
+    private  final MovieRankService movieRankService;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -27,9 +32,9 @@ public class MovieInfoController {
 
     @GetMapping("/v1/moviesDetail")
     public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo() {
-      //List<MovieInfoResponseDto> movieListMono = movieInfoService.getAllMovieList(movieRequestInfoDto);
-        //System.out.println(movieListMono);
-        //return new ResponseEntity<>(movieListMono, HttpStatus.OK);
+      MovieInfoResponseDto response = movieDetailService.getDetail();
+        System.out.println(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**일별 박스오피스(오늘의 순위) 엔드포인트(다건 출력)*/
@@ -41,8 +46,9 @@ public class MovieInfoController {
 
     @GetMapping("/v1/moviesRank")
     public ResponseEntity<List<MovieRankResponseDto>> showDailyMoviesRank() {
-        //List<MovieInfoResponseDto> movieListMono = movieInfoService.getAllMovieList(movieRequestInfoDto);
-        //return new ResponseEntity<>(movieListMono, HttpStatus.OK);
+        List<MovieRankResponseDto> response = movieRankService.getRank();
+        System.out.println(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /** 영화 목록 엔드포인트(다건 출력)*/
@@ -54,8 +60,9 @@ public class MovieInfoController {
 
     @GetMapping("/v1/moviesList")
     public ResponseEntity<List<MovieListResponseDto>> getMovieList() {
-        //List<MovieInfoResponseDto> movieListMono = movieInfoService.getAllMovieList(movieRequestInfoDto);
-        //return new ResponseEntity<>(movieListMono, HttpStatus.OK);
+        List<MovieListResponseDto> response = movieListService.getList();
+        System.out.println(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
