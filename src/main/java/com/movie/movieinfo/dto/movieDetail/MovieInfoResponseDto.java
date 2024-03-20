@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MovieInfoResponseDto {
-    /**응답 받을 파라미터(객체)들*/
+    /**영화 상세 정보 응답 받을 파라미터(객체)들*/
 
     /**영화 코드*/
     private String movieCd;

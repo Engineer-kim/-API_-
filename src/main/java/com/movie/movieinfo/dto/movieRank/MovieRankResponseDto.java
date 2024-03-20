@@ -12,7 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @Setter
 public class MovieRankResponseDto {
-    /**박스오피스 조회 일자 */
+    /**박스오피스 조회(일별 순위) 일자 응답파라미터들 */
     private String showRange;
     /**순위*/
     private  String rank;
