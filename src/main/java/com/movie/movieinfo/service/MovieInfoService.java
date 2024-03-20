@@ -24,15 +24,14 @@ public class MovieInfoService {
     private final WebClient webClient;
 
     public MovieInfoService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.xml?key=dasdas").build();
+        this.webClient = webClientBuilder.baseUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=10c83284fa09d1173eb87e683c896ee").build();
     }
 
     public Mono<List<MovieInfoDto>> getAllMovieList(Map<String, String> params) {
         MultiValueMap<String, String> multiValueParams = new LinkedMultiValueMap<>();
         params.forEach(multiValueParams::add);
 
-        // 변환된 MultiValueMap을 사용하여 URI 생성
-        String uriString = UriComponentsBuilder.fromHttpUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.xml?key=dasdas")
+        String uriString = UriComponentsBuilder.fromHttpUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=10c83284fa09d1173eb87e683c896ee")
                 .queryParams(multiValueParams)
                 .toUriString();
 
@@ -41,7 +40,6 @@ public class MovieInfoService {
                 .retrieve()
                 .bodyToMono(String.class);
 
-        // response를 비동기적으로 처리하여 List<MovieInfoDto>로 변환
         return response.flatMap(res -> Mono.just(parseResponseToMovieList(res)));
     }
 

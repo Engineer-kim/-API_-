@@ -24,6 +24,7 @@ public class MovieInfoController {
     @GetMapping("/movies")
     public Mono<ResponseEntity<List<MovieInfoDto>>> getMovies(@RequestParam(required = false) Map<String, String> params) {
         Mono<List<MovieInfoDto>> movieListMono = movieInfoService.getAllMovieList(params);
+        System.out.println(movieListMono);
         return movieListMono.map(movieList -> new ResponseEntity<>(movieList, HttpStatus.OK));
     }
 
