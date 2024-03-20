@@ -1,6 +1,8 @@
 package com.movie.movieinfo.controller;
 
+import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoRequestDto;
 import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
+import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
 import com.movie.movieinfo.dto.movie.movieRank.MovieRankResponseDto;
 import com.movie.movieinfo.service.movie.MovieDetailService;
@@ -31,8 +33,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesDetail")
-    public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo() {
-      MovieInfoResponseDto response = movieDetailService.getDetail();
+    public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo(@RequestParam MovieInfoRequestDto request) {
+      MovieInfoResponseDto response = movieDetailService.getDetail(request);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -59,8 +61,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesList")
-    public ResponseEntity<List<MovieListResponseDto>> getMovieList() {
-        List<MovieListResponseDto> response = movieListService.getList();
+    public ResponseEntity<List<MovieListResponseDto>> getMovieList(@RequestParam MovieListRequestDto request) {
+        List<MovieListResponseDto> response = movieListService.getList(request);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

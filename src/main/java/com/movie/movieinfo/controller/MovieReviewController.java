@@ -16,7 +16,7 @@ public class MovieReviewController {
      * */
     @PostMapping("/v1/saveMovieReview")
     public ResponseEntity<MovieInfoResponseDto> saveMovieReview() {
-
+        return null;
     }
 
     /**리뷰 조회
@@ -26,9 +26,7 @@ public class MovieReviewController {
      * */
     @GetMapping("/v1/getMovieReview")
     public ResponseEntity<MovieInfoResponseDto> getMovieReview() {
-        //List<MovieInfoResponseDto> movieListMono = movieInfoService.getAllMovieList(movieRequestInfoDto);
-        //System.out.println(movieListMono);
-        //return new ResponseEntity<>(movieListMono, HttpStatus.OK);
+        return null;
     }
 
 
@@ -40,9 +38,7 @@ public class MovieReviewController {
      * */
     @DeleteMapping("/v1/removeMovieReview")
     public ResponseEntity<MovieInfoResponseDto> removeMovieReview() {
-        //List<MovieInfoResponseDto> movieListMono = movieInfoService.getAllMovieList(movieRequestInfoDto);
-        //System.out.println(movieListMono);
-        //return new ResponseEntity<>(movieListMono, HttpStatus.OK);
+        return null;
     }
 
 }

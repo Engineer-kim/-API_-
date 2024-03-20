@@ -1,6 +1,7 @@
 package com.movie.movieinfo.service.movie;
 
 
+import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 @Service
 public class MovieListService {
-    public List<MovieListResponseDto> getList() {
+    public List<MovieListResponseDto> getList(MovieListRequestDto request) {
+
+        return (List<MovieListResponseDto>)MovieListRequestDto.builder().build();
     }
 }

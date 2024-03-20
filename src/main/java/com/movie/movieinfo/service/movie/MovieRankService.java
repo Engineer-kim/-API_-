@@ -8,5 +8,6 @@ import java.util.List;
 @Service
 public class MovieRankService {
     public List<MovieRankResponseDto> getRank() {
+        return (List<MovieRankResponseDto>) MovieRankResponseDto.builder().build();
     }
 }
