@@ -1,47 +1,32 @@
 package com.movie.movieinfo.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.movie.movieinfo.entity.User;
+import com.movie.movieinfo.service.user.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Member;
+import java.util.Optional;
 
-@Controller
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class LoginController {
-    @PostMapping("/login") // 세션에 담아주기
-    public String loginv2(@ModelAttribute LoginForm form, Model model,
-                          RedirectAttributes redirectAttributes , HttpServletRequest request) {
-        Member loginMember = loginService.login(form.getLoginId(), form.getPassword());
 
-        System.out.println(loginMember);
+   private  final AuthenticationManager authenticationManager;
 
-        if( loginMember == null) {
-            // 로그인실패
-            model.addAttribute("msg", "로그인실패");
-            return "login/loginForm";
-        }
-        // 로그인 성공
-        HttpSession session = request.getSession();
-        //세션에 로그인 회원정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
-
-        redirectAttributes.addFlashAttribute("msg","로그인 성공");
-        return "redirect:/";
-    }
-
-
-    @PostMapping("/logout")
-    public String logoutv2(HttpServletRequest request) {
-        //세션을 삭제
-        HttpSession session = request.getSession(false);
-        // session이 null이 아니라는건 기존에 세션이 존재했었다는 뜻이므로
-        // 세션이 null이 아니라면 session.invalidate()로 세션 삭제해주기.
-        if(session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 여기서는 단순히 "Authenticated" 문자열을 반환하지만, 실제로는 JWT 토큰을 생성하여 반환할 수 있습니다.
+        return ResponseEntity.ok("Authenticated");
     }
 }

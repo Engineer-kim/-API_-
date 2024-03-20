@@ -1,4 +1,4 @@
-package com.movie.movieinfo.dto.movieReview;
+package com.movie.movieinfo.dto.movie.movieReview;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
-package com.movie.movieinfo.dto.movieDetail;
+package com.movie.movieinfo.dto.movie.movieDetail;
 
-import com.movie.movieinfo.dto.Actor;
-import com.movie.movieinfo.dto.Director;
+import com.movie.movieinfo.dto.movie.Actor;
+import com.movie.movieinfo.dto.movie.Director;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.movie.movieinfo.service;
+package com.movie.movieinfo.service.movie;
 
 
 import org.springframework.stereotype.Service;

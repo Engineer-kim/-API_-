@@ -1,6 +1,6 @@
 package com.movie.movieinfo.controller;
 
-import com.movie.movieinfo.dto.movieDetail.MovieInfoResponseDto;
+import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

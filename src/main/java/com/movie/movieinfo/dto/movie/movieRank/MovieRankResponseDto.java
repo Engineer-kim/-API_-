@@ -1,4 +1,4 @@
-package com.movie.movieinfo.dto.movieRank;
+package com.movie.movieinfo.dto.movie.movieRank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
