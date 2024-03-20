@@ -27,4 +27,9 @@ public class MovieInfoController {
                 .defaultIfEmpty(ResponseEntity.notFound().build()); // 비어있는 경우, 404 Not Found 반환
     }
 
+
+    /**
+     * 예시 응답 엔드 포인트
+     * http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=f5eef3421c602c6cb7ea224104795888
+     * */
 }
