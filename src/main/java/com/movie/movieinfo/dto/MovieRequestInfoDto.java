@@ -7,7 +7,9 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @AllArgsConstructor
 @Jacksonized
-public class MovieInfoDto {
+public class MovieRequestInfoDto {
+    /**요청 할때 사용되는 파라미터들
+     * API키 제외 Optional*/
     private String itemPerPage;
     private String movieName;
     private String directorName;

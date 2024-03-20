@@ -8,6 +8,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 public class MovieInfoResponseDto {
+    /**응답 받을 파라미터(객체)들*/
     private String movieCd;
     private String movieNm;
     private String movieNmEn;

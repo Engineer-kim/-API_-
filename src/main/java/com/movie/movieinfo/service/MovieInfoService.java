@@ -1,13 +1,10 @@
 package com.movie.movieinfo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movie.movieinfo.dto.MovieInfoDto;
+import com.movie.movieinfo.dto.MovieRequestInfoDto;
 import com.movie.movieinfo.dto.MovieInfoResponseDto;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,9 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +27,8 @@ public class MovieInfoService {
         this.objectMapper = objectMapper;
     }
 
-    public Mono<List<MovieInfoResponseDto>> getAllMovieList(MovieInfoDto movieInfoDto) {
-        Map<String, String> dtoMap = objectMapper.convertValue(movieInfoDto, Map.class);
+    public Mono<List<MovieInfoResponseDto>> getAllMovieList(MovieRequestInfoDto movieRequestInfoDto) {
+        Map<String, String> dtoMap = objectMapper.convertValue(movieRequestInfoDto, Map.class);
         MultiValueMap<String, String> multiValueParams = new LinkedMultiValueMap<>();
         dtoMap.forEach((key, value) -> {
             if (value != null) {
@@ -61,21 +56,19 @@ public class MovieInfoService {
             JsonNode movieList = root.path("movieListResult").path("movieList");
             if (movieList.isArray()) {
                 for (JsonNode movieNode : movieList) {
-                    StringBuilder directors = new StringBuilder();
-                    JsonNode directorsNode = movieNode.path("directors");
-                    if (directorsNode.isArray()) {
-                        for (JsonNode directorNode : directorsNode) {
-                            if (directors.length() > 0) directors.append(", ");
-                            directors.append(directorNode.path("peopleNm").asText());
-                        }
-                    }
-                    // 빌더 패턴을 이용한 객체 생성
                     MovieInfoResponseDto dto = MovieInfoResponseDto.builder()
                             .movieCd(movieNode.path("movieCd").asText())
                             .movieNm(movieNode.path("movieNm").asText())
+                            .movieNmEn(movieNode.path("movieNmEn").asText())
                             .openDt(movieNode.path("openDt").asText())
-                            .directors(directors.toString())
-                            // 기타 필드들 설정...
+                            .typeNm(movieNode.path("typeNm").asText())
+                            .prdtStatNm(movieNode.path("prdtStatNm").asText())
+                            .nationAlt(movieNode.path("nationAlt").asText())
+                            .genreAlt(movieNode.path("genreAlt").asText())
+                            .repNationNm(movieNode.path("repNationNm").asText())
+                            .repGenreNm(movieNode.path("repGenreNm").asText())
+                            .directors(movieNode.path("directors").asText())
+                            .companys(movieNode.path("companys").asText())
                             .build();
 
                     movieInfoList.add(dto);
