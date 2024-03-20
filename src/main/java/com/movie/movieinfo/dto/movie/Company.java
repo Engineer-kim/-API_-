@@ -1,8 +1,11 @@
 package com.movie.movieinfo.dto.movie;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Company {
     /**제작사 코드(식별번호)*/
     private String companyCd;

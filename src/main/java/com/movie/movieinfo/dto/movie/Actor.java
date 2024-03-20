@@ -1,8 +1,11 @@
 package com.movie.movieinfo.dto.movie;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Actor {
     /**배우 이름*/
     private String peopleNm; 

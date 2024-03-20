@@ -1,10 +1,13 @@
 package com.movie.movieinfo.dto.movie;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Optional;
 
-@Data
+@Getter
+@Setter
 public class Director {
     /**감독의 이름*/
     private String peopleNm;

@@ -10,9 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Builder
-@AllArgsConstructor
-@Jacksonized
 @Getter
 @Setter
 public class MovieListResponseDto {
@@ -35,4 +32,5 @@ public class MovieListResponseDto {
     private List<Director> directors;
     /**제작사*/
     private List<Company> companies;
+
 }
