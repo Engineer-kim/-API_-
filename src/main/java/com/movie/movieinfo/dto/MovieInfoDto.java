@@ -2,14 +2,12 @@ package com.movie.movieinfo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @AllArgsConstructor
 @Jacksonized
 public class MovieInfoDto {
-    private String key;
     private String itemPerPage;
     private String movieName;
     private String directorName;

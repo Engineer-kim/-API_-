@@ -1,9 +1,11 @@
 package com.movie.movieinfo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.movieinfo.dto.MovieInfoDto;
+import com.movie.movieinfo.dto.MovieInfoResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -12,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,16 +25,23 @@ import java.util.Map;
 public class MovieInfoService {
 
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
-    public MovieInfoService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=10c83284fa09d1173eb87e683c896ee").build();
+    public MovieInfoService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
+        this.webClient = webClientBuilder.baseUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json").build();
+        this.objectMapper = objectMapper;
     }
 
-    public Mono<List<MovieInfoDto>> getAllMovieList(Map<String, String> params) {
+    public Mono<List<MovieInfoResponseDto>> getAllMovieList(MovieInfoDto movieInfoDto) {
+        Map<String, String> dtoMap = objectMapper.convertValue(movieInfoDto, Map.class);
         MultiValueMap<String, String> multiValueParams = new LinkedMultiValueMap<>();
-        params.forEach(multiValueParams::add);
+        dtoMap.forEach((key, value) -> {
+            if (value != null) {
+                multiValueParams.add(key, value);
+            }
+        });
 
-        String uriString = UriComponentsBuilder.fromHttpUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=10c83284fa09d1173eb87e683c896ee")
+        String uriString = UriComponentsBuilder.fromHttpUrl("http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=1d0c83284fa09d1173eb87e683c896ee")
                 .queryParams(multiValueParams)
                 .toUriString();
 
@@ -43,22 +53,39 @@ public class MovieInfoService {
         return response.flatMap(res -> Mono.just(parseResponseToMovieList(res)));
     }
 
-    private List<MovieInfoDto> parseResponseToMovieList(String jsonResponse) {
+    private List<MovieInfoResponseDto> parseResponseToMovieList(String response) {
         ObjectMapper objectMapper = new ObjectMapper();
+        List<MovieInfoResponseDto> movieInfoList = new ArrayList<>();
         try {
-            JsonNode root = objectMapper.readTree(jsonResponse);
-            JsonNode results = root.path("results");
-            List<MovieInfoDto> movieList = new ArrayList<>();
-            if (results.isArray()) {
-                for (JsonNode result : results) {
-                    MovieInfoDto movie = objectMapper.treeToValue(result, MovieInfoDto.class);
-                    movieList.add(movie);
+            JsonNode root = objectMapper.readTree(response);
+            JsonNode movieList = root.path("movieListResult").path("movieList");
+            if (movieList.isArray()) {
+                for (JsonNode movieNode : movieList) {
+                    StringBuilder directors = new StringBuilder();
+                    JsonNode directorsNode = movieNode.path("directors");
+                    if (directorsNode.isArray()) {
+                        for (JsonNode directorNode : directorsNode) {
+                            if (directors.length() > 0) directors.append(", ");
+                            directors.append(directorNode.path("peopleNm").asText());
+                        }
+                    }
+                    // 빌더 패턴을 이용한 객체 생성
+                    MovieInfoResponseDto dto = MovieInfoResponseDto.builder()
+                            .movieCd(movieNode.path("movieCd").asText())
+                            .movieNm(movieNode.path("movieNm").asText())
+                            .openDt(movieNode.path("openDt").asText())
+                            .directors(directors.toString())
+                            // 기타 필드들 설정...
+                            .build();
+
+                    movieInfoList.add(dto);
                 }
             }
-            return movieList;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse the API response", e);
         }
+        return movieInfoList;
     }
+
+
 }

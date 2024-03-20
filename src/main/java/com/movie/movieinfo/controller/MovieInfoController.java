@@ -1,6 +1,7 @@
 package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.MovieInfoDto;
+import com.movie.movieinfo.dto.MovieInfoResponseDto;
 import com.movie.movieinfo.service.MovieInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,11 @@ public class MovieInfoController {
     private  final MovieInfoService movieInfoService;
 
     @GetMapping("/movies")
-    public Mono<ResponseEntity<List<MovieInfoDto>>> getMovies(@RequestParam(required = false) Map<String, String> params) {
-        Mono<List<MovieInfoDto>> movieListMono = movieInfoService.getAllMovieList(params);
-        System.out.println(movieListMono);
-        return movieListMono.map(movieList -> new ResponseEntity<>(movieList, HttpStatus.OK));
+    public Mono<ResponseEntity<List<MovieInfoResponseDto>>> getMovies(MovieInfoDto movieInfoDto) {
+        Mono<List<MovieInfoResponseDto>> movieListMono = movieInfoService.getAllMovieList(movieInfoDto);
+        return movieListMono
+                .map(movieList -> ResponseEntity.ok(movieList)) // ResponseEntity에 상태 코드와 함께 데이터를 담아 반환
+                .defaultIfEmpty(ResponseEntity.notFound().build()); // 비어있는 경우, 404 Not Found 반환
     }
 
 }
