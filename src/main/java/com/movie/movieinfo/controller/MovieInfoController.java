@@ -33,7 +33,7 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesDetail")
-    public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo(@RequestParam MovieInfoRequestDto request) {
+    public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo(@ModelAttribute  MovieInfoRequestDto request) {
       MovieInfoResponseDto response = movieDetailService.getDetail(request);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
