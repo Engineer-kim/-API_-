@@ -11,9 +11,8 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Getter
 @Setter
-public class MovieRequestInfoDto {
+public class MovieInfoRequestDto {
     /**요청 할때 사용되는 파라미터들
      * API키 제외 Optional*/
     private String movieName;
-    private String directorName;
 }
