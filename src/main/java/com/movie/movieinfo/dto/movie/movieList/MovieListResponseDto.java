@@ -33,4 +33,17 @@ public class MovieListResponseDto {
     /**제작사*/
     private List<Company> companies;
 
+    public MovieListResponseDto(String movieCd, String movieNm, String movieNmEn, String prdtYear,
+                                String openDt, String genreAlt, List<Director> directors,
+                                List<Company> companies) {
+        this.movieCd = movieCd;
+        this.movieNm = movieNm;
+        this.movieNmEn = movieNmEn;
+        this.prdtYear = prdtYear;
+        this.openDt = openDt;
+        this.genreAlt = genreAlt;
+        this.directors = directors;
+        this.companies = companies;
+    }
+
 }

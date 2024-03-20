@@ -3,10 +3,12 @@ package com.movie.movieinfo.service.movie;
 
 import com.movie.movieinfo.dto.movie.Company;
 import com.movie.movieinfo.dto.movie.Director;
-import com.movie.movieinfo.dto.movie.movieList.MovieApiResponse;
+import com.movie.movieinfo.dto.movie.movieList.Movie;
 import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,24 +30,29 @@ public class MovieListService {
                 .queryParam("movieName", request.getMovieName())
                 .toUriString();
 
-        ResponseEntity<MovieApiResponse> response = restTemplate.getForEntity(url, MovieApiResponse.class);
+        ResponseEntity<List<Movie>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Movie>>() {});
+        List<Movie> movies = response.getBody();
 
-        return response.getBody().getMovieList().stream().map(movie -> {
-            List<Director> directors = movie.getDirectors().stream()
-                    .map(director -> new Director(director.getPeopleNm()))
-                    .collect(Collectors.toList());
-            List<Company> companies = movie.getCompanies().stream()
-                    .map(company -> new Company(company.getCompanyNm()))
-                    .collect(Collectors.toList());
-            return new MovieListResponseDto(
-                    movie.getMovieCd(),
-                    movie.getMovieNm(),
-                    movie.getMovieNmEn(),
-                    movie.getPrdtYear(),
-                    movie.getOpenDt(),
-                    movie.getGenreAlt(),
-                    directors,
-                    companies);
-        }).collect(Collectors.toList());
+        // Movie 객체 리스트를 MovieListResponseDto 리스트로 변환합니다.
+        return movies.stream().map(movie -> new MovieListResponseDto(
+                movie.getMovieCd(),
+                movie.getMovieNm(),
+                movie.getMovieNmEn(),
+                movie.getPrdtYear(),
+                movie.getOpenDt(),
+                movie.getGenreAlt(),
+                movie.getDirectors().stream().map(director -> new Director(
+                        director.getPeopleNm(),
+                        director.getPeopleNmEn() // Optional 처리는 Director 클래스 내부에서 수행
+                )).collect(Collectors.toList()),
+                movie.getCompanies().stream().map(company -> new Company(
+                        company.getCompanyCd(),
+                        company.getCompanyNm()
+                )).collect(Collectors.toList())
+        )).collect(Collectors.toList());
     }
 }

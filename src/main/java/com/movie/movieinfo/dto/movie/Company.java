@@ -11,4 +11,9 @@ public class Company {
     private String companyCd;
     /**제작사 명*/
     private String companyNm;
+
+    public Company(String companyCd, String companyNm) {
+        this.companyCd = companyCd;
+        this.companyNm = companyNm;
+    }
 }
