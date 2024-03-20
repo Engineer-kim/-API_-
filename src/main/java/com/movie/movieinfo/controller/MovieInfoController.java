@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,9 @@ public class MovieInfoController {
     private  final MovieInfoService movieInfoService;
 
     @GetMapping("/movies")
-    public ResponseEntity<List<MovieInfoDto>> getMovies(@RequestParam(required = false) Map<String, String> params) {
-        List<MovieInfoDto> movieList = movieInfoService.getAllMovieList(params);
-        return new ResponseEntity<>(movieList, HttpStatus.OK);
+    public Mono<ResponseEntity<List<MovieInfoDto>>> getMovies(@RequestParam(required = false) Map<String, String> params) {
+        Mono<List<MovieInfoDto>> movieListMono = movieInfoService.getAllMovieList(params);
+        return movieListMono.map(movieList -> new ResponseEntity<>(movieList, HttpStatus.OK));
     }
 
 }
