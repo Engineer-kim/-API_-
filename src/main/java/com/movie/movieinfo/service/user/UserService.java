@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService{
 
     @Transactional
     public User registerNewUserAccount(JoinRequestDto joinRequestDto) throws UserAlreadyExistsException {
-        if (userRepository.findByUsername(joinRequestDto.getUserName()).isPresent()) {
+        if (userRepository.findByUserName(joinRequestDto.getUserName()).isPresent()) {
             throw new UserAlreadyExistsException("There is an account with that email address: " + joinRequestDto.getUserName());
         }
         User user = User.builder()
@@ -40,10 +40,10 @@ public class UserService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userName));
 
 
         return new org.springframework.security.core.userdetails.User
