@@ -5,6 +5,7 @@ import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapp
 import com.movie.movieinfo.dto.review.ReviewDto;
 import com.movie.movieinfo.service.movie.MovieReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RestController
 @RequestMapping("/movieReview")
 @RequiredArgsConstructor
+@Slf4j
 public class MovieReviewController {
 
     private final MovieReviewService movieReviewService;
@@ -33,6 +35,7 @@ public class MovieReviewController {
             return ResponseEntity.status(UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
         ResponseEntity<String> response = movieReviewService.saveReview(reviewDto);
+        log.info( "ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+ response);
         return response;
     }
 

@@ -41,7 +41,7 @@ public class MovieReviewService {
            Review update = updateExistingReview(existReview.get(), reviewDto);
             log.info(existReview.get().toString());
             log.info(update.toString());
-            return new ResponseEntity<>("Update Success", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Update Success", HttpStatus.OK);
         } catch (Exception e) {
             e.getMessage();
             return new ResponseEntity<>("Update Fail", HttpStatus.INTERNAL_SERVER_ERROR);
