@@ -49,6 +49,14 @@ public class MovieReviewService {
 
 
     }
+    //리뷰 수정하는 메서드
+    private Review updateExistingReview(Review existingReview, ReviewDto reviewDto) {
+        existingReview.setDetail(reviewDto.getDetail());
+        existingReview.setStarCount(reviewDto.getStarCount());
+        existingReview.setTitle(reviewDto.getTitle());
+        return movieReviewRepository.save(existingReview);
+    }
+
 
     // ReviewDto를 Review 엔티티로 변환하는 로직
     private Review convertDtoToEntity(ReviewDto reviewDto) {
@@ -68,15 +76,6 @@ public class MovieReviewService {
             throw new RuntimeException("DTO를 Entity로 변환하는 과정에서 오류가 발생했습니다: " + e.getMessage(), e);
         }
     }
-
-    //리뷰 수정하는 메서드
-    private Review updateExistingReview(Review existingReview, ReviewDto reviewDto) {
-        existingReview.setDetail(reviewDto.getDetail());
-        existingReview.setStarCount(reviewDto.getStarCount());
-        existingReview.setTitle(reviewDto.getTitle());
-        return movieReviewRepository.save(existingReview);
-    }
-
     public boolean findUserReview(String userId, String movieCd) {
         Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {
