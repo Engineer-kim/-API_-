@@ -50,5 +50,4 @@ public class UserService implements UserDetailsService{
                 (user.getUserName(), user.getPassword(), Collections.emptyList());
     }
 
-
 }
