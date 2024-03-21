@@ -1,7 +1,11 @@
 package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
+import com.movie.movieinfo.dto.review.ReviewDto;
+import com.movie.movieinfo.service.movie.MovieReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MovieReviewController {
 
+    private final MovieReviewService movieReviewService;
+
     /**리뷰 작성
      * 데이터 존재시 수정으로 판단 -> 수정 쿼리 실행
      * 데이터 미존재 신규 작성으로 판단 -> 인서트 쿼리 실행
      * */
     @PostMapping("/v1/saveMovieReview")
-    public ResponseEntity<MovieInfoResponseWrapperDto> saveMovieReview() {
-        return null;
+    public ResponseEntity<?> saveMovieReview(@RequestBody ReviewDto reviewDto) {
+        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
+        }
+         response = movieReviewService.saveReview(reviewDto);
+        return ResponseEntity<response>.;
     }
 
     /**리뷰 조회
@@ -25,7 +35,10 @@ public class MovieReviewController {
      * 없다면 ->  커스텀 에러
      * */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<MovieInfoResponseWrapperDto> getMovieReview() {
+    public ResponseEntity<ReviewDto> getMovieReview(@RequestBody ReviewDto reviewDto) {
+        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
+        }
         return null;
     }
 
@@ -37,7 +50,7 @@ public class MovieReviewController {
      * 없다면 -> 커스텀 에러
      * */
     @DeleteMapping("/v1/removeMovieReview")
-    public ResponseEntity<MovieInfoResponseWrapperDto> removeMovieReview() {
+    public ResponseEntity<ReviewDto> removeMovieReview() {
         return null;
     }
 
