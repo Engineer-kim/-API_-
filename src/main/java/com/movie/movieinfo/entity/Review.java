@@ -1,9 +1,6 @@
 package com.movie.movieinfo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -15,13 +12,14 @@ import lombok.*;
 @Table(name = "user_review")
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false ,unique = true)
     private Integer seq;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "starCount", nullable = false)
+    @Column(name = "star_count", nullable = false)
     private float starCount;
 
     @Column(name = "detail", nullable = false, length = 300)
@@ -31,6 +29,6 @@ public class Review {
     private String userId;
 
     @Column(name = "movie_cd", nullable = false, length = 100)
-    private String movieCd;
+    private String movieCode;
 
 }

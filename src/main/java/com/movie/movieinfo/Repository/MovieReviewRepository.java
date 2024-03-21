@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface MovieReviewRepository extends JpaRepository<Review, Integer> {
     Optional<Review> findByUserIdAndMovieCode(String userId, String movieCode);
-    void deleteByUserIdAndMovieCode(String userId, String movieCd);
+    void deleteByUserIdAndMovieCode(String userId, String movieCode);
 
-    Integer findByUserIdAndMovieCodeCount(String userId, String movieCd);
+    Integer countByUserIdAndMovieCode(String userId, String movieCode);
 }

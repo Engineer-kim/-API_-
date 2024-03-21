@@ -21,7 +21,7 @@ public class MovieReviewService {
 
     public ResponseEntity<String> saveReview(ReviewDto reviewDto) {
         //데이터 있는지 찿기 , 있다면 수정 없다면 인서트
-        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(reviewDto.getUserId(), reviewDto.getMovieCd());
+        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(reviewDto.getUserId(), reviewDto.getMovieCode());
         if (!existReview.isPresent()) {
             // 새 리뷰 데이터로 판단 -> 삽입 로직
             Review newReview = convertDtoToEntity(reviewDto);
@@ -54,7 +54,7 @@ public class MovieReviewService {
     private Review convertDtoToEntity(ReviewDto reviewDto) {
         try {
             Review review = Review.builder()
-                    .movieCd(reviewDto.getMovieCd())
+                    .movieCode(reviewDto.getMovieCode())
                     .userId(reviewDto.getUserId())
                     .starCount(reviewDto.getStarCount())
                     .seq(reviewDto.getSeq())
@@ -78,7 +78,7 @@ public class MovieReviewService {
     }
 
     public boolean findUserReview(String userId, String movieCd) {
-        Integer existReview = movieReviewRepository.findByUserIdAndMovieCodeCount(userId, movieCd);
+        Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {
             return false;
         }
@@ -86,7 +86,7 @@ public class MovieReviewService {
     }
 
     public boolean deleteReview(String userId, String movieCd) {
-        Integer existReview = movieReviewRepository.findByUserIdAndMovieCodeCount(userId, movieCd);
+        Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {
             //해당 회원이 쓴 리뷰가 없어서 삭제 불가
             return false;

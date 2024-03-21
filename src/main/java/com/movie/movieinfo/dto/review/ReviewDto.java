@@ -19,5 +19,5 @@ public class ReviewDto {
     /**게시물 순번*/
     private Integer seq;
     /**영화 코드*/
-    private String movieCd;
+    private String movieCode;
 }
