@@ -12,5 +12,5 @@ public class BoxOfficeResult {
     private String boxofficeType;
     private String showRange;
     @JsonProperty("dailyBoxOfficeList")
-    private List<Movie> movieList;
+    private List<MovieRank> movieRankList;
 }

@@ -1,9 +1,8 @@
 package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
-import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
-import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
-import com.movie.movieinfo.dto.movie.movieRank.response.Movie;
+import com.movie.movieinfo.dto.movie.movieList.MovieList;
+import com.movie.movieinfo.dto.movie.movieRank.response.MovieRank;
 import com.movie.movieinfo.service.movie.MovieDetailService;
 import com.movie.movieinfo.service.movie.MovieListService;
 import com.movie.movieinfo.service.movie.MovieRankService;
@@ -11,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +36,7 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesDetail")
-    public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd) {
+    public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd){
       MovieInfoResponseWrapperDto response = movieDetailService.getDetail(movieCd);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -48,8 +50,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesRank")
-    public ResponseEntity<List<Movie>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
-        List<Movie> response = movieRankService.getRank(targetDt);
+    public ResponseEntity<List<MovieRank>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
+        List<MovieRank> response = movieRankService.getRank(targetDt);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -62,8 +64,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesList")
-    public ResponseEntity<List<MovieListResponseDto>> getMovieList(@RequestParam MovieListRequestDto request) {
-        List<MovieListResponseDto> response = movieListService.getList(request);
+    public ResponseEntity<List<MovieList>> getMovieList() {
+        List<MovieList> response = movieListService.getList();
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

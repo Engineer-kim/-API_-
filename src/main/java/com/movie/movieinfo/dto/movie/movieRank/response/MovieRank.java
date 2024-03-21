@@ -1,15 +1,11 @@
 package com.movie.movieinfo.dto.movie.movieRank.response;
 
-import com.movie.movieinfo.dto.movie.Company;
-import com.movie.movieinfo.dto.movie.Director;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
 @Getter
 @Setter
-public class Movie {
+public class MovieRank {
     private String rnum;
     private String rank;
     private String rankInten;
@@ -29,6 +25,6 @@ public class Movie {
     private String scrnCnt;
     private String showCnt;
 
-    public Movie() {
+    public MovieRank() {
     }
 }

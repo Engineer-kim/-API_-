@@ -22,18 +22,18 @@ public class MovieDetailService {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("key", key)
-                .queryParam("movieCd",movieCd);
+                .queryParam("movieCd", movieCd);
 
         System.out.println(uriBuilder.toUriString());
         String responseString = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
         try {
             MovieInfoResponseWrapperDto response = objectMapper.readValue(responseString, MovieInfoResponseWrapperDto.class);
             return response;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
             e.getStackTrace();
         }
-    return null;
+        return null;
 
     }
 }
