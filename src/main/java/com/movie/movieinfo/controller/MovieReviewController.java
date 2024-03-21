@@ -21,12 +21,12 @@ public class MovieReviewController {
      * 데이터 미존재 신규 작성으로 판단 -> 인서트 쿼리 실행
      * */
     @PostMapping("/v1/saveMovieReview")
-    public ResponseEntity<?> saveMovieReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<String> saveMovieReview(@RequestBody ReviewDto reviewDto) {
         if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
-         response = movieReviewService.saveReview(reviewDto);
-        return ResponseEntity<response>.;
+        ResponseEntity<String> response = movieReviewService.saveReview(reviewDto);
+        return response;
     }
 
     /**리뷰 조회
