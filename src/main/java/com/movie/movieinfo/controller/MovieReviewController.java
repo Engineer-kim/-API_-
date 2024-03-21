@@ -33,13 +33,14 @@ public class MovieReviewController {
      * 데이터 있는지부터 체크
      * 있다면 -> 조회한거 보여주기
      * 없다면 ->  커스텀 에러
+     * 단건 출력
      * */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<ReviewDto> getMovieReview(@RequestBody ReviewDto reviewDto) {
-        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+    public ResponseEntity<?> getMovieReview(@RequestParam("user_id") String userId ,@RequestParam("movie_cd") String movieCd) {
+        if(userId.isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
-        return null;
+        return movieReviewService.findUserReview(userId, movieCd);
     }
 
 
@@ -48,10 +49,13 @@ public class MovieReviewController {
      * 데이터 있는지부터 체크
      * 있다면 -> 삭제
      * 없다면 -> 커스텀 에러
+     * 단건 출력
      * */
     @DeleteMapping("/v1/removeMovieReview")
     public ResponseEntity<ReviewDto> removeMovieReview() {
-        return null;
+        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
+        }
     }
 
 }

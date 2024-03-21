@@ -5,13 +5,10 @@ import com.movie.movieinfo.dto.review.ReviewDto;
 import com.movie.movieinfo.entity.Review;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Struct;
 import java.util.Optional;
 
 @Slf4j
@@ -77,5 +74,13 @@ public class MovieReviewService {
         existingReview.setStarCount(reviewDto.getStarCount());
         existingReview.setTitle(reviewDto.getTitle());
         return movieReviewRepository.save(existingReview);
+    }
+
+    public ResponseEntity<?> findUserReview(String userId, String movieCd) {
+        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
+        if (!existReview.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 회원의 리뷰를 찾을 수 없습니다.");
+        }
+        return new ResponseEntity<>(existReview, HttpStatus.OK);
     }
 }
