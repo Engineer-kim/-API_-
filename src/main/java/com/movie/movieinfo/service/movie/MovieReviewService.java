@@ -83,4 +83,14 @@ public class MovieReviewService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(existReview) ;
     }
+
+    public boolean deleteReview(String userId, String movieCd) {
+        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
+        if (!existReview.isPresent()) {
+            //해당 회원이 쓴 리뷰가 없어서 삭제 불가
+            return false;
+        }
+        movieReviewRepository.deleteByUserIdAndMovieCode(userId , movieCd);
+        return true;
+    }
 }

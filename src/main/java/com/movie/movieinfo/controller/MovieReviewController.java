@@ -22,7 +22,8 @@ public class MovieReviewController {
      * */
     @PostMapping("/v1/saveMovieReview")
     public ResponseEntity<String> saveMovieReview(@RequestBody ReviewDto reviewDto) {
-        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+        if(reviewDto.getUserId().isEmpty()){
+            //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
         ResponseEntity<String> response = movieReviewService.saveReview(reviewDto);
@@ -36,8 +37,9 @@ public class MovieReviewController {
      * 단건 출력
      * */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<?> getMovieReview(@RequestParam("user_id") String userId ,@RequestParam("movie_cd") String movieCd) {
-        if(userId.isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
+    public ResponseEntity<?> getMovieReview(@RequestParam("userId") String userId ,@RequestParam("movieCd") String movieCd) {
+        if(userId.isEmpty()){
+            //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
         return movieReviewService.findUserReview(userId, movieCd);
@@ -52,10 +54,18 @@ public class MovieReviewController {
      * 단건 출력
      * */
     @DeleteMapping("/v1/removeMovieReview")
-    public ResponseEntity<ReviewDto> removeMovieReview() {
-        if(reviewDto.getUserId().isEmpty()){ //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인후 시도 해주세요");
+    public ResponseEntity<String> removeMovieReview(@RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+        if(userId.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 시도 해주세요.");
         }
+        boolean isDeleted = movieReviewService.deleteReview(userId, movieCd);
+        if (!isDeleted) {
+            // 삭제 실패 시(해당 회원이 작성한 리뷰가 없는 경우)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리뷰를 찾을 수 없거나 삭제할 권한이 없습니다.");
+        }
+
+        // 삭제 성공시
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 되었습니다");
     }
 
 }
