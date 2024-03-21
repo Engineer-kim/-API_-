@@ -22,7 +22,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)  //csrf 비활성화 test를 위함
                 .authorizeHttpRequests(authorize -> authorize
                         //로그인 페이지 및 홈페이지만 미인증시 접근가능
                         .requestMatchers("/login", "/").permitAll()
@@ -44,6 +43,7 @@ public class SecurityConfig {
                         .deleteCookies("clearCookie")
                         .permitAll()
                 );
+        http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 }
