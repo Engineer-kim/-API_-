@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movieInfo/")
+@RequestMapping("/movieInfo")
 @RequiredArgsConstructor
 public class MovieInfoController {
 
