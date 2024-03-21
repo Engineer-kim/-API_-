@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
@@ -26,17 +25,23 @@ public class ReviewTestCode {
         // 테스트 데이터 준비
         Review review = new Review();
         review.setUserId("user1");
+        review.setTitle("title1");
+        review.setDetail("detail1");
+        review.setStarCount(5.0F);
         review.setMovieCode("movie123");
         // 더 필요한 필드 설정
         movieReviewRepository.save(review);
 
         // 테스트 실행
         Optional<Review> foundReview = movieReviewRepository.findByUserIdAndMovieCode("user1", "movie123");
-
+        System.out.println("scaaaaaaaaaaaaaaaaaaaaaaaaa"+ foundReview);
         // 검증
         assertThat(foundReview).isPresent();
         assertThat(foundReview.get().getUserId()).isEqualTo("user1");
         assertThat(foundReview.get().getMovieCode()).isEqualTo("movie123");
+        assertThat(foundReview.get().getTitle()).isEqualTo("title1");
+        assertThat(foundReview.get().getDetail()).isEqualTo("detail1");
+        assertThat(foundReview.get().getStarCount()).isEqualTo(5.0f);
     }
 
     @Test
@@ -44,6 +49,8 @@ public class ReviewTestCode {
         // 테스트 데이터 준비
         Review review = new Review();
         review.setUserId("user2");
+        review.setTitle("title2");
+        review.setDetail("detail2");
         review.setMovieCode("movie456");
         // 더 필요한 필드 설정
         movieReviewRepository.save(review);
@@ -61,6 +68,8 @@ public class ReviewTestCode {
         // 테스트 데이터 준비
         Review review = new Review();
         review.setUserId("user3");
+        review.setTitle("title3");
+        review.setDetail("detail3");
         review.setMovieCode("movie789");
         // 더 필요한 필드 설정
         movieReviewRepository.save(review);
