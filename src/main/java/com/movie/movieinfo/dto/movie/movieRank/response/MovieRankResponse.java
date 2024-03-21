@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MovieRankResponse {
+    /**Wrapper DTO*/
     @JsonProperty("boxOfficeResult")
     private BoxOfficeResult boxOfficeResult;
 }

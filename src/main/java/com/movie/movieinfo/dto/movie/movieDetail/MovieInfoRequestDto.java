@@ -16,3 +16,5 @@ public class MovieInfoRequestDto {
      * API키 제외 Optional*/
     private String movieName;
 }
+
+

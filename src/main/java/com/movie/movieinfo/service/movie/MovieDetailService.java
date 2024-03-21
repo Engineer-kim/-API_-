@@ -1,8 +1,7 @@
 package com.movie.movieinfo.service.movie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoRequestDto;
-import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
+import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,16 +14,26 @@ public class MovieDetailService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public MovieInfoResponseDto getDetail(MovieInfoRequestDto request) {
-        final String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
+    public MovieInfoResponseWrapperDto getDetail(String movieCd) {
+        final String baseUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
 
         final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
+
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("key", key)
-                .queryParam("movieNm", request.getMovieName());
+                .queryParam("movieCd",movieCd);
 
-        String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
-        return null;
+        System.out.println(uriBuilder.toUriString());
+        String responseString = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
+        try {
+            MovieInfoResponseWrapperDto response = objectMapper.readValue(responseString, MovieInfoResponseWrapperDto.class);
+            return response;
+        }catch (Exception e){
+            e.getMessage();
+            e.getStackTrace();
+        }
+    return null;
+
     }
 }

@@ -1,6 +1,6 @@
 package com.movie.movieinfo.controller;
 
-import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
+import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class MovieReviewController {
      * 데이터 미존재 신규 작성으로 판단 -> 인서트 쿼리 실행
      * */
     @PostMapping("/v1/saveMovieReview")
-    public ResponseEntity<MovieInfoResponseDto> saveMovieReview() {
+    public ResponseEntity<MovieInfoResponseWrapperDto> saveMovieReview() {
         return null;
     }
 
@@ -25,7 +25,7 @@ public class MovieReviewController {
      * 없다면 ->  커스텀 에러
      * */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<MovieInfoResponseDto> getMovieReview() {
+    public ResponseEntity<MovieInfoResponseWrapperDto> getMovieReview() {
         return null;
     }
 
@@ -37,7 +37,7 @@ public class MovieReviewController {
      * 없다면 -> 커스텀 에러
      * */
     @DeleteMapping("/v1/removeMovieReview")
-    public ResponseEntity<MovieInfoResponseDto> removeMovieReview() {
+    public ResponseEntity<MovieInfoResponseWrapperDto> removeMovieReview() {
         return null;
     }
 

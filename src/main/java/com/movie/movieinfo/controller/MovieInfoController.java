@@ -1,7 +1,6 @@
 package com.movie.movieinfo.controller;
 
-import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoRequestDto;
-import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
+import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
 import com.movie.movieinfo.dto.movie.movieRank.response.Movie;
@@ -35,8 +34,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesDetail")
-    public ResponseEntity<MovieInfoResponseDto> getMovieDetailInfo(@ModelAttribute  MovieInfoRequestDto request) {
-      MovieInfoResponseDto response = movieDetailService.getDetail(request);
+    public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd) {
+      MovieInfoResponseWrapperDto response = movieDetailService.getDetail(movieCd);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -49,8 +48,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesRank")
-    public ResponseEntity<List<Movie>> showDailyMoviesRank(@RequestParam("date") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDate) {
-        List<Movie> response = movieRankService.getRank(targetDate);
+    public ResponseEntity<List<Movie>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
+        List<Movie> response = movieRankService.getRank(targetDt);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
