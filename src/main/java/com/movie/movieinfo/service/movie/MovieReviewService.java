@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -76,17 +77,17 @@ public class MovieReviewService {
         return movieReviewRepository.save(existingReview);
     }
 
-    public ResponseEntity<?> findUserReview(String userId, String movieCd) {
-        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
-        if (!existReview.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body("해당 회원의 리뷰를 찾을 수 없습니다.");
+    public boolean findUserReview(String userId, String movieCd) {
+        Integer existReview = movieReviewRepository.findByUserIdAndMovieCodeCount(userId, movieCd);
+        if (existReview < 1) {
+            return false;
         }
-        return ResponseEntity.status(HttpStatus.OK).body(existReview) ;
+        return true;
     }
 
     public boolean deleteReview(String userId, String movieCd) {
-        Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
-        if (!existReview.isPresent()) {
+        Integer existReview = movieReviewRepository.findByUserIdAndMovieCodeCount(userId, movieCd);
+        if (existReview < 1) {
             //해당 회원이 쓴 리뷰가 없어서 삭제 불가
             return false;
         }
