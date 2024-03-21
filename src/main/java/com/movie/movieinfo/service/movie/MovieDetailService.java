@@ -16,7 +16,7 @@ public class MovieDetailService {
     private final ObjectMapper objectMapper;
 
     public MovieInfoResponseDto getDetail(MovieInfoRequestDto request) {
-        final  String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
+        final String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
 
         final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
@@ -25,15 +25,6 @@ public class MovieDetailService {
                 .queryParam("movieNm", request.getMovieName());
 
         String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
-
-
-        try {
-
-            MovieInfoResponseDto movieInfoResponseDto = objectMapper.readValue(response, MovieInfoResponseDto.class);
-            return movieInfoResponseDto;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return null;
     }
 }

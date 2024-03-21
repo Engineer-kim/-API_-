@@ -4,15 +4,17 @@ import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoRequestDto;
 import com.movie.movieinfo.dto.movie.movieDetail.MovieInfoResponseDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListRequestDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieListResponseDto;
-import com.movie.movieinfo.dto.movie.movieRank.MovieRankResponseDto;
+import com.movie.movieinfo.dto.movie.movieRank.response.Movie;
 import com.movie.movieinfo.service.movie.MovieDetailService;
 import com.movie.movieinfo.service.movie.MovieListService;
 import com.movie.movieinfo.service.movie.MovieRankService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -47,8 +49,8 @@ public class MovieInfoController {
      * */
 
     @GetMapping("/v1/moviesRank")
-    public ResponseEntity<List<MovieRankResponseDto>> showDailyMoviesRank() {
-        List<MovieRankResponseDto> response = movieRankService.getRank();
+    public ResponseEntity<List<Movie>> showDailyMoviesRank(@RequestParam("date") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDate) {
+        List<Movie> response = movieRankService.getRank(targetDate);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
