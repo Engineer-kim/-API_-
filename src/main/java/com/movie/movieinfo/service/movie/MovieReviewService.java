@@ -79,8 +79,8 @@ public class MovieReviewService {
     public ResponseEntity<?> findUserReview(String userId, String movieCd) {
         Optional<Review> existReview = movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
         if (!existReview.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 회원의 리뷰를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.OK).body("해당 회원의 리뷰를 찾을 수 없습니다.");
         }
-        return new ResponseEntity<>(existReview, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(existReview) ;
     }
 }
