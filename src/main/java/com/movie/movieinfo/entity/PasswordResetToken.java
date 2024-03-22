@@ -14,16 +14,14 @@ import java.util.Date;
 @Table(name = "user_token")
 public class PasswordResetToken {
 
-
     @Id
-    @Column(name = "userId", nullable = false, length = 100)
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "token", nullable = false, length = 500)
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @MapsId
     @JoinColumn(nullable = false, name = "userId")
     private User user;
 

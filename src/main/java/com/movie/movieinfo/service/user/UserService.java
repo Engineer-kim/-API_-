@@ -100,20 +100,27 @@ public class UserService implements UserDetailsService{
 
     private void savePasswordResetToken(String token, User user) {
         PasswordResetToken myToken = PasswordResetToken.builder()
-                .userId(user.getUserId())
                 .token(token)
                 .user(user)
                 .expiryDate(calculateExpiryDate(EXPIRATION)).build();
         System.out.println(myToken.toString());
-        System.out.println(myToken.getUserId());
         passwordResetTokenRepository.save(myToken);
     }
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(new Date().getTime());
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        calendar.add(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // 1초를 빼서 이전 날의 23시 59분 59초로 설정합니다.
+        calendar.add(Calendar.SECOND, -1);
+        System.out.println("calendar.getTime():::::::::::::::::::"+calendar.getTime());
+        return calendar.getTime();
     }
 
     public boolean isTokenExpired(PasswordResetToken token) {
@@ -129,7 +136,7 @@ public class UserService implements UserDetailsService{
             return new CustomResponse(400, "토큰이 유효하지않거나 만료 되었습니다.");
         }
         // 토큰에 해당하는 사용자 찾기
-        User user = userRepository.findById(passwordResetToken.getUserId()).orElse(null);
+        User user = passwordResetToken.getUser();
         if (user == null) {
             return new CustomResponse(404, "해당 토큰에 대응하는 사용자를 찾을 수 없습니다.");
         }

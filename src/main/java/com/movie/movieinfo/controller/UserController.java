@@ -74,6 +74,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new CustomResponse(HttpStatus.NOT_FOUND.value(), "해당 이메일로 가입된 정보가 없습니다"));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new CustomResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "비밀번호 재설정 링크 전송 중 에러가 발생했습니다."));
         }
