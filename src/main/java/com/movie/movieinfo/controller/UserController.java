@@ -34,12 +34,9 @@ public class UserController {
 
     /**아이디 찿기 기능 API*/
     @GetMapping("/v1/findUserId")
-    public ResponseEntity<?> findUserIdsByEmail(@RequestParam String email) {
-        List<String> userIds = userService.findUserByEmail(email);
-        if (userIds.isEmpty()) {
-            return ResponseEntity.ok("가입된 계정정보가 없습니다");
-        }
-        return ResponseEntity.ok().body(userIds);
+    public ResponseEntity<CustomResponse> getUserIdsByEmail(@RequestParam String email) {
+        CustomResponse response = userService.findUserIdsByEmailResponse(email);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
     }
 
 }

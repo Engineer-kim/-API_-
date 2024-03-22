@@ -70,6 +70,15 @@ public class UserService implements UserDetailsService{
                 .map(User::getId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
                 .collect(Collectors.toList()); //("id1", "id2")
     }
+    public CustomResponse findUserIdsByEmailResponse(String email) {
+        List<String> userIds = findUserByEmail(email);
+        if (userIds.isEmpty()) {
+            return new CustomResponse(404, "해당 이메일로 등록된 사용자를 찾을 수 없습니다.");
+        } else {
+            return new CustomResponse(200, userIds.toString());
+        }
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

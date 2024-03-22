@@ -23,8 +23,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         //하위 엔드포인트는 미인증이여도 접근가능하게끔
-                        .requestMatchers("/login", "/" ,"/api/auth/v1/findUserId" ,
-                                "/api/auth/v1/register" , "/api/auth/v1/duplicateCheckId").permitAll()
+                        .requestMatchers("/login", "/" ,"/api/auth/v1/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
