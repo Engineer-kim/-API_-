@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService{
     
     /**패스워드 초기화 로직*/
     public void sendPasswordResetLink(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findOneByUserEmailOrderBySignDateDesc(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         String token = UUID.randomUUID().toString();
@@ -109,12 +109,41 @@ public class UserService implements UserDetailsService{
         return new Date(cal.getTime().getTime());
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public boolean isTokenExpired(PasswordResetToken token) {
+       Date expiryDate = calculateExpiryDate(EXPIRATION);
+       return  token.getExpiryDate().before(new Date());
+    }
 
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + userName));
+    public CustomResponse  resetPassword(String token, String newPassword) {
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+
+        // 토큰 유효성 검사
+        if (passwordResetToken == null || isTokenExpired(passwordResetToken)) {
+            return new CustomResponse(400, "토큰이 유효하지않거나 만료 되었습니다.");
+        }
+        // 토큰에 해당하는 사용자 찾기
+        User user = userRepository.findById(passwordResetToken.getUserId()).orElse(null);
+        if (user == null) {
+            return new CustomResponse(404, "해당 토큰에 대응하는 사용자를 찾을 수 없습니다.");
+        }
+        
+        // 새 비밀번호 설정
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        // 토큰 사용 처리(토큰 삭제)
+        passwordResetTokenRepository.delete(passwordResetToken);
+
+        return new CustomResponse(200, "비밀번호가 성공적으로 재설정되었습니다.");
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + username));
         return new org.springframework.security.core.userdetails.User
                 (user.getUserName(), user.getUserId(), Collections.emptyList());
     }
 }
+

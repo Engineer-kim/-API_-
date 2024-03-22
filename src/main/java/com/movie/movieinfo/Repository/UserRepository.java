@@ -13,6 +13,9 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUserName(String userName);
 
     List<User> findByUserEmail(String email);
+    
+    //가장 최근에 회원가입 된 계정으로 찿아오기
+    Optional<User> findOneByUserEmailOrderBySignDateDesc(String email);
 
-    Optional<User> findByEmail(String userEmail);
+
 }

@@ -1,4 +1,4 @@
-package com.movie.movieinfo;
-
-public class SessionCheckTestCode {
-}
+//package com.movie.movieinfo;
+//
+//public class SessionCheckTestCode {
+//}
