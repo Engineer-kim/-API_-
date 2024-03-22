@@ -9,6 +9,8 @@ import com.movie.movieinfo.exception.UserEmailNotFoundException;
 import com.movie.movieinfo.response.CustomResponse;
 import com.movie.movieinfo.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -84,9 +86,7 @@ public class UserService implements UserDetailsService{
     }
     
     /**패스워드 초기화 로직*/
-    public void sendPasswordResetLink(String userEmail) {
-
-        userRepository.countByUserEmail(userEmail);
+    public void sendPasswordResetLink(String userEmail){
         System.out.println(userRepository.countByUserEmail(userEmail));
         User user = userRepository.findOneByUserEmailOrderBySignDateDesc(userEmail)
                 .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
@@ -100,9 +100,12 @@ public class UserService implements UserDetailsService{
 
     private void savePasswordResetToken(String token, User user) {
         PasswordResetToken myToken = PasswordResetToken.builder()
+                .userId(user.getUserId())
                 .token(token)
                 .user(user)
                 .expiryDate(calculateExpiryDate(EXPIRATION)).build();
+        System.out.println(myToken.toString());
+        System.out.println(myToken.getUserId());
         passwordResetTokenRepository.save(myToken);
     }
 

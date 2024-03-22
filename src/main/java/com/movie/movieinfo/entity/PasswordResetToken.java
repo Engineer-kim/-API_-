@@ -11,11 +11,11 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user_token")
 public class PasswordResetToken {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userId", nullable = false, length = 100)
     private String userId;
 
@@ -23,7 +23,8 @@ public class PasswordResetToken {
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "id")
+    @MapsId
+    @JoinColumn(nullable = false, name = "userId")
     private User user;
 
     @Column(name = "expiryDate", nullable = false)

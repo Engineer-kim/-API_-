@@ -67,6 +67,7 @@ public class UserController {
     @PostMapping("/v1/resetPassword/request")
     public ResponseEntity<CustomResponse> sendResetPasswordLink(@RequestBody String userEmail) {
         try {
+            System.out.println("Controller :::::::::::::::::::::::::::" +userEmail);
             userService.sendPasswordResetLink(userEmail);
             return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(), "비밀번호 재설정 링크가 입력하신 이메일로 성공적으로 전송되었습니다."));
         } catch (UserEmailNotFoundException e) {
