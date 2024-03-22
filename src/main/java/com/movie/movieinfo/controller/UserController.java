@@ -39,4 +39,18 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
     }
 
+    /**비밀 번호 초기화*/
+    @GetMapping("/v1/resetPassword")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+
+        return "resetPasswordForm";
+    }
+    @PostMapping("/v1/reset-password")
+    public String resetPassword(@RequestParam("token") String token,
+                                @RequestParam("password") String password) {
+        // 토큰 유효성 검사 및 비밀번호 업데이트 로직
+        return "redirect:/login";
+    }
+
+
 }

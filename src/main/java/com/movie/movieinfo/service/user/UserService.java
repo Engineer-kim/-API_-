@@ -1,14 +1,14 @@
 package com.movie.movieinfo.service.user;
 
+import com.movie.movieinfo.Repository.PasswordResetTokenRepository;
 import com.movie.movieinfo.Repository.UserRepository;
 import com.movie.movieinfo.dto.user.JoinRequestDto;
+import com.movie.movieinfo.entity.PasswordResetToken;
 import com.movie.movieinfo.entity.User;
-import com.movie.movieinfo.exception.UserAlreadyExistsException;
 import com.movie.movieinfo.response.CustomResponse;
+import com.movie.movieinfo.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,12 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +28,11 @@ public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final EmailService emailService;
+
+    //패스워드 초기화 만료 시간 (24시간)
+    private static final int EXPIRATION = 60 * 24;
     @Transactional
     public ResponseEntity<?> registerNewUserAccount(JoinRequestDto joinRequestDto) {
         // 사용자 ID로 기존 사용자 존재 여부를 확인
@@ -43,7 +46,7 @@ public class UserService implements UserDetailsService{
         User user = User.builder()
                 .dbSts(joinRequestDto.getDbSts())
                 .userName(joinRequestDto.getUserName())
-                .id(joinRequestDto.getUserId())
+                .userId(joinRequestDto.getUserId())
                 .userEmail(joinRequestDto.getUserEmail())
                 .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
                 .signDate(LocalDateTime.now())
@@ -67,7 +70,7 @@ public class UserService implements UserDetailsService{
     public List<String> findUserByEmail(String email) {
         return userRepository.findByUserEmail(email)
                 .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
-                .map(User::getId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
+                .map(User::getUserId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
                 .collect(Collectors.toList()); //("id1", "id2")
     }
     public CustomResponse findUserIdsByEmailResponse(String email) {
@@ -78,7 +81,33 @@ public class UserService implements UserDetailsService{
             return new CustomResponse(200, userIds.toString());
         }
     }
+    
+    /**패스워드 초기화 로직*/
+    public void sendPasswordResetLink(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
+        String token = UUID.randomUUID().toString();
+        savePasswordResetToken(token, user);
+
+        String resetLink = "http://localhost:8080/v1/resetPassword?token=" + token;
+        emailService.sendEmail(userEmail, resetLink);
+    }
+
+    private void savePasswordResetToken(String token, User user) {
+        PasswordResetToken myToken = PasswordResetToken.builder()
+                .token(token)
+                .user(user)
+                .expiryDate(calculateExpiryDate(EXPIRATION)).build();
+        passwordResetTokenRepository.save(myToken);
+    }
+
+    private Date calculateExpiryDate(int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(new Date().getTime());
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -86,8 +115,6 @@ public class UserService implements UserDetailsService{
         User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + userName));
         return new org.springframework.security.core.userdetails.User
-                (user.getUserName(), user.getId(), Collections.emptyList());
+                (user.getUserName(), user.getUserId(), Collections.emptyList());
     }
-
-
 }
