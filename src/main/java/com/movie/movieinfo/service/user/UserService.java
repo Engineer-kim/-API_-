@@ -85,7 +85,12 @@ public class UserService implements UserDetailsService{
         }
     }
     
-    /**패스워드 초기화 로직*/
+    /**패스워드 초기화 로직
+     * 
+     *회원가입시 사용한 아이디에 토큰을 1대1 로 발급하고
+     * 초기화 설정이 완료되면 발급했던 토큰은 삭제됨
+     * 나중에 도메인 (http://localhost:8080) 바꿀것
+     * */
     public void sendPasswordResetLink(String userEmail){
         System.out.println(userRepository.countByUserEmail(userEmail));
         User user = userRepository.findOneByUserEmailOrderBySignDateDesc(userEmail)
