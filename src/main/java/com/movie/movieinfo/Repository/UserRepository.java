@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findOneByUserEmailOrderBySignDateDesc(String email);
 
 
+    Integer countByUserEmail(String userEmail);
 }

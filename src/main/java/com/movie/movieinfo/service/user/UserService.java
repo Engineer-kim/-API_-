@@ -5,6 +5,7 @@ import com.movie.movieinfo.Repository.UserRepository;
 import com.movie.movieinfo.dto.user.JoinRequestDto;
 import com.movie.movieinfo.entity.PasswordResetToken;
 import com.movie.movieinfo.entity.User;
+import com.movie.movieinfo.exception.UserEmailNotFoundException;
 import com.movie.movieinfo.response.CustomResponse;
 import com.movie.movieinfo.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -84,8 +85,11 @@ public class UserService implements UserDetailsService{
     
     /**패스워드 초기화 로직*/
     public void sendPasswordResetLink(String userEmail) {
+
+        userRepository.countByUserEmail(userEmail);
+        System.out.println(userRepository.countByUserEmail(userEmail));
         User user = userRepository.findOneByUserEmailOrderBySignDateDesc(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
 
         String token = UUID.randomUUID().toString();
         savePasswordResetToken(token, user);
