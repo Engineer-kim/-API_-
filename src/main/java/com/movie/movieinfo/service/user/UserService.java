@@ -5,6 +5,8 @@ import com.movie.movieinfo.dto.user.JoinRequestDto;
 import com.movie.movieinfo.entity.User;
 import com.movie.movieinfo.exception.UserAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +29,10 @@ public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     @Transactional
     public User registerNewUserAccount(JoinRequestDto joinRequestDto) throws UserAlreadyExistsException {
-        checkIfUserIdExists(joinRequestDto.getUserId());
         User user = User.builder()
-                .dbSts("A")
+                .dbSts(joinRequestDto.getDbSts())
                 .userName(joinRequestDto.getUserName())
                 .id(joinRequestDto.getUserId())
                 .userEmail(joinRequestDto.getUserEmail())
@@ -37,6 +40,22 @@ public class UserService implements UserDetailsService{
                 .signDate(LocalDateTime.now())
                 .build();
         return userRepository.save(user);
+    }
+    public ResponseEntity<String> checkIfUserIdExists(String userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("중복된 아이디로 해당 아이디로 가입 불가합니다 ");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**이메일로 유저 아이디 찿기(단건 혹은 다건)*/
+    public List<String> findUserByEmail(String email) {
+        return userRepository.findByUserEmail(email)
+                .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
+                .map(User::getId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
+                .collect(Collectors.toList()); //("id1", "id2")
     }
 
     @Override
@@ -47,13 +66,6 @@ public class UserService implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User
                 (user.getUserName(), user.getId(), Collections.emptyList());
     }
-
-    public void checkIfUserIdExists(String userId) throws UserAlreadyExistsException {
-        if (userRepository.findByUserId(userId).isPresent()) {
-            throw new UserAlreadyExistsException("해당 아이디로 가입된 계정이 있습니다: " + userId);
-        }
-    }
-
 
 
 }

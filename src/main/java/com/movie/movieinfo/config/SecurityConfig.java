@@ -22,8 +22,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        //로그인 페이지 및 홈페이지만 미인증시 접근가능
-                        .requestMatchers("/login", "/").permitAll()
+                        //하위 엔드포인트는 미인증이여도 접근가능하게끔
+                        .requestMatchers("/login", "/" ,"/api/auth/v1/findUserId" ,
+                                "/api/auth/v1/register" , "/api/auth/v1/duplicateCheckId").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

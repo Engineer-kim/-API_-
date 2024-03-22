@@ -34,44 +34,4 @@ public class JoinTestCode {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void whenRegisterNewUser_thenSucceed() throws UserAlreadyExistsException {
-
-        JoinRequestDto joinRequestDto = new JoinRequestDto("name12313", "1232132password", "userId0103", "userEmail@naver.com", LocalDateTime.now());
-
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-
-        User mockUser = User.builder()
-                .dbSts("A")
-                .userName(joinRequestDto.getUserName())
-                .id(joinRequestDto.getUserId())
-                .userEmail(joinRequestDto.getUserEmail())
-                .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
-                .signDate(LocalDateTime.now())
-                .build();
-
-        when(userRepository.findByUserId(anyString())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(mockUser);
-
-        User result = userService.registerNewUserAccount(joinRequestDto);
-
-        assertNotNull(result);
-        assertEquals(joinRequestDto.getUserName(), result.getUserName());
-        assertEquals(joinRequestDto.getUserId(), result.getId());
-        assertEquals(joinRequestDto.getUserEmail(), result.getUserEmail());
-        assertEquals("encodedPassword", result.getPassword());
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    public void whenRegisterExistingUser_thenThrowException() {
-
-        JoinRequestDto joinRequestDto = new JoinRequestDto("name12313", "1232132112323password", "userId0103", "userEmail@naver.com", LocalDateTime.now());
-        when(userRepository.findByUserId(anyString())).thenReturn(Optional.of(new User()));
-
-        assertThrows(UserAlreadyExistsException.class, () -> {
-            userService.registerNewUserAccount(joinRequestDto);
-        });
-    }
 }

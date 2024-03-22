@@ -17,4 +17,5 @@ public class JoinRequestDto {
     private String userId;
     private String userEmail;
     private LocalDateTime userSignDate;
+    private String  dbSts;
 }

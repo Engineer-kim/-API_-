@@ -33,7 +33,7 @@ public class User {
     @Column(name = "signDate", nullable = false)
     private LocalDateTime signDate;
 
-    @Column(name = "dbSts", nullable = false, length = 1, columnDefinition = "char default 'A'")
+    @Column(name = "dbSts", nullable = false, length = 1)
     private String dbSts;
 
 }
