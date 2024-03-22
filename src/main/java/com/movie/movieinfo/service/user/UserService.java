@@ -4,6 +4,7 @@ import com.movie.movieinfo.Repository.UserRepository;
 import com.movie.movieinfo.dto.user.JoinRequestDto;
 import com.movie.movieinfo.entity.User;
 import com.movie.movieinfo.exception.UserAlreadyExistsException;
+import com.movie.movieinfo.response.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,15 @@ public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     @Transactional
-    public User registerNewUserAccount(JoinRequestDto joinRequestDto) throws UserAlreadyExistsException {
+    public ResponseEntity<?> registerNewUserAccount(JoinRequestDto joinRequestDto) {
+        // 사용자 ID로 기존 사용자 존재 여부를 확인
+        Optional<User> existingUser = userRepository.findById(joinRequestDto.getUserId());
+        if (existingUser.isPresent()) {
+            // 사용자가 이미 존재하면 400 상태 코드와 메시지를 JSON 형태로 반환
+            return ResponseEntity
+                    .badRequest()
+                    .body(new CustomResponse(400, "해당 아이디로 가입된 사용자가 이미 존재합니다."));
+        }
         User user = User.builder()
                 .dbSts(joinRequestDto.getDbSts())
                 .userName(joinRequestDto.getUserName())
@@ -39,15 +48,19 @@ public class UserService implements UserDetailsService{
                 .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
                 .signDate(LocalDateTime.now())
                 .build();
-        return userRepository.save(user);
+
+        // 사용자 저장
+        userRepository.save(user);
+        // 성공 응답 반환
+        return ResponseEntity.ok(new CustomResponse(200, "회원가입 성공"));
     }
-    public ResponseEntity<String> checkIfUserIdExists(String userId) {
+    public CustomResponse checkIfUserIdExists(String userId) {
         if (userRepository.findById(userId).isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body("중복된 아이디로 해당 아이디로 가입 불가합니다 ");
+            return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
+        } else {
+            return new CustomResponse(200, "사용 가능한 아이디입니다");
         }
-        return ResponseEntity.notFound().build();
+
     }
 
     /**이메일로 유저 아이디 찿기(단건 혹은 다건)*/
