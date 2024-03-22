@@ -19,7 +19,7 @@ public class UserController {
             userService.registerNewUserAccount(joinRequestDto);
             return ResponseEntity.ok().body("User registered successfully");
         } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 

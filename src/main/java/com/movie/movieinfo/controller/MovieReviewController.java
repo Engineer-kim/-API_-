@@ -35,7 +35,6 @@ public class MovieReviewController {
             return ResponseEntity.status(UNAUTHORIZED).body("로그인후 시도 해주세요");
         }
         ResponseEntity<String> response = movieReviewService.saveReview(reviewDto);
-        log.info( "ASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+ response);
         return response;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Service
@@ -26,16 +27,15 @@ public class UserService implements UserDetailsService{
 
     @Transactional
     public User registerNewUserAccount(JoinRequestDto joinRequestDto) throws UserAlreadyExistsException {
-        if (userRepository.findByUserName(joinRequestDto.getUserName()).isPresent()) {
-            throw new UserAlreadyExistsException("There is an account with that email address: " + joinRequestDto.getUserName());
-        }
+        checkIfUserIdExists(joinRequestDto.getUserId());
         User user = User.builder()
-               .dbSts('A')
-               .userName(joinRequestDto.getUserName())
-               .id(joinRequestDto.getUserId())
-               .userEmaiil(joinRequestDto.getUserEmail())
-               .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
-               .build();
+                .dbSts("A")
+                .userName(joinRequestDto.getUserName())
+                .id(joinRequestDto.getUserId())
+                .userEmail(joinRequestDto.getUserEmail())
+                .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
+                .signDate(LocalDateTime.now())
+                .build();
         return userRepository.save(user);
     }
 
@@ -43,11 +43,17 @@ public class UserService implements UserDetailsService{
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
         User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userName));
-
-
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + userName));
         return new org.springframework.security.core.userdetails.User
-                (user.getUserName(), user.getPassword(), Collections.emptyList());
+                (user.getUserName(), user.getId(), Collections.emptyList());
     }
+
+    public void checkIfUserIdExists(String userId) throws UserAlreadyExistsException {
+        if (userRepository.findByUserId(userId).isPresent()) {
+            throw new UserAlreadyExistsException("해당 아이디로 가입된 계정이 있습니다: " + userId);
+        }
+    }
+
+
 
 }

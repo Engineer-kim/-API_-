@@ -28,12 +28,12 @@ public class User {
     private String userName;
 
     @Column(name = "userEmail", nullable = false, length = 50,unique = true)
-    private String userEmaiil;
+    private String userEmail;
 
     @Column(name = "signDate", nullable = false)
-    private LocalDateTime signDate = LocalDateTime.now();
+    private LocalDateTime signDate;
 
     @Column(name = "dbSts", nullable = false, length = 1, columnDefinition = "char default 'A'")
-    private char dbSts = 'A'; // 기본값 'A'
+    private String dbSts;
 
 }
