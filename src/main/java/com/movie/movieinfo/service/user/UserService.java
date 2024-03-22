@@ -110,14 +110,14 @@ public class UserService implements UserDetailsService{
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-
-        calendar.add(Calendar.DATE, 1);
+        //토큰 발급 받은 당일 날짜 하루종일 토큰 유효하도록
+        calendar.add(Calendar.DATE, 2);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        // 1초를 빼서 이전 날의 23시 59분 59초로 설정합니다.
+
         calendar.add(Calendar.SECOND, -1);
         System.out.println("calendar.getTime():::::::::::::::::::"+calendar.getTime());
         return calendar.getTime();
