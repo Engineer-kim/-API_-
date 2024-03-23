@@ -63,10 +63,10 @@ public class SecurityConfig {
                 )
                 .rememberMe(Customizer.withDefaults())
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessUrl("/api/auth/login")
                         .invalidateHttpSession(true)
-                        .deleteCookies("clearCookie")
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 );
         http.csrf(AbstractHttpConfigurer::disable);

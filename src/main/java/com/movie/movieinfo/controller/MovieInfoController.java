@@ -69,5 +69,10 @@ public class MovieInfoController {
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    /**임시 로그아웃 테스트르르위한 엔드포인트*/
+    @GetMapping("/main")
+    public String main() {
+        return "main";
+    }
 
 }

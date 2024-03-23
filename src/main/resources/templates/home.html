@@ -8,9 +8,22 @@
 <div class="container">
     <h1>인증이 성공<!</h1>
     <p>인증이 성공</p>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
+    <form id="logoutForm" action="/api/auth/logout" method="post">
+        <input type="submit" value="Logout"/>
     </form>
 </div>
 </body>
+<script>
+    document.getElementById('logoutForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch('/api/auth/logout', {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                window.location.href = '/';
+            });
+    });
+</script>
 </html>
