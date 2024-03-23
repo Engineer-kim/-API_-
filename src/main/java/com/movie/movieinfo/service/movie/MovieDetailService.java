@@ -3,6 +3,7 @@ package com.movie.movieinfo.service.movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -14,6 +15,7 @@ public class MovieDetailService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
+    @Cacheable(value = "movieDetails", key = "#movieCd")
     public MovieInfoResponseWrapperDto getDetail(String movieCd) {
         final String baseUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
 

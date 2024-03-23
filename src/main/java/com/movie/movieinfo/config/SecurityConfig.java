@@ -34,7 +34,8 @@ public class SecurityConfig {
                         //하위 엔드포인트는 미인증이여도 접근가능하게끔
                         .requestMatchers("/api/user/v1/findUserId",
                                 "/api/user/v1/duplicateCheckId", "/api/user/v1/register" ,"/api/auth/v1/login",
-                                "/api/auth/loginPoc").permitAll()
+                                "/api/auth/loginPoc",
+                                "/movieInfo/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

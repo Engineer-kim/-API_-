@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.springframework.cache.annotation.Cacheable;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class MovieRankService {
     private final String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
     private final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
+    @Cacheable(value = "movieRank", key = "#targetDate.toString()")
     public List<MovieRank> getRank(LocalDate targetDate) {
         String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String url = baseUrl + "?key=" + key+"&targetDt=" +formattedDate;
