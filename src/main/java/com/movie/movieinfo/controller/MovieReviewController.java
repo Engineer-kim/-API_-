@@ -1,17 +1,13 @@
 package com.movie.movieinfo.controller;
 
-import com.movie.movieinfo.annotation.UserIdNotEmpty;
-import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
+import com.movie.movieinfo.annotation.UserIdNotEmptyInterface;
+import com.movie.movieinfo.annotation.login.LoggedIn;
 import com.movie.movieinfo.dto.review.ReviewDto;
 import com.movie.movieinfo.service.movie.MovieReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -29,6 +25,7 @@ public class MovieReviewController {
      * 데이터 미존재 신규 작성으로 판단 -> 인서트 쿼리 실행
      */
     @PostMapping("/v1/saveMovieReview")
+    @LoggedIn
     public ResponseEntity<String> saveMovieReview(@RequestBody ReviewDto reviewDto) {
         if (reviewDto.getUserId().isEmpty() || reviewDto.getUserId() == null) {
             //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
@@ -46,7 +43,8 @@ public class MovieReviewController {
      * 단건 출력
      */
     @GetMapping("/v1/getMovieReview")
-    public boolean getMovieReview(@UserIdNotEmpty @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+    @LoggedIn
+    public boolean getMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         boolean hasReview = movieReviewService.findUserReview(userId, movieCd);
         if (!hasReview) {
             return false;
@@ -64,7 +62,8 @@ public class MovieReviewController {
      * 단건 출력
      */
     @DeleteMapping("/v1/removeMovieReview")
-    public boolean removeMovieReview(@UserIdNotEmpty @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+    @LoggedIn
+    public boolean removeMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         boolean isDeleted = movieReviewService.deleteReview(userId, movieCd);
         if (!isDeleted) {
             // 삭제 실패 시(해당 회원이 작성한 리뷰가 없는 경우)

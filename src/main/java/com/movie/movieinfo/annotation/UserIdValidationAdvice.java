@@ -17,7 +17,7 @@ public class UserIdValidationAdvice extends ResponseEntityExceptionHandler imple
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(UserIdNotEmpty.class);
+        return parameter.hasParameterAnnotation(UserIdNotEmptyInterface.class);
     }
 
     @Override
