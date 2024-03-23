@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -92,7 +92,4 @@ public class UserController {
         }
         return ResponseEntity.status(status).body(response);
     }
-
-
-
 }

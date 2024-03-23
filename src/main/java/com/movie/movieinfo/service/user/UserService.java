@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService{
         String token = UUID.randomUUID().toString();
         savePasswordResetToken(token, user);
 
-        String resetLink = "http://localhost:8080/v1/resetPassword?token=" + token;
+        String resetLink = "http://localhost:8080/api/auth/v1/resetPassword?token=" + token;
         emailService.sendEmail(userEmail, resetLink);
     }
 
@@ -164,5 +164,14 @@ public class UserService implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User
                 (user.getUserName(), user.getUserId(), Collections.emptyList());
     }
+
+    public boolean authenticateUser(String userId, String password) {
+        User user = userRepository.findByUserId(userId);
+        if (user != null) {
+            return passwordEncoder.matches(password, user.getPassword());
+        }
+        return false;
+    }
+
 }
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <form class="form-signin" method="post" action="/api/auth/loginPoc" autocomplete="off">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
+        <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
+        <div><input type="submit" value="Sign In"/></div>
+        <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+    </form>
+</div>
+</body>
+</html>
