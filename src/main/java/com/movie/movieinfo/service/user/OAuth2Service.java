@@ -28,6 +28,9 @@ public class OAuth2Service extends DefaultOAuth2UserService {
         } else if ("kakao".equals(registrationId)) {
             var authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
             return new DefaultOAuth2User(authorities, oAuth2User.getAttributes(), "id");
+        } else if ("naver".equals(registrationId)) {
+            var authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+            return new DefaultOAuth2User(authorities, oAuth2User.getAttributes(), "name");
         }
         throw new OAuth2AuthenticationException(new OAuth2Error("Unsupported_Login_Provider" ,"지원하지 않는 로그인 방식입니다", null));
     }
