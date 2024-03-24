@@ -21,7 +21,7 @@ public class LoginController {
 
     private final UserService userService;
 
-    @GetMapping("/v1/login")
+    @GetMapping("/commonLogin")
     public String login() {
         return "login.html";
     }
@@ -53,5 +53,6 @@ public class LoginController {
         }
         return ResponseEntity.ok().body("로그아웃 성공");
     }
+
 
 }
