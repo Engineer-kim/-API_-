@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import java.io.IOException;
 
@@ -37,8 +38,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //   /api/auth/commonLogin 는 일반 로그인 
-                //  /api/auth/login 구글 로그인
+                // 기본적으로 oauth2Login 성공시 / 루트 URL 로 리턴됨 커스텀해서 사용해야함
+                //ex) .successHandler(new SimpleUrlAuthenticationSuccessHandler("/api/auth/loginSuccess"))
                 .authorizeHttpRequests(authorize -> authorize
                         //하위 엔드포인트는 미인증이여도 접근가능하게끔
                         .requestMatchers("/api/user/v1/findUserId",
@@ -73,11 +74,9 @@ public class SecurityConfig {
 
                 )
                 .oauth2Login((oauth2) -> oauth2
-                        .loginPage("/api/auth/login")
-                        .defaultSuccessUrl("/api/auth/loginSuccess")
-                        .failureUrl("/api/auth/login")
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customOAuth2Service()))
+                        .loginPage("/api/auth/commonLogin")
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2Service()))
+                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/api/auth/loginSuccess"))
                 )
                 .rememberMe(Customizer.withDefaults())
                 .logout(logout -> logout
