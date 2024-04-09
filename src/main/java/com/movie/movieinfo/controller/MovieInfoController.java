@@ -4,9 +4,11 @@ import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapp
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieRank;
 import com.movie.movieinfo.service.movie.MovieDetailService;
+import com.movie.movieinfo.service.movie.MovieImageService;
 import com.movie.movieinfo.service.movie.MovieListService;
 import com.movie.movieinfo.service.movie.MovieRankService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ public class MovieInfoController {
     private  final MovieListService movieListService;
     private  final MovieDetailService movieDetailService;
     private  final MovieRankService movieRankService;
+    private final MovieImageService movieImageService;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -38,7 +41,10 @@ public class MovieInfoController {
     @GetMapping("/v1/moviesDetail")
     public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd){
       MovieInfoResponseWrapperDto response = movieDetailService.getDetail(movieCd);
-        System.out.println(response);
+      String moviePosterImageUrl  = movieImageService.getMoviePosterImageUrl(movieCd);
+        System.out.println("movieImageUrl::::::::::::::::::::::::::::::::::::::::::::" +moviePosterImageUrl);
+        System.out.println(response.toString());
+        response.setMoviePosterUrl(moviePosterImageUrl);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -69,6 +75,10 @@ public class MovieInfoController {
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+
+
     /**임시 로그아웃 테스트르르위한 엔드포인트*/
     @GetMapping("/main")
     public String main() {

@@ -13,4 +13,6 @@ public class MovieInfoResponseWrapperDto {
     /**영화 상세 정보 응답 받을 파라미터(객체)들*/
     @JsonProperty("movieInfoResult")
     private MovieInfoResultDto movieInfoResultDto;
+
+    private String moviePosterUrl;
 }
