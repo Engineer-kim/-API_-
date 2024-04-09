@@ -3,10 +3,7 @@ package com.movie.movieinfo.controller;
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieRank;
-import com.movie.movieinfo.service.movie.CrawlingMoviePoster;
-import com.movie.movieinfo.service.movie.MovieDetailService;
-import com.movie.movieinfo.service.movie.MovieListService;
-import com.movie.movieinfo.service.movie.MovieRankService;
+import com.movie.movieinfo.service.movie.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,6 +25,7 @@ public class MovieInfoController {
     private  final MovieListService movieListService;
     private  final MovieDetailService movieDetailService;
     private  final MovieRankService movieRankService;
+    private  final MovieSearchService movieSearchService;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -79,6 +78,13 @@ public class MovieInfoController {
     public String getMoviePosterImageUrl(@RequestParam("movieCd") String movieCd){
         String response = CrawlingMoviePoster.getMoviePosterImageUrl(movieCd);
         return  response;
+    }
+
+    /**감독명 또는 영화제목으로 검색 가능한 API(Like 쿼리로 검색)*/
+    @GetMapping("/v1/movieSearch")
+    public ResponseEntity<List<MovieList>> searchMovie(@RequestParam(value = "movieNm", required = false) String movieName, @RequestParam(value = "directorNm", required = false) String directorName) {
+        List<MovieList> response = movieSearchService.searchMovie(movieName, directorName);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
