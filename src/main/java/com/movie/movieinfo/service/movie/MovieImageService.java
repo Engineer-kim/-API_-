@@ -7,9 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class MovieImageService {
+public class CrawlingMoviePoster {
 
     public static String getMoviePosterImageUrl(String movieCd) {
         String url = "https://kobis.or.kr/kobis/business/mast/mvie/searchMovieDtl.do";

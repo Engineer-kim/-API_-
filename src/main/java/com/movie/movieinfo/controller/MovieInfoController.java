@@ -3,12 +3,11 @@ package com.movie.movieinfo.controller;
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieRank;
+import com.movie.movieinfo.service.movie.CrawlingMoviePoster;
 import com.movie.movieinfo.service.movie.MovieDetailService;
-import com.movie.movieinfo.service.movie.MovieImageService;
 import com.movie.movieinfo.service.movie.MovieListService;
 import com.movie.movieinfo.service.movie.MovieRankService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class MovieInfoController {
     @GetMapping("/v1/moviesDetail")
     public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd){
       MovieInfoResponseWrapperDto response = movieDetailService.getDetail(movieCd);
-      String moviePosterImageUrl  = MovieImageService.getMoviePosterImageUrl(movieCd);
+      String moviePosterImageUrl  = CrawlingMoviePoster.getMoviePosterImageUrl(movieCd);
         System.out.println("movieImageUrl::::::::::::::::::::::::::::::::::::::::::::" +moviePosterImageUrl);
         System.out.println(response.toString());
         response.setMoviePosterUrl(moviePosterImageUrl);
@@ -78,7 +77,7 @@ public class MovieInfoController {
     /**영화 포스터 가져오는(크롤링) API 임*/
     @GetMapping("/v1/getMoviePosterImage")
     public String getMoviePosterImageUrl(@RequestParam("movieCd") String movieCd){
-        String response = MovieImageService.getMoviePosterImageUrl(movieCd);
+        String response = CrawlingMoviePoster.getMoviePosterImageUrl(movieCd);
         return  response;
     }
 
