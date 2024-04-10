@@ -3,9 +3,11 @@ package com.movie.movieinfo.dto.movie.movieRank.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class MovieRank {
+public class MovieWeeklyRank {
     private String rnum;
     private String rank;
     private String rankInten;
@@ -25,6 +27,6 @@ public class MovieRank {
     private String scrnCnt;
     private String showCnt;
 
-    public MovieRank() {
+    public MovieWeeklyRank() {
     }
 }

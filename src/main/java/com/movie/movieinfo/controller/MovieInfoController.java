@@ -2,7 +2,10 @@ package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
-import com.movie.movieinfo.dto.movie.movieRank.response.MovieRank;
+import com.movie.movieinfo.dto.movie.movieRank.response.BoxWeeklyOfficeResult;
+import com.movie.movieinfo.dto.movie.movieRank.response.MovieDailyRank;
+import com.movie.movieinfo.dto.movie.movieRank.response.MovieWeeklyRank;
+import com.movie.movieinfo.dto.movie.movieRank.response.MovieWeeklyRankWrapperResponse;
 import com.movie.movieinfo.service.movie.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/movieInfo")
@@ -24,7 +27,8 @@ public class MovieInfoController {
 
     private  final MovieListService movieListService;
     private  final MovieDetailService movieDetailService;
-    private  final MovieRankService movieRankService;
+    private  final MovieDailyRankService movieDailyRankService;
+    private  final MovieWeeklyRankService movieWeeklyRankService;
     private  final MovieSearchService movieSearchService;
 
 
@@ -52,12 +56,26 @@ public class MovieInfoController {
      *	http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101
      * */
 
-    @GetMapping("/v1/moviesRank")
-    public ResponseEntity<List<MovieRank>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
-        List<MovieRank> response = movieRankService.getRank(targetDt);
+    @GetMapping("/v1/moviesDailyRank")
+    public ResponseEntity<List<MovieDailyRank>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
+        List<MovieDailyRank> response = movieDailyRankService.getRank(targetDt);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    /**주별(월~ 일요일까지) 순위 다건 출력(top1 ~ toP10)*/
+
+    @GetMapping("/v1/moviesWeeklyRank")
+    public ResponseEntity<MovieWeeklyRankWrapperResponse> showWeeklyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
+        // 원래 서비스로부터 데이터를 가져오는 로직
+        Optional<MovieWeeklyRankWrapperResponse> optionalResponse = movieWeeklyRankService.getWeeklyRank(targetDt);
+        return optionalResponse
+                .map(ResponseEntity::ok)
+                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    }
+
+
+
 
     /** 영화 목록 엔드포인트(다건 출력)*/
 
@@ -88,6 +106,7 @@ public class MovieInfoController {
     }
 
 
+    
 
     /**임시 로그아웃 테스트르르위한 엔드포인트*/
     @GetMapping("/main")

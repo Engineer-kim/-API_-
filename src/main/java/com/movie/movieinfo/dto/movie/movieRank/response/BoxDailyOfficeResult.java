@@ -8,9 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class BoxOfficeResult {
+public class BoxDailyOfficeResult {
     private String boxofficeType;
     private String showRange;
     @JsonProperty("dailyBoxOfficeList")
-    private List<MovieRank> movieRankList;
+    private List<MovieDailyRank> movieDailyRankList;
 }
