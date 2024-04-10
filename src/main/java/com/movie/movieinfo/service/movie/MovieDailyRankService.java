@@ -20,7 +20,7 @@ public class MovieDailyRankService {
     private final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
     @Cacheable(value = "movieDailyRank", key = "#targetDate.toString()")
-    public List<MovieDailyRank> getRank(LocalDate targetDate) {
+    public List<MovieDailyRank> getDailyRank(LocalDate targetDate) {
         String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String url = baseUrl + "?key=" + key+"&targetDt=" +formattedDate;
         try {

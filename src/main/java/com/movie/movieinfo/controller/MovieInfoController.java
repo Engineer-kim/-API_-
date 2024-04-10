@@ -58,7 +58,7 @@ public class MovieInfoController {
 
     @GetMapping("/v1/moviesDailyRank")
     public ResponseEntity<List<MovieDailyRank>> showDailyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
-        List<MovieDailyRank> response = movieDailyRankService.getRank(targetDt);
+        List<MovieDailyRank> response = movieDailyRankService.getDailyRank(targetDt);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -68,8 +68,8 @@ public class MovieInfoController {
     @GetMapping("/v1/moviesWeeklyRank")
     public ResponseEntity<MovieWeeklyRankWrapperResponse> showWeeklyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
         // 원래 서비스로부터 데이터를 가져오는 로직
-        Optional<MovieWeeklyRankWrapperResponse> optionalResponse = movieWeeklyRankService.getWeeklyRank(targetDt);
-        return optionalResponse
+        Optional<MovieWeeklyRankWrapperResponse> response = movieWeeklyRankService.getWeeklyRank(targetDt);
+        return response
                 .map(ResponseEntity::ok)
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
