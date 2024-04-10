@@ -49,7 +49,7 @@ public class MovieInfoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**일별 박스오피스(오늘의 순위) 엔드포인트(다건 출력)*/
+    /**일별 순위, 다건 출력(top1 ~ toP10 (다건 출력))*/
 
     /**
      * 예시 응답 엔드 포인트
@@ -63,20 +63,16 @@ public class MovieInfoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    /**주별(월~ 일요일까지) 순위 다건 출력(top1 ~ toP10)*/
+    /**주별(월~ 일요일까지) 순위 다건 출력(top1 ~ toP10 (다건 출력))*/
 
     @GetMapping("/v1/moviesWeeklyRank")
     public ResponseEntity<MovieWeeklyRankWrapperResponse> showWeeklyMoviesRank(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt) {
-        // 원래 서비스로부터 데이터를 가져오는 로직
         Optional<MovieWeeklyRankWrapperResponse> response = movieWeeklyRankService.getWeeklyRank(targetDt);
         return response
                 .map(ResponseEntity::ok)
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
-
-
-
-
+    
     /** 영화 목록 엔드포인트(다건 출력)*/
 
     /**
