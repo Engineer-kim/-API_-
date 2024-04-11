@@ -9,6 +9,7 @@ import com.movie.movieinfo.exception.UserEmailNotFoundException;
 import com.movie.movieinfo.response.CustomResponse;
 import com.movie.movieinfo.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService{
 
 
@@ -33,6 +35,8 @@ public class UserService implements UserDetailsService{
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
+
+    public final String activationUserDiscrimination = "A";
 
     //패스워드 초기화 만료 시간 (24시간)
     private static final int EXPIRATION = 60 * 24;
@@ -47,7 +51,7 @@ public class UserService implements UserDetailsService{
                     .body(new CustomResponse(400, "해당 아이디로 가입된 사용자가 이미 존재합니다."));
         }
         User user = User.builder()
-                .dbSts(joinRequestDto.getDbSts())
+                .dbSts(activationUserDiscrimination)
                 .userName(joinRequestDto.getUserName())
                 .userId(joinRequestDto.getUserId())
                 .userEmail(joinRequestDto.getUserEmail())
@@ -60,21 +64,23 @@ public class UserService implements UserDetailsService{
         // 성공 응답 반환
         return ResponseEntity.ok(new CustomResponse(200, "회원가입 성공"));
     }
-    public CustomResponse checkIfUserIdExists(String userId) {
-        if (userRepository.findById(userId).isPresent()) {
-            return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
-        } else {
-            return new CustomResponse(200, "사용 가능한 아이디입니다");
-        }
 
+    public CustomResponse checkIfUserIdExists(String userId) {
+        if (userRepository.findById(userId).isPresent() && findActivationUser(userId)) {
+            return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
+        } else if (userRepository.findById(userId).isEmpty()) {
+            return new CustomResponse(200, "사용 가능한 아이디입니다");
+        } else {// 오류 발생시
+            return new CustomResponse(404, "오류가 발생했습니다.");
+        }
     }
 
     /**이메일로 유저 아이디 찿기(단건 혹은 다건)*/
     public List<String> findUserByEmail(String email) {
-        return userRepository.findByUserEmail(email)
-                .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
-                .map(User::getUserId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
-                .collect(Collectors.toList()); //("id1", "id2")
+            return userRepository.findByDbStsAndUserEmail(activationUserDiscrimination, email)
+                    .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
+                    .map(User::getUserId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
+                    .collect(Collectors.toList()); //("id1", "id2")
     }
     public CustomResponse findUserIdsByEmailResponse(String email) {
         List<String> userIds = findUserByEmail(email);
@@ -93,14 +99,14 @@ public class UserService implements UserDetailsService{
      * */
     public void sendPasswordResetLink(String userEmail){
         System.out.println(userRepository.countByUserEmail(userEmail));
-        User user = userRepository.findOneByUserEmailOrderBySignDateDesc(userEmail)
-                .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
+            User user = userRepository.findOneByDbStsAndUserEmailOrderBySignDateDesc(activationUserDiscrimination,userEmail)
+                    .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
 
-        String token = UUID.randomUUID().toString();
-        savePasswordResetToken(token, user);
+            String token = UUID.randomUUID().toString();
+            savePasswordResetToken(token, user);
 
-        String resetLink = "http://localhost:8080/api/auth/v1/resetPassword?token=" + token;
-        emailService.sendEmail(userEmail, resetLink);
+            String resetLink = "http://localhost:8080/api/auth/v1/resetPassword?token=" + token;
+            emailService.sendEmail(userEmail, resetLink);
     }
 
     private void savePasswordResetToken(String token, User user) {
@@ -173,5 +179,36 @@ public class UserService implements UserDetailsService{
         return false;
     }
 
+    
+    /**탈퇴한 유저인지 판단하는 메서드
+     * dbSts 컬럼으로 소프트 딜리트 형식으로 탈퇴한 회원을 DB에 보관
+     * A: 활성화
+     * D: 비활성화(화원탈퇴한 유저)
+     * */
+    private boolean findActivationUser(String userId) {
+        Optional<User> result = userRepository.findByUserIdAndDbSts(userId,activationUserDiscrimination);
+        System.out.print("result::::::::::::::::" + result.toString());
+        if (result.isPresent()) {
+            User user = result.get();
+            log.info("findActivationUser.user  == "  + user);
+            if ("A".equals(user.getDbSts())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {  
+            log.info("없는 사용자 계정 정보 입니다\n DB에 해당 사용자 계정이 있는지 체크 해주세요");
+            return  false;
+        }
+    }
+
+    public boolean deleteUserAccount(String userId) {
+        if (findActivationUser(userId)) {
+            return userRepository.updateUserDbSts(userId, "D") > 0;
+        } else {
+            // 활성 상태가 아니면 false 반환
+            return false;
+        }
+    }
 }
 
