@@ -46,7 +46,7 @@ public class SecurityConfig {
                                 "/api/user/v1/duplicateCheckId", "/api/user/v1/register" ,"/api/auth/commonLogin"
                                 ,"/api/auth/login",
                                 "/api/auth/loginPoc",
-                                "/movieInfo/**" ,"/api/user/**").permitAll()
+                                "/movieInfo/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

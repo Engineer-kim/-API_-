@@ -1,6 +1,7 @@
 package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.password.PasswordResetDto;
+import com.movie.movieinfo.dto.user.DeleteRequestDto;
 import com.movie.movieinfo.dto.user.JoinRequestDto;
 import com.movie.movieinfo.exception.UserAlreadyExistsException;
 import com.movie.movieinfo.exception.UserEmailNotFoundException;
@@ -50,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/v1/deleteUser")
-    public  ResponseEntity<?> deleteUserAccount(@RequestBody String userId){
-        boolean isDeleted = userService.deleteUserAccount(userId);
+    public  ResponseEntity<?> deleteUserAccount(@RequestBody DeleteRequestDto deleteRequestDto){
+        boolean isDeleted = userService.deleteUserAccount(deleteRequestDto.getUserId());
         if (isDeleted) {
             return ResponseEntity.status(HttpStatus.OK).body("회원 탈퇴 처리에 완료되었습니다.");
         } else {

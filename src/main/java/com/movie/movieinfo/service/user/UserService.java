@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService{
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
 
-    private final String activationUserDiscrimination = "A";
+    public final String activationUserDiscrimination = "A";
 
     //패스워드 초기화 만료 시간 (24시간)
     private static final int EXPIRATION = 60 * 24;
@@ -68,10 +68,11 @@ public class UserService implements UserDetailsService{
     public CustomResponse checkIfUserIdExists(String userId) {
         if (userRepository.findById(userId).isPresent() && findActivationUser(userId)) {
             return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
-        } else if (findActivationUser(userId) && !(userRepository.findById(userId).isPresent())) {
+        } else if (userRepository.findById(userId).isEmpty()) {
             return new CustomResponse(200, "사용 가능한 아이디입니다");
+        } else {// 오류 발생시
+            return new CustomResponse(404, "오류가 발생했습니다.");
         }
-        return new CustomResponse(404, "오류가 발생했습니다.");
     }
 
     /**이메일로 유저 아이디 찿기(단건 혹은 다건)*/
@@ -186,6 +187,7 @@ public class UserService implements UserDetailsService{
      * */
     private boolean findActivationUser(String userId) {
         Optional<User> result = userRepository.findByUserIdAndDbSts(userId,activationUserDiscrimination);
+        System.out.print("result::::::::::::::::" + result.toString());
         if (result.isPresent()) {
             User user = result.get();
             log.info("findActivationUser.user  == "  + user);
