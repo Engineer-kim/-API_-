@@ -49,6 +49,18 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
     }
 
+    @PostMapping("/v1/deleteUser")
+    public  ResponseEntity<?> deleteUserAccount(@RequestBody String userId){
+        boolean isDeleted = userService.deleteUserAccount(userId);
+        if (isDeleted) {
+            return ResponseEntity.status(HttpStatus.OK).body("회원 탈퇴 처리에 완료되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("회원 탈퇴 처리에 실패했습니다");
+        }
+    }
+
+
+
     /**비밀번호 초기화 API*/
 
     /**비밀번호 초기화를 위해 회원가입시 입력했던 이메일 입력*/
@@ -92,4 +104,5 @@ public class UserController {
         }
         return ResponseEntity.status(status).body(response);
     }
+
 }
