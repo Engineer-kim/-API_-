@@ -17,12 +17,11 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUserName(String userName);
 
     List<User> findByDbStsAndUserEmail(String dbSts,String userEmail);
-    
-    //가장 최근에 회원가입 된 계정으로 찿아오기
-    Optional<User> findOneByDbStsAndUserEmailOrderBySignDateDesc(String dbSts,String userEmail);
+
+    Optional<User> findOneByDbStsAndUserEmailAndUserId(String dbSts,String userEmail, String userId);
 
 
-    Integer countByUserEmail(String userEmail);
+    Integer countByUserEmailAndUserId(String userEmail , String userId);
 
     User findByUserId(String userId);
 

@@ -3,6 +3,7 @@ package com.movie.movieinfo.controller;
 import com.movie.movieinfo.dto.password.PasswordResetDto;
 import com.movie.movieinfo.dto.user.DeleteRequestDto;
 import com.movie.movieinfo.dto.user.JoinRequestDto;
+import com.movie.movieinfo.dto.user.PasswordResetRequest;
 import com.movie.movieinfo.exception.UserAlreadyExistsException;
 import com.movie.movieinfo.exception.UserEmailNotFoundException;
 import com.movie.movieinfo.response.CustomResponse;
@@ -78,10 +79,10 @@ public class UserController {
      * 비밀번호 재설정 요청 처리
      */
     @PostMapping("/v1/resetPassword/request")
-    public ResponseEntity<CustomResponse> sendResetPasswordLink(@RequestBody String userEmail) {
+    public ResponseEntity<CustomResponse> sendResetPasswordLink(@RequestBody PasswordResetRequest passwordResetRequest) {
         try {
-            System.out.println("Controller :::::::::::::::::::::::::::" +userEmail);
-            userService.sendPasswordResetLink(userEmail);
+
+            userService.sendPasswordResetLink(passwordResetRequest.getEmail() , passwordResetRequest.getUserId());
             return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(), "비밀번호 재설정 링크가 입력하신 이메일로 성공적으로 전송되었습니다."));
         } catch (UserEmailNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
