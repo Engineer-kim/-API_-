@@ -97,9 +97,9 @@ public class UserService implements UserDetailsService{
      * 초기화 설정이 완료되면 발급했던 토큰은 삭제됨
      * 나중에 도메인 (http://localhost:8080) 바꿀것
      * */
-    public void sendPasswordResetLink(String userEmail){
-        System.out.println(userRepository.countByUserEmail(userEmail));
-            User user = userRepository.findOneByDbStsAndUserEmailOrderBySignDateDesc(activationUserDiscrimination,userEmail)
+    public void sendPasswordResetLink(String userEmail , String userId){
+        System.out.println(userRepository.countByUserEmailAndUserId(userEmail ,userId));
+            User user = userRepository.findOneByDbStsAndUserEmailAndUserId(activationUserDiscrimination,userEmail, userId)
                     .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
 
             String token = UUID.randomUUID().toString();
