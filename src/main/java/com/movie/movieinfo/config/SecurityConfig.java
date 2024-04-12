@@ -5,11 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +21,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.io.IOException;
 
@@ -46,8 +51,13 @@ public class SecurityConfig {
                                 "/api/user/v1/duplicateCheckId", "/api/user/v1/register" ,"/api/auth/commonLogin"
                                 ,"/api/auth/login",
                                 "/api/auth/loginPoc",
-                                "/movieInfo/**").permitAll()
-                        .anyRequest().authenticated()
+                                "/movieInfo/**" , "/movieInfoMain/**")
+                        .permitAll()
+                        .requestMatchers(request ->
+                                "XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/api/auth/commonLogin")
@@ -87,6 +97,34 @@ public class SecurityConfig {
                         .permitAll()
                 );
         http.csrf(AbstractHttpConfigurer::disable);
+
         return http.build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        // 정적 리소스 spring security 대상에서 제외
+        return (web) -> {
+            web
+                .ignoring()
+                .requestMatchers(
+                        PathRequest.toStaticResources().atCommonLocations()
+                );
+        };
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+
+
 }

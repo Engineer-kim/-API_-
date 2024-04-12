@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>일별 박스오피스</title>
+</head>
+<body>
+<h1>일별 박스오피스</h1>
+<h1>일별 영화 순위</h1>
+<ul id="moviesList">
+</ul>
+</body>
+<script src="/js/config.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    function getTodayDate() {
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = ('0' + (today.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더해주고, 두 자릿수를 유지하기 위해 '0'을 더한 후 마지막 두 자리만 추출
+        var dd = ('0' + today.getDate()).slice(-2); // 일자도 두 자릿수를 유지하기 위해 '0'을 더한 후 마지막 두 자리만 추출
+
+        return yyyy + mm + dd;
+    }
+
+    const todayDate = getTodayDate();
+
+    $(document).ready(function(){
+        console.log(urlConfig);
+        $.ajax({
+            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+            },
+            success: function(response) {
+                console.log("response:::::::::::::"+ response);
+                displayMoviesRank(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: " + error);
+            }
+        });
+    });
+
+    function displayMoviesRank(boxOfficeResult) {
+        const moviesList = $("#moviesList");
+        moviesList.empty();
+        $.each(boxOfficeResult.dailyBoxOfficeList, function(i, movie) {
+            moviesList.append("<li>순위: " + movie.rank + ", 영화명: " + movie.movieNm + "</li>");
+        });
+    }
+
+
+</script>
+</html>
