@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>일별 박스오피스</title>
+    <meta charset="UTF-8">
+    <title>영화 일일 순위</title>
+    <style>
+        .movie-rank-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .movie {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <h1>일별 박스오피스</h1>
 <h1>일별 영화 순위</h1>
-<ul id="moviesList">
-</ul>
+<div class="movie-rank-container" id="movieRankContainer"></div>
+
 </body>
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -16,8 +29,8 @@
     function getTodayDate() {
         var today = new Date();
         var yyyy = today.getFullYear();
-        var mm = ('0' + (today.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더해주고, 두 자릿수를 유지하기 위해 '0'을 더한 후 마지막 두 자리만 추출
-        var dd = ('0' + today.getDate()).slice(-2); // 일자도 두 자릿수를 유지하기 위해 '0'을 더한 후 마지막 두 자리만 추출
+        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        var dd = ('0' + today.getDate()).slice(-2);
 
         return yyyy + mm + dd;
     }
@@ -27,6 +40,7 @@
     $(document).ready(function(){
         console.log(urlConfig);
         $.ajax({
+            //영화 정보 불러오는 API
             url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
             type: "GET",
             headers: {
@@ -42,14 +56,17 @@
         });
     });
 
-    function displayMoviesRank(boxOfficeResult) {
-        const moviesList = $("#moviesList");
-        moviesList.empty();
-        $.each(boxOfficeResult.dailyBoxOfficeList, function(i, movie) {
-            moviesList.append("<li>순위: " + movie.rank + ", 영화명: " + movie.movieNm + "</li>");
+    function displayMoviesRank(movies) {
+        const container = $('#movieRankContainer');
+        movies.forEach(function(movie) {
+            var movieEl = $('<div class="movie"></div>');
+            movieEl.append('<h2>순위: ' + movie.rank + '</h2>');
+            movieEl.append('<p>제목: ' + movie.movieNm + '</p>');
+            movieEl.append('<p>개봉일: ' + movie.openDt + '</p>');
+            movieEl.append('<p>누적 관객수: ' + movie.audiAcc + '</p>');
+            container.append(movieEl);
         });
     }
-
 
 </script>
 </html>
