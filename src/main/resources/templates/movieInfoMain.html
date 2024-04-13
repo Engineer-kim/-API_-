@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>영화  순위정보</title>
+    <style>
+        .movie-rank-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .movie {
+            display: flex;
+            align-items: flex-start;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            gap: 10px;
+        }
+        .movie-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .movie-poster {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>일별 박스오피스</h1>
+<h1>일별 영화 순위</h1>
+<div class="movie-rank-container" id="movieRankContainer">
+
+</div>
+
+<h1>주별 영화 순위</h1>
+
+
+
+</body>
+<script src="/js/config.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    /**날짜 가져오는 함수*/
+    function getTodayDate() {
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        var dd = ('0' + today.getDate()).slice(-2);
+
+        return yyyy + mm + dd;
+    }
+
+    const todayDate = getTodayDate();
+
+    /**일별 정보 가져오는 함수*/
+    $(document).ready(function(){
+        console.log(urlConfig);
+        $.ajax({
+            //영화 정보 불러오는 API
+            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+            },
+            success: function(response) {
+                displayMoviesRank(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: " + error);
+            }
+        });
+    });
+
+    async function displayMoviesRank(movies) {
+        const container = $('#movieRankContainer');
+        for (const movie of movies) {
+            const movieEl = $('<div class="movie"></div>');
+            const movieInfoEl = $('<div class="movie-info"></div>');
+
+            movieInfoEl.append('<h2>순위: ' + movie.rank + '</h2>');
+            movieInfoEl.append('<p>제목: ' + movie.movieNm + '</p>');
+            movieInfoEl.append('<p>개봉일: ' + movie.openDt + '</p>');
+            movieInfoEl.append('<p>누적 관객수: ' + movie.audiAcc + '</p>');
+
+            // 이미지 URL을 가져오는 부분
+            const imageUrl = await getImageFunction(movie.movieCd);
+            const movieImageEl = $('<img src="' + imageUrl + '" alt="Movie Poster" class="movie-poster">');
+
+            movieEl.append(movieImageEl);
+            movieEl.append(movieInfoEl);
+
+            movieEl.on('click', function() {
+                pageMove(movie.movieCd); // 클릭 시 상세 페이지 로직 호출
+            });
+
+
+            container.append(movieEl);
+        }
+    }
+
+    // /**주간 정보*/
+    // fetch(urlConfig.baseUrl + "movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240407")
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('네트워크 응답이 올바르지 않습니다.');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         console.log('주간 박스오피스 데이터:', data);
+    //         const weeklyBoxOfficeList = data.boxOfficeResult.weeklyBoxOfficeList;
+    //         console.log('주간 박스오피스 리스트:');
+    //         weeklyBoxOfficeList.forEach((movie, index) => {
+    //             console.log(`${index + 1}위: ${movie.movieNm} (코드: ${movie.movieCd})`);
+    //         });
+    //     })
+    //     .catch(error => {
+    //         // 오류 처리
+    //         console.error('데이터 요청 중 오류가 발생했습니다:', error);
+    //     });
+
+    /**영화 포스터*/
+    async function getImageFunction(movieCd) {
+        const response = await fetch(urlConfig.baseUrl +"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
+        const imageData = await response.text();
+        return imageData;
+    }
+
+    function pageMove(movieCd){
+        window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
+    }
+</script>
+</html>
