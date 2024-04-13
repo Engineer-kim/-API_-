@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>helolo</title>
+</head>
+<body>
+<div id="movieDetails">
+    <img id="moviePoster" src="" alt="영화 포스터">
+    <h2 id="movieNm"></h2>
+    <h3 id="movieNmEn"></h3>
+    <p id="typeNm"></p>
+    <p id="genres"></p>
+    <p id="actors"></p>
+</div>
+
+</body>
+<script src="/js/config.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieCd = urlParams.get('movieCd');
+
+        if (movieCd) {
+            console.log(urlConfig);
+            $.ajax({
+                // 영화 상세 정보 불러오는 API
+                url: urlConfig.baseUrl + "/movieInfo/v1/moviesDetail?movieCd=" + movieCd,
+                type: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+                },
+                success: function(response) {
+                    console.log(response);
+                    showMovieDetail(response)
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error occurred: " + error);
+                }
+            });
+        } else {
+            console.error("movieCd 값이 없습니다.");
+        }
+    });
+
+    function showMovieDetail(response){
+        // 영화 포스터 설정
+        $('#moviePoster').attr('src', response.moviePosterUrl);
+
+        // 영화 이름, 영문 이름, 유형 설정
+        $('#movieNm').text(response.movieInfoResult.movieInfo.movieNm);
+        $('#movieNmEn').text(response.movieInfoResult.movieInfo.movieNmEn);
+        $('#typeNm').text(response.movieInfoResult.movieInfo.typeNm);
+
+        // 장르 설정
+        const genres = response.movieInfoResult.movieInfo.genres.map(genre => genre.genreNm).join(', ');
+        $('#genres').text(genres);
+
+        // 출연 배우 설정
+        if(response.movieInfoResult.movieInfo.actors.length > 0){
+            const actors = response.movieInfoResult.movieInfo.actors.map(actor => actor.peopleNm).join(', ');
+            $('#actors').text(actors);
+        } else {
+            $('#actors').text('출연 배우 정보 없음');
+        }
+    }
+</script>
+</html>
