@@ -28,9 +28,11 @@ public class LoginController {
 
     @PostMapping("/loginPoc")
     public ModelAndView login(@RequestParam("userId") String userId,
-                              @RequestParam("password") String password) {
+                              @RequestParam("password") String password, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         if (userService.authenticateUser(userId, password)) {
+            HttpSession session = request.getSession(); // 세션 생성 또는 기존 세션 가져오기
+            session.setAttribute("userName", userId); // 로그인 성공 시 세션에 userName 설정
             modelAndView.setViewName("home.html");
         } else {
             modelAndView.setViewName("login.html");
