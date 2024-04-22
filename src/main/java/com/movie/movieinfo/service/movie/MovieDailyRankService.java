@@ -31,6 +31,22 @@ public class MovieDailyRankService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return List.of(); // 오류 발생 시 빈 리스트 반환
+        return List.of();
     }
+
+    /**지역별 주간 1~10위 랭킹 로직*/
+    public List<MovieDailyRank> getDailyRankWithRegionCode(LocalDate targetDate , String regionCode) {
+        String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String url = baseUrl + "?key=" + key+"&targetDt=" +formattedDate +"&comCode=" +regionCode;
+        try {
+            MovieDailyRankWrapperResponse response = restTemplate.getForObject(url, MovieDailyRankWrapperResponse.class);
+            if (response != null && response.getBoxDailyOfficeResult() != null) {
+                return response.getBoxDailyOfficeResult().getMovieDailyRankList();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List.of();
+    }
+
 }
