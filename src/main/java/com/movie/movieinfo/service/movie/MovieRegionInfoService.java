@@ -18,7 +18,7 @@ public class MovieRegionInfoService {
     private final String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/code/searchCodeList.json";
     private final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
-    private final String  UpperRegionCode = "0105000000";
+    private final String  UpperRegionCode = "0105000000"; // 바꾸면안됨 상위코드는 대한민국 지역별 고유  분류 번호임
 
     public Optional<MovieRegionCode> getRegionCode(String regionCode) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
