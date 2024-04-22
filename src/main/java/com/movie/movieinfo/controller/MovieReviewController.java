@@ -72,5 +72,4 @@ public class MovieReviewController {
         // 삭제 성공시
         return true;
     }
-
 }

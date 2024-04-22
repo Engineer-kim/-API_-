@@ -93,4 +93,9 @@ public class MovieReviewService {
         movieReviewRepository.deleteByUserIdAndMovieCode(userId , movieCd);
         return true;
     }
+
+    public Integer getMovieReviewCount(String movieCd) {
+        Integer reviewCnt = movieReviewRepository.getMovieReviewCount(movieCd);
+        return Objects.requireNonNullElse(reviewCnt, 0);
+    }
 }
