@@ -105,7 +105,7 @@ public class MovieInfoController {
      * **/
 
     @GetMapping("/v1/{comCode}/listRegionMovieRankInfo")
-    public ResponseEntity<?> getRegionCode(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt , @PathVariable String comCode) {
+    public ResponseEntity<?> getMovieRankInfoWithRegionInfo(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt , @PathVariable String comCode) {
         Optional<MovieRegionCode> optionalRegionInfo = movieRegionInfoService.getRegionCode(comCode);
         System.out.println("optionalRegionInfo:::::::::::::::::::::::::::" +optionalRegionInfo.toString());
         List<MovieDailyRank> dailyRankInfo = movieDailyRankService.getDailyRankWithRegionCode(targetDt, comCode);
