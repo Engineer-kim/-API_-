@@ -1,5 +1,6 @@
 package com.movie.movieinfo.controller;
 
+import com.movie.movieinfo.annotation.login.LoggedIn;
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieDailyRank;
@@ -28,6 +29,7 @@ public class MovieInfoController {
     private  final MovieWeeklyRankService movieWeeklyRankService;
     private  final MovieSearchService movieSearchService;
     private final MovieRegionInfoService movieRegionInfoService;
+    private  final MovieReviewService movieReviewService;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -124,5 +126,13 @@ public class MovieInfoController {
     public String main() {
         return "main";
     }
+    
+    
 
+    /**해당 영화에 달린 리뷰 갯수 조회 API(세션이랑은 상관이 없어야함)*/
+    @GetMapping("/v1/getMovieReviewTotalCount")
+    @LoggedIn
+    public Integer getMovieReviewTotalCount(@RequestParam("movieCd") String movieCd) {
+        return movieReviewService.getMovieReviewCount(movieCd);
+    }
 }
