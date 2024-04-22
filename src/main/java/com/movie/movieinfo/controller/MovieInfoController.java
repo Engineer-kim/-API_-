@@ -2,10 +2,10 @@ package com.movie.movieinfo.controller;
 
 import com.movie.movieinfo.dto.movie.movieDetail.response.MovieInfoResponseWrapperDto;
 import com.movie.movieinfo.dto.movie.movieList.MovieList;
-import com.movie.movieinfo.dto.movie.movieRank.response.BoxWeeklyOfficeResult;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieDailyRank;
-import com.movie.movieinfo.dto.movie.movieRank.response.MovieWeeklyRank;
 import com.movie.movieinfo.dto.movie.movieRank.response.MovieWeeklyRankWrapperResponse;
+import com.movie.movieinfo.dto.movie.movieRegion.MovieRegionCode;
+import com.movie.movieinfo.dto.movie.movieRegion.response.RegionDailyRankResponse;
 import com.movie.movieinfo.service.movie.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +27,7 @@ public class MovieInfoController {
     private  final MovieDailyRankService movieDailyRankService;
     private  final MovieWeeklyRankService movieWeeklyRankService;
     private  final MovieSearchService movieSearchService;
+    private final MovieRegionInfoService movieRegionInfoService;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -97,8 +98,26 @@ public class MovieInfoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**지역 별 영화 정보 출력
+     * 주간 순위 정보 (TOP1 ~ TOP10)
+     * +
+     * 지역별코드 내려갈수있겠끔
+     * **/
 
-    
+    @GetMapping("/v1/{comCode}/listRegionMovieRankInfo")
+    public ResponseEntity<?> getRegionCode(@RequestParam("targetDt") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate targetDt , @PathVariable String comCode) {
+        Optional<MovieRegionCode> optionalRegionInfo = movieRegionInfoService.getRegionCode(comCode);
+        System.out.println("optionalRegionInfo:::::::::::::::::::::::::::" +optionalRegionInfo.toString());
+        List<MovieDailyRank> dailyRankInfo = movieDailyRankService.getDailyRankWithRegionCode(targetDt, comCode);
+        System.out.println("dailyRankInfo.toString()::::::::::::::::::::::::::::"  +dailyRankInfo.toString());
+        if (optionalRegionInfo.isPresent()) {
+            MovieRegionCode regionInfo = optionalRegionInfo.get();
+            RegionDailyRankResponse response = new RegionDailyRankResponse(regionInfo, dailyRankInfo);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     /**임시 로그아웃 테스트르르위한 엔드포인트*/
     @GetMapping("/main")

@@ -8,6 +8,7 @@
 <div class="container">
     <h1>인증이 성공<!</h1>
     <p>인증이 성공</p>
+    <p>안녕하세요, <span th:text="${session.userName}">사용자</span>님.</p>
     <form id="logoutForm" action="/api/auth/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <input type="submit" value="Logout"/>
