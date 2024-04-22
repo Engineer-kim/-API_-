@@ -96,10 +96,6 @@ public class MovieReviewService {
 
     public Integer getMovieReviewCount(String movieCd) {
         Integer reviewCnt = movieReviewRepository.getMovieReviewCount(movieCd);
-        if (reviewCnt == null) {
-            return 0;
-        } else {
-            return reviewCnt;
-        }
+        return Objects.requireNonNullElse(reviewCnt, 0);
     }
 }
