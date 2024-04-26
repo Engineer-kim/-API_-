@@ -110,9 +110,9 @@
                     <h6>Welcome to movie</h6>
                     <h2>오늘의 박스오피스 1위!</h2>
                     <div class="search-input">
-                        <form id="search" action="#">
-                            <input type="text" placeholder="제목/감독" id='searchText' name="searchKeyword" onkeypress="handle" />
-                            <button role="button">검색</button>
+                        <form id="search" action="#" method="GET">
+                            <input type="text" placeholder="제목/감독" id='searchText' name="searchKeyword" />
+                            <button type="submit" role="button">검색</button>
                         </form>
                     </div>
                     <div class="movieBestContainer"></div>
@@ -497,6 +497,27 @@
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 폼의 제출 이벤트를 감지합니다.
+        document.getElementById("search").addEventListener("submit", function(event) {
+            // 기본 폼 제출 동작을 막습니다.
+            event.preventDefault();
+
+            // 사용자가 입력한 텍스트를 가져옵니다.
+            var searchText = document.getElementById('searchText').value;
+
+            // 페이지를 리다이렉트할 URL을 구성합니다.
+            var targetUrl = "http://localhost:8080/movieInfo/v1/movieSearch?movieNm=" + encodeURIComponent(searchText);
+
+            // 구성된 URL로 페이지를 리다이렉트 합니다.
+            window.location.href = targetUrl;
+        });
+    });
+</script>
+<script>
+
+
+
     /**날짜 가져오는 함수*/
     function getTodayDate() {
         var today = new Date();
