@@ -130,8 +130,8 @@ public class MovieInfoController {
     
 
     /**해당 영화에 달린 리뷰 갯수 조회 API(세션이랑은 상관이 없어야함)*/
-//    @GetMapping("/v1/getMovieReviewTotalCount")
-//    public Integer getMovieReviewTotalCount(@RequestParam("movieCd") String movieCd) {
-//        return movieReviewService.getMovieReviewCount(movieCd);
-//    }
+    @GetMapping("/v1/getMovieReviewTotalCount")
+    public Integer getMovieReviewTotalCount(@RequestParam("movieCd") String movieCd) {
+        return movieReviewService.getMovieReviewCount(movieCd);
+    }
 }
