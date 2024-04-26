@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,14 +34,17 @@ public class MovieSearchService {
         Optional.ofNullable(directorName)
                 .filter(parameter -> !parameter.isBlank())
                 .ifPresent(parameter -> uriBuilder.queryParam("directorNm", directorName));
-        //각각의 파라미터를 합쳐서 url로만들어서 외부 API 호출
-        String url = uriBuilder.toUriString();
+        //각각의 파라미터를 합쳐서 url로 만들어서 호출 
+        //restTempate 은 한글과 같은 비아스키 코드는 인식을 못하므로 인코딩 가능하도록 설정
+        URI url = uriBuilder.encode().build().toUri();
 
         try {
             MovieListResponseDto response = restTemplate.getForObject(url, MovieListResponseDto.class);
             if (response != null && response.getMovieListResult() != null) {
+                System.out.println("response.getMovieListResult().getMovieList():::::::::::"+ response.getMovieListResult().getMovieList());
                 return response.getMovieListResult().getMovieList();
             }
+            System.out.println("response.toString():::::::::::::::::::::::::::::::::::::::::::"+response.toString() );
         } catch (Exception e) {
             log.error("Reason For Error:::::::::::::::::::::::::::::::::::::" + e);
             e.printStackTrace();
