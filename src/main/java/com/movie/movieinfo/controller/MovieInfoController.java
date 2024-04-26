@@ -95,8 +95,8 @@ public class MovieInfoController {
 
     /**감독명 또는 영화제목으로 검색 가능한 API(Like 쿼리로 검색)*/
     @GetMapping("/v1/movieSearch")
-    public ResponseEntity<List<MovieList>> searchMovie(@RequestParam(value = "movieNm", required = false) String movieName, @RequestParam(value = "directorNm", required = false) String directorName) {
-        List<MovieList> response = movieSearchService.searchMovie(movieName, directorName);
+    public ResponseEntity<List<MovieList>> searchMovie(@RequestParam(value = "movieNm", required = false) String movieName) {
+        List<MovieList> response = movieSearchService.searchMovie(movieName);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
