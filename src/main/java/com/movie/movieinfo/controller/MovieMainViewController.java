@@ -21,4 +21,10 @@ public class MovieMainViewController {
         return "movieInfoDetail";
     }
 
+    /**영화 검색*/
+    @GetMapping("/search")
+    public String movieSearch(@RequestParam("text")  String text) {
+        return "movieInfoSearch";
+    }
+
 }

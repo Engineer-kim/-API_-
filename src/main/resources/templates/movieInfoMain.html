@@ -111,12 +111,12 @@
                     <h2>오늘의 박스오피스 1위!</h2>
                     <div class="search-input">
                         <form id="search" action="#" method="GET">
-                            <input type="text" placeholder="제목/감독" id='searchText' name="searchKeyword" />
+                            <input type="text" placeholder="제목" id='searchText' name="searchKeyword" />
                             <button type="submit" role="button">검색</button>
                         </form>
                     </div>
                     <div class="movieBestContainer"></div>
-                    <p>영화진흥회에서 제공하는 공신력 있는 정보를 기반으로 영화순위를 보여줍니다.
+                    <p>-----영화진흥회에서 제공하는 공신력 있는 정보를 기반으로 영화순위를 보여줍니다.
                 </div>
             </div>
             <div class="col-lg-4 offset-lg-2">
@@ -507,7 +507,8 @@
             var searchText = document.getElementById('searchText').value;
 
             // 페이지를 리다이렉트할 URL을 구성합니다.
-            var targetUrl = "http://localhost:8080/movieInfo/v1/movieSearch?movieNm=" + encodeURIComponent(searchText);
+            // 여기서 'movieNm' 대신 'text'를 사용합니다.
+            var targetUrl = urlConfig.baseUrl+"/movieInfoMain/search?text=" + encodeURIComponent(searchText);
 
             // 구성된 URL로 페이지를 리다이렉트 합니다.
             window.location.href = targetUrl;
