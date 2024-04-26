@@ -2,49 +2,522 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <title>영화  순위정보</title>
     <style>
-        .movie-rank-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+
+
+
+
+        swiper-container {
+            width: 100%;
+            height: 100%;
         }
-        .movie {
+
+        swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
             display: flex;
-            align-items: flex-start;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            gap: 10px;
+            justify-content: center;
+            align-items: center;
         }
-        .movie-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .movie-poster {
-            width: 100px;
-            height: 150px;
+
+        swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 5px;
         }
+
+        .image-size {
+            width: 300px;
+            height: auto;
+        }
+
     </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="/js/vendor/jquery/jquery.min.js"></script>
+    <script src="/js/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/assets/js/isotope.min.js"></script>
+    <script src="/js/assets/js/owl-carousel.js"></script>
+    <script src="/js/assets/js/counter.js"></script>
+    <script src="/js/assets/js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/js/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/js/assets/css/templatemo-lugx-gaming.css">
+    <link rel="stylesheet" href="/js/assets/css/owl.css">
+    <link rel="stylesheet" href="/js/assets/css/animate.css">
+
 </head>
 <body>
-<h1>일별 박스오피스</h1>
-<h1>일별 영화 순위</h1>
-<div class="movie-rank-container" id="movieRankContainer">
 
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">DailyBest</a></li>
+                        <li><a href="#">WeeklyBest</a></li>
+                        <li><a href="#">Best by region</a></li>
+                        <!-- <li><a class="listyle" href="#">Sign up<br></a></li> -->
+                        <li><a href="#">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<div class="main-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 align-self-center">
+                <div class="caption header-text">
+                    <h6>Welcome to movie</h6>
+                    <h2>오늘의 박스오피스 1위!</h2>
+                    <div class="search-input">
+                        <form id="search" action="#" method="GET">
+                            <input type="text" placeholder="제목/감독" id='searchText' name="searchKeyword" />
+                            <button type="submit" role="button">검색</button>
+                        </form>
+                    </div>
+                    <div class="movieBestContainer"></div>
+                    <p>영화진흥회에서 제공하는 공신력 있는 정보를 기반으로 영화순위를 보여줍니다.
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                <div class="right-image">
+                    <div class="posterBestContainer"></div>
+                    <span class="price">best</span>
+                    <span class="offer">today</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<h1>주별 영화 순위</h1>
 
+<div class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105001')">
+                        </div>
+                        <h4>서울</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105002')">
+                        </div>
+                        <h4>경기도</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105003')">
+                        </div>
+                        <h4>강원도</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105004')">
+                        </div>
+                        <h4>Easy Layout</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105005')">
+                        </div>
+                        <h4>Easy Layout</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105006')">
+                        </div>
+                        <h4>Easy Layout</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105007')">
+                        </div>
+                        <h4>Easy Layout</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105008')">
+                        </div>
+                        <h4>Easy Layout</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="section trending">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h6>일간순위</h6>
+                    <h2>오늘의 박스오피스 TOP10</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="main-button">
+                    <a href="shop.html">View All</a>
+                </div>
+            </div>
+
+            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" space-between="30"
+                              slides-per-view="3">
+                <swiper-slide>
+                    <div id="rank1">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank2">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank3">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank4">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank5">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank6">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank7">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank8">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank9">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="rank10">
+                        <div class="movieContainer">
+                            <div class="posterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="infoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+            </swiper-container>
+        </div>
+    </div>
+</div>
+
+<div class="section trending">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h6>주간순위</h6>
+                    <h2>주간 박스오피스 TOP10</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="main-button">
+                    <a href="shop.html">View All</a>
+                </div>
+            </div>
+
+            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" space-between="30"
+                              slides-per-view="3">
+                <swiper-slide>
+                    <div id="Weekrank1">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank2">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank3">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank4">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank5">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank6">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank7">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank8">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank9">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                    <div id="Weekrank10">
+                        <div class="movieContainer">
+                            <div class="WposterContainer"></div> <!-- 영화 포스터 컨테이너 -->
+                            <div class="movieDetails">
+                                <div class="WinfoContainer"></div> <!-- 영화 제목 및 개봉일 컨테이너 -->
+                            </div>
+                        </div>
+                    </div>
+                </swiper-slide>
+
+            </swiper-container>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        <div class="col-lg-12">
+            <p>Copyright © 2048 LUGX Gaming Company. All rights reserved. &nbsp;&nbsp; <a rel="nofollow" href="https://templatemo.com" target="_blank">Design: TemplateMo</a></p>
+        </div>
+    </div>
+</footer>
 
 
 </body>
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 폼의 제출 이벤트를 감지합니다.
+        document.getElementById("search").addEventListener("submit", function(event) {
+            // 기본 폼 제출 동작을 막습니다.
+            event.preventDefault();
+
+            // 사용자가 입력한 텍스트를 가져옵니다.
+            var searchText = document.getElementById('searchText').value;
+
+            // 페이지를 리다이렉트할 URL을 구성합니다.
+            var targetUrl = "http://localhost:8080/movieInfo/v1/movieSearch?movieNm=" + encodeURIComponent(searchText);
+
+            // 구성된 URL로 페이지를 리다이렉트 합니다.
+            window.location.href = targetUrl;
+        });
+    });
+</script>
+<script>
+
+
+
     /**날짜 가져오는 함수*/
     function getTodayDate() {
         var today = new Date();
@@ -69,6 +542,7 @@
             },
             success: function(response) {
                 displayMoviesRank(response);
+                displayMoviesBest(response);
             },
             error: function(xhr, status, error) {
                 console.error("Error occurred: " + error);
@@ -76,6 +550,114 @@
         });
     });
 
+    async function displayMoviesRank(movies) {
+        for (const movie of movies) {
+            // 영화 순위를 기반으로 컨테이너 선택
+            const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
+            const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
+
+            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
+            const imageUrl = await getImageFunction(movie.movieCd);
+            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
+            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
+
+            // 영화 정보 추가
+            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
+            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
+
+            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
+            $('#rank' + movie.rank).on('click', function() {
+                pageMove(movie.movieCd);
+            });
+        }
+    }
+
+
+    function displayMoviesBest(movies) {
+        console.log(movies); // 여기서 movies 구조 확인
+        const container = $('.movieBestContainer');
+        const posterContainer = $('.posterBestContainer'); // 영화 포스터를 위한 새로운 컨테이너
+
+        // rank가 "1"인 영화만 필터링
+        const rankOneMovie = movies.filter(function(movie) {
+            return movie.rank === "1";
+        });
+
+        // 필터링된 영화(들) 표시
+        rankOneMovie.forEach(function(movie) {
+            var movieEl = $('<div class="movie"></div>');
+            movieEl.append('<br><h6>순위: ' + movie.rank + '</h6>');
+            movieEl.append('<h6>제목: ' + movie.movieNm + '</h6>'); // movieNm 속성 확인
+            movieEl.append('<h6>개봉일: ' + movie.openDt + '</h6>'); // openDt 속성 확인
+            movieEl.append('<h6>누적 관객수: ' + movie.audiAcc + '명</h6><br><br><br>'); // audiAcc 속성 확인
+            container.append(movieEl);
+
+            $('.posterBestContainer').on('click', function() {
+                pageMove(movie.movieCd);
+            });
+
+            // 영화 포스터 이미지 불러오기를 위한 Ajax 요청
+            $.ajax({
+                url:  urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" + movie.movieCd,
+                type: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                success: function(posterResponse) {
+                    // 영화 포스터 이미지 URL을 가져오는 데 성공한 경우
+                    console.log("Poster URL1111111111111111111111::::::::::::::::::::: " + posterResponse);
+                    var posterEl = $('<img src="' + posterResponse + '" alt="영화 포스터" class="movie-poster">');
+                    posterContainer.append(posterEl); // 포스터 이미지를 별도의 컨테이너에 추가
+                },
+                error: function(xhr, status, error) {
+                    console.error("영화 포스터 이미지를 불러오는 데 실패했습니다: " + error);
+                }
+            });
+        });
+    }
+
+    $(document).ready(function(){
+        console.log(urlConfig);
+        $.ajax({
+            //영화 정보 불러오는 API
+            url: urlConfig.baseUrl +"/movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240101",
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+            },
+            success: function(response) {
+                WeekMoviesRank(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: " + error);
+            }
+        });
+    });
+
+    async function WeekMoviesRank(movies) {
+        for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
+            // 영화 순위를 기반으로 컨테이너 선택
+            const posterContainer = $('#Weekrank' + movie.rank + ' .WposterContainer');
+            const infoContainer = $('#Weekrank' + movie.rank + ' .WinfoContainer');
+
+            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
+            const imageUrl = await getImageFunction(movie.movieCd);
+            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
+            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
+
+            // 영화 정보 추가
+            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
+            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
+
+            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
+            $('#Weekrank' + movie.rank).on('click', function() {
+                pageMove(movie.movieCd);
+            });
+        }
+    }
+
+
+    /** 원본
     async function displayMoviesRank(movies) {
         const container = $('#movieRankContainer');
         for (const movie of movies) {
@@ -102,7 +684,7 @@
             container.append(movieEl);
         }
     }
-
+    */
     // /**주간 정보*/
     // fetch(urlConfig.baseUrl + "movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240407")
     //     .then(response => {
@@ -133,6 +715,26 @@
 
     function pageMove(movieCd){
         window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
+    }
+
+    /** 각 도별 이미지 클릭시 이동 함수*/
+    function moveCityDetailPage(comCode){
+        const targetDt = "20230419"; // 날짜 동적으로 가져와서 바꾸는 함수로 대체하셈. 테스트를 위해 일주일 전 날짜를 설정함.
+        $.ajax({
+            url: urlConfig.baseUrl+ `/movieInfo/v1/${comCode}/listRegionMovieRankInfo?targetDt=${targetDt}`,
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function(data) {
+                return data; // 단순히 응답값만 찍었음 향후 로직은 함수여기서 호출하던 로직을짜던 하면됨
+            },
+            error: function() {
+                // 오류 처리 해주셈
+                console.error("에러 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ㅇㅈㅇㅂㅁ");
+            }
+        });
     }
 </script>
 </html>

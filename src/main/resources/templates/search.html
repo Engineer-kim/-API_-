@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="/js/config.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+
+
+    $(document).ready(function(){
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get('text');
+
+        if (text) {
+            console.log(text);
+            $.ajax({
+                url: urlConfig.baseUrl + "/movieInfo/v1/movieSearch?movieNm=" + text,
+                type: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error occurred: " + error);
+                }
+            });
+        } else {
+            console.error("text 값이 없습니다."); // 오류 메시지 수정
+        }
+    });
+
+</script>
+</html>

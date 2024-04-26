@@ -13,5 +13,5 @@ public interface MovieReviewRepository extends JpaRepository<Review, Integer> {
 
     Integer countByUserIdAndMovieCode(String userId, String movieCode);
 
-    Integer getMovieReviewCount(String movieCd);
+//    Integer countByMovieId(String movieCd);
 }
