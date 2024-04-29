@@ -47,6 +47,30 @@
             object-fit: cover;
         }
 
+        .movie-poster {
+            width: 150px; /* 폭 설정 */
+            height: auto; /* 높이를 자동으로 조절하여 비율 유지 */
+            display: block; /* 블록 레벨 요소로 표시 */
+            margin: 0 auto; /* 상하 여백은 없고 좌우 여백은 자동으로 설정하여 중앙 정렬 */
+            border-radius: 10px; /* 모서리를 둥글게 처리 */
+        }
+
+        .movie-container {
+            display: flex; /* Flexbox 사용 */
+            flex-direction: column; /* 자식 요소를 수직 방향으로 정렬 */
+            align-items: center; /* 가운데 정렬 */
+            margin-bottom: 40px; /* 영화 컨테이너 간 여백을 늘림 */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .info-container {
+            margin-left: 20px; /* 포스터와 정보 사이의 여백 */
+            display: flex; /* Flexbox 사용 */
+            flex-direction: column; /* 요소들을 수직으로 정렬 */
+            justify-content: center; /* 수직 축 중앙 정렬 */
+        }
 
     </style>
 
@@ -99,23 +123,25 @@
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
-
+<!-- 검색결과 텍스트 -->
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <h3>
-                    <div class="movieDetails">
-                        <div class="movieNm"></div>
+                    <div>
+                        <div class="search-text"></div>
                     </div>
                 </h3>
             </div>
         </div>
     </div>
 </div>
+<!-- ***** Header Area End ***** -->
 
-
-
+<!-- 검색 결과 화면 표시 부분-->
+<div id="movies" class="movie-container"></div> <!-- 영화 정보를 표시할 컨테이너 -->
+<!-- footer 부분 -->
 <footer>
     <div class="container">
         <div class="col-lg-12">
@@ -130,31 +156,76 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
+    $(document).ready(function() {
+        const urlConfig = {
+            baseUrl: "http://localhost:8080",
+            searchPath: "/movieInfo/v1/movieSearch?movieNm=",
+        };
 
-
-    $(document).ready(function(){
         const urlParams = new URLSearchParams(window.location.search);
         const text = urlParams.get('text');
-
+        /** 검색 내용 출력*/
         if (text) {
-            console.log(urlConfig);
+            const searchTextElement = $('<h3>').text(`검색어: ${text}`); // `<p>` 태그 생성 및 텍스트 설정
+            $('.search-text').append(searchTextElement); // 특정 div에 생성한 `<p>` 태그 추가
+        } else {
+            console.error("text 값이 없습니다.");
+        }
+        /** 검색결과 출력 */
+        if (text) {
             $.ajax({
-                url: urlConfig.baseUrl + "/movieInfo/v1/movieSearch?movieNm=" + text,
+                url: `${urlConfig.baseUrl}${urlConfig.searchPath}${text}`,
                 type: "GET",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(response) {
-                    console.log(response);
+                    // 응답이 배열 형태라고 가정하고, 각 영화 정보에 대해 반복
+                    response.forEach(async function(movie) {
+                        const movieContainer = $('<div>', { 'class': 'movie-container' });
+                        const title = $('<h3>').text(movie.movieNm);
+                        const releaseDate = $('<p>').text(`개봉일: ${movie.openDt}`);
+
+                        movieContainer.append(title, releaseDate);
+                        $('#movies').append(movieContainer);
+
+                        // 영화 포스터 가져오기 및 상세 페이지로 이동 설정
+                        try {
+                            const imageData = await getImageFunction(movie.movieCd);
+                            const imageElement = $('<img>', {
+                                src: imageData,
+                                alt: `${movie.movieNm} 포스터`,
+                                class: "movie-poster" // 클래스 추가
+                            }).click(function() {
+                                pageMove(movie.movieCd);
+                            });
+
+                            movieContainer.append(imageElement);
+                        } catch (error) {
+                            console.error('영화 포스터를 불러오는데 실패했습니다.', error);
+                        }
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error("Error occurred: " + error);
                 }
             });
         } else {
-            console.error("text 값이 없습니다."); // 오류 메시지 수정
+            console.error("text 값이 없습니다.");
         }
     });
+
+    // 영화 포스터 가져오기
+    async function getImageFunction(movieCd) {
+        const response = await fetch(urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
+        const imageData = await response.text();
+        return imageData;
+    }
+
+    // 상세 페이지로 이동하는 함수
+    function pageMove(movieCd) {
+        window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
+    }
 
 </script>
 </html>
