@@ -163,18 +163,18 @@
         };
 
         const urlParams = new URLSearchParams(window.location.search);
-        const text = urlParams.get('text');
+        const searchText = urlParams.get('searchText');
         /** 검색 내용 출력*/
-        if (text) {
-            const searchTextElement = $('<h3>').text(`검색어: ${text}`); // `<p>` 태그 생성 및 텍스트 설정
+        if (searchText) {
+            const searchTextElement = $('<h3>').text(`검색어: ${searchText}`); // `<p>` 태그 생성 및 텍스트 설정
             $('.search-text').append(searchTextElement); // 특정 div에 생성한 `<p>` 태그 추가
         } else {
             console.error("text 값이 없습니다.");
         }
         /** 검색결과 출력 */
-        if (text) {
+        if (searchText) {
             $.ajax({
-                url: `${urlConfig.baseUrl}${urlConfig.searchPath}${text}`,
+                url: `${urlConfig.baseUrl}${urlConfig.searchPath}${searchText}`,
                 type: "GET",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"

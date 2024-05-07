@@ -128,82 +128,32 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105001">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105001')">
+                            <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;">
                         </div>
                         <h4>서울</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105002">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105002')">
+                            <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>경기도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105003">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105003')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>강원도</h4>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#">
-                    <div class="item">
-                        <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105004')">
-                        </div>
-                        <h4>Easy Layout</h4>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#">
-                    <div class="item">
-                        <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105005')">
-                        </div>
-                        <h4>Easy Layout</h4>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#">
-                    <div class="item">
-                        <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105006')">
-                        </div>
-                        <h4>Easy Layout</h4>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#">
-                    <div class="item">
-                        <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105007')">
-                        </div>
-                        <h4>Easy Layout</h4>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#">
-                    <div class="item">
-                        <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105008')">
-                        </div>
-                        <h4>Easy Layout</h4>
                     </div>
                 </a>
             </div>
@@ -477,7 +427,7 @@
 
             // 페이지를 리다이렉트할 URL을 구성합니다.
             // 여기서 'movieNm' 대신 'text'를 사용합니다.
-            var targetUrl = urlConfig.baseUrl+"/movieInfoMain/search?text=" + encodeURIComponent(searchText);
+            var targetUrl = urlConfig.baseUrl+"/movieInfoMain/search?searchText=" + encodeURIComponent(searchText);
 
             // 구성된 URL로 페이지를 리다이렉트 합니다.
             window.location.href = targetUrl;

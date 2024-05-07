@@ -23,8 +23,11 @@ public class MovieMainViewController {
 
     /**영화 검색*/
     @GetMapping("/search")
-    public String movieSearch(@RequestParam("text")  String text) {
-        return "movieInfoSearch";
-    }
+    public String movieSearch(@RequestParam("searchText")  String searchText) {return "movieInfoSearch";}
+
+    /**지역 랭킹*/
+    @GetMapping("/city")
+    public String movieCity(@RequestParam("cityCode")  String cityCode) { return "movieCityRank"; }
+
 
 }
