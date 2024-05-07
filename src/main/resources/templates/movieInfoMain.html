@@ -416,25 +416,6 @@
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // 폼의 제출 이벤트를 감지합니다.
-        document.getElementById("search").addEventListener("submit", function(event) {
-            // 기본 폼 제출 동작을 막습니다.
-            event.preventDefault();
-
-            // 사용자가 입력한 텍스트를 가져옵니다.
-            var searchText = document.getElementById('searchText').value;
-
-            // 페이지를 리다이렉트할 URL을 구성합니다.
-            // 여기서 'movieNm' 대신 'text'를 사용합니다.
-            var targetUrl = urlConfig.baseUrl+"/movieInfoMain/search?searchText=" + encodeURIComponent(searchText);
-
-            // 구성된 URL로 페이지를 리다이렉트 합니다.
-            window.location.href = targetUrl;
-        });
-    });
-</script>
-<script>
 
     /**날짜 가져오는 함수*/
     function getTodayDate() {
@@ -530,45 +511,18 @@
             });
         });
     }
-    /** 주간 박스오피스api 불러오기*/
-    $(document).ready(function(){
-        $.ajax({
-            //영화 정보 불러오는 API
-            url: urlConfig.baseUrl +"/movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240101",
-            type: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
-            },
-            success: function(response) {
-                WeekMoviesRank(response);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error occurred: " + error);
-            }
-        });
-    });
+
+    /**검색버튼을 누르면 텍스트 박스 안에 있는 텍스트 정보를 movieInfoSearch 페이지로 넘겨주는 함수 */
     /** 주간 박스오피스 순위 1~10까지 불러오는 함수 */
-    async function WeekMoviesRank(movies) {
-        for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
-            // 영화 순위를 기반으로 컨테이너 선택
-            const posterContainer = $('#Weekrank' + movie.rank + ' .WposterContainer');
-            const infoContainer = $('#Weekrank' + movie.rank + ' .WinfoContainer');
-
-            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
-            const imageUrl = await getImageFunction(movie.movieCd);
-            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
-
-            // 영화 정보 추가
-            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
-            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-
-            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
-            $('#Weekrank' + movie.rank).on('click', function() {
-                pageMove(movie.movieCd);
-            });
-        }
-    }
+    /** (주간/일간 박스오피스 함수 관련)
+     * 영화 정보값을 "#rank+영화순위"의 형태로 id형태로 만들고 그 안에 있는 영화포스터 정보를 ".posterContainer"의 형태로 class로 만들고
+     * 영화 제목과 개봉일 정보를 ".infoContainer"의 형태로 class로 만들어서 화면에 뿌리는 기능이 있어야함
+     * 사용예시
+     * <div id="rank">
+     *     <div class="posterContainer"></div>
+     *     <div class="infoContainer"></div>
+     * </div>
+     * 위와 같은 형태로 사용될 수 있어야함*/
 
     /**영화 포스터*/
     async function getImageFunction(movieCd) {
@@ -579,26 +533,6 @@
     /** 상세페이지 이동 함수*/
     function pageMove(movieCd){
         window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
-    }
-
-    /** 각 도별 이미지 클릭시 이동 함수*/
-    function moveCityDetailPage(comCode){
-        const targetDt = "20230419"; // 날짜 동적으로 가져와서 바꾸는 함수로 대체하셈. 테스트를 위해 일주일 전 날짜를 설정함.
-        $.ajax({
-            url: urlConfig.baseUrl+ `/movieInfo/v1/${comCode}/listRegionMovieRankInfo?targetDt=${targetDt}`,
-            type: 'GET',
-            dataType: 'json',
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            success: function(data) {
-                return data; // 단순히 응답값만 찍었음 향후 로직은 함수여기서 호출하던 로직을짜던 하면됨
-            },
-            error: function() {
-                // 오류 처리 해주셈
-                console.error("에러 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ㅇㅈㅇㅂㅁ");
-            }
-        });
     }
 </script>
 </html>
