@@ -341,19 +341,19 @@
     });
     /** 영화 상세정보 불러오는 함수 */
     function showMovieDetail(response){
-        // 영화 포스터 설정
+
         $('.moviePoster').attr('src', response.moviePosterUrl);
 
-        // 영화 이름, 영문 이름, 유형 설정
+
         $('.movieNm').text(response.movieInfoResult.movieInfo.movieNm);
         $('.movieNmEn').text(response.movieInfoResult.movieInfo.movieNmEn);
         $('.typeNm').text(response.movieInfoResult.movieInfo.typeNm);
 
-        // 장르 설정
+
         const genres = response.movieInfoResult.movieInfo.genres.map(genre => genre.genreNm).join(', ');
         $('.genres').text(genres);
 
-        // 출연 배우 설정
+
         if(response.movieInfoResult.movieInfo.actors.length > 0){
             const actors = response.movieInfoResult.movieInfo.actors.map(actor => actor.peopleNm).join(', ');
             $('.actors').text(actors);
@@ -365,11 +365,10 @@
     /**일별 정보 가져오는 함수*/
     $(document).ready(function(){
         $.ajax({
-            //영화 정보 불러오는 API
             url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
             type: "GET",
             headers: {
-                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+                "X-Requested-With": "XMLHttpRequest"
             },
             success: function(response) {
                 displayMoviesRank(response);
@@ -382,20 +381,16 @@
     /** 일간 박스오피스 정보 1~10위까지 불러오는 함수*/
     async function displayMoviesRank(movies) {
         for (const movie of movies) {
-            // 영화 순위를 기반으로 컨테이너 선택
             const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
             const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
 
-            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
             const imageUrl = await getImageFunction(movie.movieCd);
             const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
             posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
 
-            // 영화 정보 추가
             infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
             infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
 
-            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
             $('#rank' + movie.rank).on('click', function() {
                 pageMove(movie.movieCd);
             });

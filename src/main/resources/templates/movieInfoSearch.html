@@ -166,8 +166,8 @@
         const searchText = urlParams.get('searchText');
         /** 검색 내용 출력*/
         if (searchText) {
-            const searchTextElement = $('<h3>').text(`검색어: ${searchText}`); // `<p>` 태그 생성 및 텍스트 설정
-            $('.search-text').append(searchTextElement); // 특정 div에 생성한 `<p>` 태그 추가
+            const searchTextElement = $('<h3>').text(`검색어: ${searchText}`);
+            $('.search-text').append(searchTextElement);
         } else {
             console.error("text 값이 없습니다.");
         }
@@ -180,7 +180,6 @@
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(response) {
-                    // 응답이 배열 형태라고 가정하고, 각 영화 정보에 대해 반복
                     response.forEach(async function(movie) {
                         const movieContainer = $('<div>', { 'class': 'movie-container' });
                         const title = $('<h3>').text(movie.movieNm);
@@ -188,18 +187,15 @@
 
                         movieContainer.append(title, releaseDate);
                         $('#movies').append(movieContainer);
-
-                        // 영화 포스터 가져오기 및 상세 페이지로 이동 설정
                         try {
                             const imageData = await getImageFunction(movie.movieCd);
                             const imageElement = $('<img>', {
                                 src: imageData,
                                 alt: `${movie.movieNm} 포스터`,
-                                class: "movie-poster" // 클래스 추가
+                                class: "movie-poster"
                             }).click(function() {
                                 pageMove(movie.movieCd);
                             });
-
                             movieContainer.append(imageElement);
                         } catch (error) {
                             console.error('영화 포스터를 불러오는데 실패했습니다.', error);
@@ -215,14 +211,11 @@
         }
     });
 
-    // 영화 포스터 가져오기
     async function getImageFunction(movieCd) {
         const response = await fetch(urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
         const imageData = await response.text();
         return imageData;
     }
-
-    // 상세 페이지로 이동하는 함수
     function pageMove(movieCd) {
         window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
     }

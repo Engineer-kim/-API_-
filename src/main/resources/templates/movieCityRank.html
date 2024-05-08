@@ -169,27 +169,24 @@
 
 
     $(document).ready(function(){
-        // URL에서 cityCode 쿼리 파라미터 값을 추출
+
         var cityCode = new URLSearchParams(window.location.search).get('cityCode');
 
-        // cityCode 값이 있는 경우에만 AJAX 요청 실행
         if(cityCode) {
             $.ajax({
-                // 동적으로 cityCode 값을 포함한 URL 구성
                 url: urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101",
                 type: "GET",
                 headers: {
-                    "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+                    "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(response) {
                     console.log(response.dailyRankInfo);
                     displayCityRank(response.dailyRankInfo);
 
-                    // korNm 값을 사용하여 <h3> 태그 생성 및 특정 div에 추가
+
                     const regionName = response.regionInfo.korNm;
                     const regionHeader = $('<h3>' + regionName + '</h3>');
-                    $('.yourClassName').prepend(regionHeader); // 지정한 클래스를 가진 div의 가장 위에 <h3> 태그 추가
-
+                    $('.yourClassName').prepend(regionHeader);
                 },
                 error: function(xhr, status, error) {
                     console.error("Error occurred: " + error);
@@ -204,17 +201,11 @@
         for (const movie of movies) {
             const posterContainer = $('#rank' + movie.rank + ' .posterContainer2');
             const infoContainer = $('#rank' + movie.rank + ' .infoContainer2');
-
-            // 포스터 URL 가져오기
             const imageUrl = await getImageFunction(movie.movieCd);
             const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
             posterContainer.append(moviePosterEl);
-
-            // 영화 정보 추가
             infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
             infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-
-            // 클릭 시 상세 페이지로 이동하는 로직 수정
             posterContainer.on('click', function() {
                 pageMove(movie.movieCd);
             });
