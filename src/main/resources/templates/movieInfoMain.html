@@ -444,7 +444,7 @@
                 getWeeklyMovieRank();
             },
             error: function(xhr, status, error) {
-                console.error("Error occurred: " + error);
+                alert("일별 정보를 가져오는데 실패하였습니다");
             }
         });
 
@@ -504,7 +504,7 @@
                     posterContainer.append(posterEl);
                 },
                 error: function(xhr, status, error) {
-                    console.error("영화 포스터 이미지를 불러오는 데 실패했습니다: " + error);
+                    alert("영화 포스터 이미지를 불러오는 데 실패했습니다");
                 }
             });
         });
@@ -522,7 +522,6 @@
     /**주간 영화 정보*/
     function getWeeklyMovieRank() {
         const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${targetDt}`;
-        console.log("weeklyApiEndPoint:::::::::"+ weeklyApiEndPoint);
         fetch(weeklyApiEndPoint)
             .then(response => {
                 if (response.ok) {

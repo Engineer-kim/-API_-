@@ -180,7 +180,6 @@
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(response) {
-                    console.log(response.dailyRankInfo);
                     displayCityRank(response.dailyRankInfo);
 
 
@@ -189,11 +188,11 @@
                     $('.yourClassName').prepend(regionHeader);
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error occurred: " + error);
+                    alert("지역 별 영화 정보를 가져오는데 실패했습니다")
                 }
             });
         } else {
-            console.error("cityCode query parameter is missing in the URL.");
+            alert("지역 별 영화 정보를 가져오는도중 알수없는 오류가 발생했습니다.")
         }
     });
 

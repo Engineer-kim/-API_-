@@ -169,7 +169,7 @@
             const searchTextElement = $('<h3>').text(`검색어: ${searchText}`);
             $('.search-text').append(searchTextElement);
         } else {
-            console.error("text 값이 없습니다.");
+            alert("검색텍스트가 입력되지 않았습니다");
         }
         /** 검색결과 출력 */
         if (searchText) {
@@ -198,16 +198,16 @@
                             });
                             movieContainer.append(imageElement);
                         } catch (error) {
-                            console.error('영화 포스터를 불러오는데 실패했습니다.', error);
+                            alert("검색 도중 오류가 발생 했습니다.");
                         }
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error occurred: " + error);
+                    alert("알수없는 오류가 발생 했습니다.");
                 }
             });
         } else {
-            console.error("text 값이 없습니다.");
+            alert("text 값이 없습니다.");
         }
     });
 
