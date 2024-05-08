@@ -547,8 +547,11 @@
            getImageFunction(movieCd).then(imageUrl => {
                const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
                posterContainer.append(moviePosterEl);
-           }).catch(error => console.error("조회된 영화 포스터가 없습니다", "Default.png"));
-
+           }).catch(error => {
+               const defaultImageUrl = "Default.png";
+               const moviePosterEl = $(`<img src="${defaultImageUrl}" alt="Movie Poster">`);
+               posterContainer.append(moviePosterEl);
+           });
            infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
 
            $(rankSelector).on('click', () => pageMove(movieCd));
