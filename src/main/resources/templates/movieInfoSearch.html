@@ -157,11 +157,6 @@
 <script>
 
     $(document).ready(function() {
-        const urlConfig = {
-            baseUrl: "http://localhost:8080",
-            searchPath: "/movieInfo/v1/movieSearch?movieNm=",
-        };
-
         const urlParams = new URLSearchParams(window.location.search);
         const searchText = urlParams.get('searchText');
         /** 검색 내용 출력*/
@@ -174,7 +169,7 @@
         /** 검색결과 출력 */
         if (searchText) {
             $.ajax({
-                url: `${urlConfig.baseUrl}${urlConfig.searchPath}${searchText}`,
+                url: urlConfig.baseUrl + "/movieInfo/v1/movieSearch?movieNm=" +searchText,
                 type: "GET",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
