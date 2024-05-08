@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -419,10 +419,10 @@
 
     /**날짜 가져오는 함수*/
     function getTodayDate() {
-        var today = new Date();
-        var yyyy = today.getFullYear();
-        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
-        var dd = ('0' + today.getDate()).slice(-2);
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
 
         return yyyy + mm + dd;
     }
@@ -436,34 +436,37 @@
             url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
             type: "GET",
             headers: {
-                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+                "X-Requested-With": "XMLHttpRequest"
             },
             success: function(response) {
                 displayMoviesRank(response);
                 displayMoviesBest(response);
+                getWeeklyMovieRank();
             },
             error: function(xhr, status, error) {
                 console.error("Error occurred: " + error);
             }
         });
+
+        $('#search').on('submit', searchMovie);
     });
     /**일간 박스오피스 정보 불러오는 함수 */
     async function displayMoviesRank(movies) {
         for (const movie of movies) {
-            // 영화 순위를 기반으로 컨테이너 선택
+
             const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
             const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
 
-            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
+
             const imageUrl = await getImageFunction(movie.movieCd);
             const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
+            posterContainer.append(moviePosterEl);
 
-            // 영화 정보 추가
+
             infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
             infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
 
-            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
+
             $('#rank' + movie.rank).on('click', function() {
                 pageMove(movie.movieCd);
             });
@@ -473,27 +476,23 @@
     /**당일 박스오피스 1위 상세정보 불러오는 함수 */
     function displayMoviesBest(movies) {
         const container = $('.movieBestContainer');
-        const posterContainer = $('.posterBestContainer'); // 영화 포스터를 위한 새로운 컨테이너
-
-        // rank가 "1"인 영화만 필터링
+        const posterContainer = $('.posterBestContainer');
         const rankOneMovie = movies.filter(function(movie) {
             return movie.rank === "1";
         });
 
-        // 필터링된 영화(들) 표시
         rankOneMovie.forEach(function(movie) {
             var movieEl = $('<div class="movie"></div>');
             movieEl.append('<br><h6>순위: ' + movie.rank + '</h6>');
-            movieEl.append('<h6>제목: ' + movie.movieNm + '</h6>'); // movieNm 속성 확인
-            movieEl.append('<h6>개봉일: ' + movie.openDt + '</h6>'); // openDt 속성 확인
-            movieEl.append('<h6>누적 관객수: ' + movie.audiAcc + '명</h6><br><br><br>'); // audiAcc 속성 확인
+            movieEl.append('<h6>제목: ' + movie.movieNm + '</h6>');
+            movieEl.append('<h6>개봉일: ' + movie.openDt + '</h6>');
+            movieEl.append('<h6>누적 관객수: ' + movie.audiAcc + '명</h6><br><br><br>');
             container.append(movieEl);
 
             $('.posterBestContainer').on('click', function() {
                 pageMove(movie.movieCd);
             });
 
-            // 영화 포스터 이미지 불러오기를 위한 Ajax 요청
             $.ajax({
                 url:  urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" + movie.movieCd,
                 type: "GET",
@@ -501,9 +500,8 @@
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(posterResponse) {
-                    // 영화 포스터 이미지 URL을 가져오는 데 성공한 경우
                     var posterEl = $('<img src="' + posterResponse + '" alt="영화 포스터" class="movie-poster">');
-                    posterContainer.append(posterEl); // 포스터 이미지를 별도의 컨테이너에 추가
+                    posterContainer.append(posterEl);
                 },
                 error: function(xhr, status, error) {
                     console.error("영화 포스터 이미지를 불러오는 데 실패했습니다: " + error);
@@ -511,19 +509,51 @@
             });
         });
     }
+    function searchMovie(e){
+        e.preventDefault();
+        const searchMovieText = document.getElementById('searchText').value;
+        const encodeText = encodeURIComponent(searchMovieText);
+        window.location.href = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}`
+    }
+    
+    //임시 변수(개발완료 후 함수에서 계산된 날짜로 변경해야함)
+    const targetDt = "20240101";
 
-    /**검색버튼을 누르면 텍스트 박스 안에 있는 텍스트 정보를 movieInfoSearch 페이지로 넘겨주는 함수 */
-    /** 주간 박스오피스 순위 1~10까지 불러오는 함수 */
-    /** (주간/일간 박스오피스 함수 관련)
-     * 영화 정보값을 "#rank+영화순위"의 형태로 id형태로 만들고 그 안에 있는 영화포스터 정보를 ".posterContainer"의 형태로 class로 만들고
-     * 영화 제목과 개봉일 정보를 ".infoContainer"의 형태로 class로 만들어서 화면에 뿌리는 기능이 있어야함
-     * 사용예시
-     * <div id="rank">
-     *     <div class="posterContainer"></div>
-     *     <div class="infoContainer"></div>
-     * </div>
-     * 위와 같은 형태로 사용될 수 있어야함*/
+    /**주간 영화 정보*/
+    function getWeeklyMovieRank() {
+        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${targetDt}`;
+        console.log("weeklyApiEndPoint:::::::::"+ weeklyApiEndPoint);
+        fetch(weeklyApiEndPoint)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }else{
+                    return response.json("Api Error");
+                }
+            })
+            .then(data => showWeeklyMovieRankingData(data))
+            .catch(error => {
+                return "Api Error";
+            });
+    }
+    //Default.png  ====> 이미지 없을떄 기본 이미지 웹상에서 하나 찿아서 넣어주셈
+   async function showWeeklyMovieRankingData(movies){
+       for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
+           const { rank, movieCd, movieNm, openDt } = movie;
+           const rankSelector = `#Weekrank${rank}`;
+           const posterContainer = $(`${rankSelector} .WposterContainer`);
+           const infoContainer = $(`${rankSelector} .WinfoContainer`);
 
+           getImageFunction(movieCd).then(imageUrl => {
+               const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
+               posterContainer.append(moviePosterEl);
+           }).catch(error => console.error("조회된 영화 포스터가 없습니다", "Default.png"));
+
+           infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
+
+           $(rankSelector).on('click', () => pageMove(movieCd));
+       }
+    }
     /**영화 포스터*/
     async function getImageFunction(movieCd) {
         const response = await fetch(urlConfig.baseUrl +"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
