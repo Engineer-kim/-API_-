@@ -52,7 +52,9 @@ public class SecurityConfig {
                                 "/api/user/v1/duplicateCheckId", "/api/user/v1/register" ,"/api/auth/commonLogin"
                                 ,"/api/auth/login",
                                 "/api/auth/loginPoc",
-                                "/movieInfo/**" , "/movieInfoMain/**")
+                                "/movieInfo/**" , "/movieInfoMain/**"  ,"/userManagement/**"
+                        ,"/api/user/v1/resetPassword/request" ,"/api/user/v1/resetPassword"
+                       )
                         .permitAll()
                         .requestMatchers(request ->
                                 "XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
