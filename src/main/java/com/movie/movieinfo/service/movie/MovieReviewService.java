@@ -94,8 +94,8 @@ public class MovieReviewService {
         return true;
     }
 
-//    public Integer getMovieReviewCount(String movieCd) {
-//        Integer reviewCnt = movieReviewRepository.countByMovieId(movieCd);
-//        return Objects.requireNonNullElse(reviewCnt, 0);
-//    }
+    public Integer getMovieReviewCount(String movieCd) {
+        Integer reviewCnt = movieReviewRepository.countByMovieCode(movieCd);
+        return Objects.requireNonNullElse(reviewCnt, 0);
+    }
 }

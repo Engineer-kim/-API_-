@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <title>영화  순위정보</title>
     <style>
-
-
-
 
         swiper-container {
             width: 100%;
@@ -49,7 +46,6 @@
     <!-- Bootstrap core CSS -->
     <link href="/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="/js/assets/css/fontawesome.css">
     <link rel="stylesheet" href="/js/assets/css/templatemo-lugx-gaming.css">
@@ -58,7 +54,6 @@
 
 </head>
 <body>
-
 
 <!-- ***** Preloader Start ***** -->
 <div id="js-preloader" class="js-preloader">
@@ -89,7 +84,8 @@
                         <li><a href="#">WeeklyBest</a></li>
                         <li><a href="#">Best by region</a></li>
                         <!-- <li><a class="listyle" href="#">Sign up<br></a></li> -->
-                        <li><a href="#">Login</a></li>
+                        <li><a href="#">회원가입</a></li>
+                        <li><a href="http://localhost:8080/api/auth/commonLogin">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -101,7 +97,6 @@
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
-
 <div class="main-banner">
     <div class="container">
         <div class="row">
@@ -111,12 +106,12 @@
                     <h2>오늘의 박스오피스 1위!</h2>
                     <div class="search-input">
                         <form id="search" action="#" method="GET">
-                            <input type="text" placeholder="제목/감독" id='searchText' name="searchKeyword" />
+                            <input type="text" placeholder="제목" id='searchText' name="searchKeyword" />
                             <button type="submit" role="button">검색</button>
                         </form>
                     </div>
                     <div class="movieBestContainer"></div>
-                    <p>영화진흥회에서 제공하는 공신력 있는 정보를 기반으로 영화순위를 보여줍니다.
+                    <p>-----영화진흥회에서 제공하는 공신력 있는 정보를 기반으로 영화순위를 보여줍니다.
                 </div>
             </div>
             <div class="col-lg-4 offset-lg-2">
@@ -129,97 +124,184 @@
         </div>
     </div>
 </div>
-
-
+<!-- 지역별 박스오피스 선택  -->
 <div class="features">
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105001">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105001')">
+                            <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;">
                         </div>
                         <h4>서울</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105002">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105002')">
+                            <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>경기도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105003">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105003')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>강원도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105004">
                     <div class="item">
                         <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105004')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>Easy Layout</h4>
+                        <h4>충청북도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105005">
                     <div class="item">
                         <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105005')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>Easy Layout</h4>
+                        <h4>충청남도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105006">
                     <div class="item">
                         <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105006')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>Easy Layout</h4>
+                        <h4>경상북도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105007">
                     <div class="item">
                         <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105007')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>Easy Layout</h4>
+                        <h4>경상남도</h4>
                     </div>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="#">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105008">
                     <div class="item">
                         <div class="image">
-                            <img src="assets/images/featured-04.png" alt="" style="max-width: 44px;" onclick="moveCityDetailPage('0105008')">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>Easy Layout</h4>
+                        <h4>전라북도</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105009">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>전라남도</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105010">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>제주시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105011">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>부산시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105012">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>대구시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105013">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>대전시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105014">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>울산시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105015">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>인천시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105016">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>광주시</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105017">
+                    <div class="item">
+                        <div class="image">
+                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                        </div>
+                        <h4>세종시</h4>
                     </div>
                 </a>
             </div>
         </div>
     </div>
 </div>
-
-
-
+<!-- 오늘의 박스오피스 1~10위까지 스와이퍼 -->
 <div class="section trending">
     <div class="container">
         <div class="row">
@@ -231,7 +313,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="main-button">
-                    <a href="shop.html">View All</a>
+                    <a href="http://localhost:8080/movieInfoMain/view?divisionCode=1">View All</a>
                 </div>
             </div>
 
@@ -247,7 +329,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank2">
                         <div class="movieContainer">
@@ -258,7 +339,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank3">
                         <div class="movieContainer">
@@ -269,7 +349,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank4">
                         <div class="movieContainer">
@@ -280,7 +359,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank5">
                         <div class="movieContainer">
@@ -291,7 +369,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank6">
                         <div class="movieContainer">
@@ -302,7 +379,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank7">
                         <div class="movieContainer">
@@ -313,7 +389,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank8">
                         <div class="movieContainer">
@@ -324,7 +399,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank9">
                         <div class="movieContainer">
@@ -335,7 +409,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="rank10">
                         <div class="movieContainer">
@@ -350,7 +423,7 @@
         </div>
     </div>
 </div>
-
+<!-- 주간박스오피스 1~10위까지 스와이퍼-->
 <div class="section trending">
     <div class="container">
         <div class="row">
@@ -362,10 +435,9 @@
             </div>
             <div class="col-lg-6">
                 <div class="main-button">
-                    <a href="shop.html">View All</a>
+                    <a href="http://localhost:8080/movieInfoMain/view?divisionCode=2">View All</a>
                 </div>
             </div>
-
             <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" space-between="30"
                               slides-per-view="3">
                 <swiper-slide>
@@ -378,7 +450,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank2">
                         <div class="movieContainer">
@@ -389,7 +460,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank3">
                         <div class="movieContainer">
@@ -400,7 +470,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank4">
                         <div class="movieContainer">
@@ -411,7 +480,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank5">
                         <div class="movieContainer">
@@ -422,7 +490,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank6">
                         <div class="movieContainer">
@@ -433,7 +500,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank7">
                         <div class="movieContainer">
@@ -444,7 +510,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank8">
                         <div class="movieContainer">
@@ -455,7 +520,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank9">
                         <div class="movieContainer">
@@ -466,7 +530,6 @@
                         </div>
                     </div>
                 </swiper-slide>
-
                 <swiper-slide>
                     <div id="Weekrank10">
                         <div class="movieContainer">
@@ -477,13 +540,11 @@
                         </div>
                     </div>
                 </swiper-slide>
-
             </swiper-container>
         </div>
     </div>
 </div>
-
-
+<!-- footer 영역 -->
 <footer>
     <div class="container">
         <div class="col-lg-12">
@@ -492,38 +553,17 @@
     </div>
 </footer>
 
-
 </body>
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // 폼의 제출 이벤트를 감지합니다.
-        document.getElementById("search").addEventListener("submit", function(event) {
-            // 기본 폼 제출 동작을 막습니다.
-            event.preventDefault();
-
-            // 사용자가 입력한 텍스트를 가져옵니다.
-            var searchText = document.getElementById('searchText').value;
-
-            // 페이지를 리다이렉트할 URL을 구성합니다.
-            var targetUrl = "http://localhost:8080/movieInfo/v1/movieSearch?movieNm=" + encodeURIComponent(searchText);
-
-            // 구성된 URL로 페이지를 리다이렉트 합니다.
-            window.location.href = targetUrl;
-        });
-    });
-</script>
-<script>
-
-
 
     /**날짜 가져오는 함수*/
     function getTodayDate() {
-        var today = new Date();
-        var yyyy = today.getFullYear();
-        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
-        var dd = ('0' + today.getDate()).slice(-2);
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
 
         return yyyy + mm + dd;
     }
@@ -532,71 +572,68 @@
 
     /**일별 정보 가져오는 함수*/
     $(document).ready(function(){
-        console.log(urlConfig);
         $.ajax({
             //영화 정보 불러오는 API
             url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
             type: "GET",
             headers: {
-                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
+                "X-Requested-With": "XMLHttpRequest"
             },
             success: function(response) {
                 displayMoviesRank(response);
                 displayMoviesBest(response);
+                getWeeklyMovieRank();
             },
             error: function(xhr, status, error) {
-                console.error("Error occurred: " + error);
+                alert("일별 정보를 가져오는데 실패하였습니다");
             }
         });
-    });
 
+        $('#search').on('submit', searchMovie);
+    });
+    /**일간 박스오피스 정보 불러오는 함수 */
     async function displayMoviesRank(movies) {
         for (const movie of movies) {
-            // 영화 순위를 기반으로 컨테이너 선택
+
             const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
             const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
 
-            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
+
             const imageUrl = await getImageFunction(movie.movieCd);
             const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
+            posterContainer.append(moviePosterEl);
 
-            // 영화 정보 추가
+
             infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
             infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
 
-            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
+
             $('#rank' + movie.rank).on('click', function() {
                 pageMove(movie.movieCd);
             });
         }
     }
 
-
+    /**당일 박스오피스 1위 상세정보 불러오는 함수 */
     function displayMoviesBest(movies) {
-        console.log(movies); // 여기서 movies 구조 확인
         const container = $('.movieBestContainer');
-        const posterContainer = $('.posterBestContainer'); // 영화 포스터를 위한 새로운 컨테이너
-
-        // rank가 "1"인 영화만 필터링
+        const posterContainer = $('.posterBestContainer');
         const rankOneMovie = movies.filter(function(movie) {
             return movie.rank === "1";
         });
 
-        // 필터링된 영화(들) 표시
         rankOneMovie.forEach(function(movie) {
             var movieEl = $('<div class="movie"></div>');
             movieEl.append('<br><h6>순위: ' + movie.rank + '</h6>');
-            movieEl.append('<h6>제목: ' + movie.movieNm + '</h6>'); // movieNm 속성 확인
-            movieEl.append('<h6>개봉일: ' + movie.openDt + '</h6>'); // openDt 속성 확인
-            movieEl.append('<h6>누적 관객수: ' + movie.audiAcc + '명</h6><br><br><br>'); // audiAcc 속성 확인
+            movieEl.append('<h6>제목: ' + movie.movieNm + '</h6>');
+            movieEl.append('<h6>개봉일: ' + movie.openDt + '</h6>');
+            movieEl.append('<h6>누적 관객수: ' + movie.audiAcc + '명</h6><br><br><br>');
             container.append(movieEl);
 
             $('.posterBestContainer').on('click', function() {
                 pageMove(movie.movieCd);
             });
 
-            // 영화 포스터 이미지 불러오기를 위한 Ajax 요청
             $.ajax({
                 url:  urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" + movie.movieCd,
                 type: "GET",
@@ -604,137 +641,71 @@
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(posterResponse) {
-                    // 영화 포스터 이미지 URL을 가져오는 데 성공한 경우
-                    console.log("Poster URL1111111111111111111111::::::::::::::::::::: " + posterResponse);
                     var posterEl = $('<img src="' + posterResponse + '" alt="영화 포스터" class="movie-poster">');
-                    posterContainer.append(posterEl); // 포스터 이미지를 별도의 컨테이너에 추가
+                    posterContainer.append(posterEl);
                 },
                 error: function(xhr, status, error) {
-                    console.error("영화 포스터 이미지를 불러오는 데 실패했습니다: " + error);
+                    alert("영화 포스터 이미지를 불러오는 데 실패했습니다");
                 }
             });
         });
     }
-
-    $(document).ready(function(){
-        console.log(urlConfig);
-        $.ajax({
-            //영화 정보 불러오는 API
-            url: urlConfig.baseUrl +"/movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240101",
-            type: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest" // AJAX 요청임을 명시
-            },
-            success: function(response) {
-                WeekMoviesRank(response);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error occurred: " + error);
-            }
-        });
-    });
-
-    async function WeekMoviesRank(movies) {
-        for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
-            // 영화 순위를 기반으로 컨테이너 선택
-            const posterContainer = $('#Weekrank' + movie.rank + ' .WposterContainer');
-            const infoContainer = $('#Weekrank' + movie.rank + ' .WinfoContainer');
-
-            // 포스터 URL 가져오기 (getImageFunction 함수 구현에 따라 달라짐)
-            const imageUrl = await getImageFunction(movie.movieCd);
-            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl); // 포스터 컨테이너에 삽입
-
-            // 영화 정보 추가
-            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
-            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-
-            // 클릭 시 상세 페이지로 이동하는 로직 (pageMove 함수 구현에 따라 달라짐)
-            $('#Weekrank' + movie.rank).on('click', function() {
-                pageMove(movie.movieCd);
-            });
-        }
+    function searchMovie(e){
+        e.preventDefault();
+        const searchMovieText = document.getElementById('searchText').value;
+        const encodeText = encodeURIComponent(searchMovieText);
+        window.location.href = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}`
     }
+    
+    //임시 변수(개발완료 후 함수에서 계산된 날짜로 변경해야함)
+    const targetDt = "20240101";
 
-
-    /** 원본
-    async function displayMoviesRank(movies) {
-        const container = $('#movieRankContainer');
-        for (const movie of movies) {
-            const movieEl = $('<div class="movie"></div>');
-            const movieInfoEl = $('<div class="movie-info"></div>');
-
-            movieInfoEl.append('<h2>순위: ' + movie.rank + '</h2>');
-            movieInfoEl.append('<p>제목: ' + movie.movieNm + '</p>');
-            movieInfoEl.append('<p>개봉일: ' + movie.openDt + '</p>');
-            movieInfoEl.append('<p>누적 관객수: ' + movie.audiAcc + '</p>');
-
-            // 이미지 URL을 가져오는 부분
-            const imageUrl = await getImageFunction(movie.movieCd);
-            const movieImageEl = $('<img src="' + imageUrl + '" alt="Movie Poster" class="movie-poster">');
-
-            movieEl.append(movieImageEl);
-            movieEl.append(movieInfoEl);
-
-            movieEl.on('click', function() {
-                pageMove(movie.movieCd); // 클릭 시 상세 페이지 로직 호출
+    /**주간 영화 정보*/
+    function getWeeklyMovieRank() {
+        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${targetDt}`;
+        fetch(weeklyApiEndPoint)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }else{
+                    return response.json("Api Error");
+                }
+            })
+            .then(data => showWeeklyMovieRankingData(data))
+            .catch(error => {
+                return "Api Error";
             });
-
-
-            container.append(movieEl);
-        }
     }
-    */
-    // /**주간 정보*/
-    // fetch(urlConfig.baseUrl + "movieInfo/v1/moviesWeeklyRank?targetDt=" + "20240407")
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('네트워크 응답이 올바르지 않습니다.');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(data => {
-    //         console.log('주간 박스오피스 데이터:', data);
-    //         const weeklyBoxOfficeList = data.boxOfficeResult.weeklyBoxOfficeList;
-    //         console.log('주간 박스오피스 리스트:');
-    //         weeklyBoxOfficeList.forEach((movie, index) => {
-    //             console.log(`${index + 1}위: ${movie.movieNm} (코드: ${movie.movieCd})`);
-    //         });
-    //     })
-    //     .catch(error => {
-    //         // 오류 처리
-    //         console.error('데이터 요청 중 오류가 발생했습니다:', error);
-    //     });
+    //Default.png  ====> 이미지 없을떄 기본 이미지 웹상에서 하나 찿아서 넣어주셈
+   async function showWeeklyMovieRankingData(movies){
+       for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
+           const { rank, movieCd, movieNm, openDt } = movie;
+           const rankSelector = `#Weekrank${rank}`;
+           const posterContainer = $(`${rankSelector} .WposterContainer`);
+           const infoContainer = $(`${rankSelector} .WinfoContainer`);
 
+           getImageFunction(movieCd).then(imageUrl => {
+               const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
+               posterContainer.append(moviePosterEl);
+           }).catch(error => {
+               const defaultImageUrl = "Default.png";
+               const moviePosterEl = $(`<img src="${defaultImageUrl}" alt="Movie Poster">`);
+               posterContainer.append(moviePosterEl);
+           });
+           infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
+
+           $(rankSelector).on('click', () => pageMove(movieCd));
+       }
+    }
     /**영화 포스터*/
     async function getImageFunction(movieCd) {
         const response = await fetch(urlConfig.baseUrl +"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
         const imageData = await response.text();
         return imageData;
     }
-
+    /** 상세페이지 이동 함수*/
     function pageMove(movieCd){
         window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
-    }
-
-    /** 각 도별 이미지 클릭시 이동 함수*/
-    function moveCityDetailPage(comCode){
-        const targetDt = "20230419"; // 날짜 동적으로 가져와서 바꾸는 함수로 대체하셈. 테스트를 위해 일주일 전 날짜를 설정함.
-        $.ajax({
-            url: urlConfig.baseUrl+ `/movieInfo/v1/${comCode}/listRegionMovieRankInfo?targetDt=${targetDt}`,
-            type: 'GET',
-            dataType: 'json',
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            success: function(data) {
-                return data; // 단순히 응답값만 찍었음 향후 로직은 함수여기서 호출하던 로직을짜던 하면됨
-            },
-            error: function() {
-                // 오류 처리 해주셈
-                console.error("에러 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ㅇㅈㅇㅂㅁ");
-            }
-        });
     }
 </script>
 </html>

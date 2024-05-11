@@ -95,8 +95,8 @@ public class MovieInfoController {
 
     /**감독명 또는 영화제목으로 검색 가능한 API(Like 쿼리로 검색)*/
     @GetMapping("/v1/movieSearch")
-    public ResponseEntity<List<MovieList>> searchMovie(@RequestParam(value = "movieNm", required = false) String movieName, @RequestParam(value = "directorNm", required = false) String directorName) {
-        List<MovieList> response = movieSearchService.searchMovie(movieName, directorName);
+    public ResponseEntity<List<MovieList>> searchMovie(@RequestParam(value = "movieNm", required = false) String movieName) {
+        List<MovieList> response = movieSearchService.searchMovie(movieName);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -130,8 +130,8 @@ public class MovieInfoController {
     
 
     /**해당 영화에 달린 리뷰 갯수 조회 API(세션이랑은 상관이 없어야함)*/
-//    @GetMapping("/v1/getMovieReviewTotalCount")
-//    public Integer getMovieReviewTotalCount(@RequestParam("movieCd") String movieCd) {
-//        return movieReviewService.getMovieReviewCount(movieCd);
-//    }
+    @GetMapping("/v1/getMovieReviewTotalCount")
+    public Integer getMovieReviewTotalCount(@RequestParam("movieCd") String movieCd) {
+        return movieReviewService.getMovieReviewCount(movieCd);
+    }
 }

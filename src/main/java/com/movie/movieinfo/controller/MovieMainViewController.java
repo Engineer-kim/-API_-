@@ -21,4 +21,15 @@ public class MovieMainViewController {
         return "movieInfoDetail";
     }
 
+    /**영화 검색*/
+    @GetMapping("/search")
+    public String movieSearch(@RequestParam("searchText")  String searchText) {return "movieInfoSearch";}
+
+    /**지역 랭킹*/
+    @GetMapping("/city")
+    public String movieCity(@RequestParam("cityCode")  String cityCode) { return "movieCityRank"; }
+
+    /**전부 보기*/
+    @GetMapping("/view")
+    public String movieView(@RequestParam("divisionCode")  String viewCode) { return "movieViewAll"; }
 }

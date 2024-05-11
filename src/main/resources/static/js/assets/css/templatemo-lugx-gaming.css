@@ -80,7 +80,31 @@ reset
   /* 필요에 따라 추가 스타일링 */
 }
 
+.movieContainer2 {
+  display: flex;
+  flex-direction: row; /* 요소들을 가로 방향으로 배치. */
+  align-items: center; /* 세로 축 중앙 정렬 */
+  justify-content: flex-start; /* 가로 축 시작 지점 정렬 */
+  padding-left: 10px; /* 왼쪽으로부터의 거리 */
+  width: 100%; /* 필요에 따라 조정 가능 */
+}
 
+.posterContainer2 img {
+  width: 200px; /* 이미지 원본 크기에 맞게 조정 */
+  max-width: 100%; /* 최대 너비 제한 */
+  height: 300px; /* 이미지 높이 자동 조정 */
+  display: block; /* 이미지를 블록 요소로 처리 */
+}
+
+.infoContainer2 {
+  padding-left: 30px; /* 왼쪽으로부터의 거리 */
+}
+.movieDetails2 {
+  display: flex;
+  flex-direction: column; /* 요소들을 수직 방향으로 배치 */
+  align-items: flex-start; /* 세부 정보를 왼쪽 정렬 */
+  padding-left: 20px; /* 이미지와 세부 정보 사이의 간격 */
+}
 
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, div
