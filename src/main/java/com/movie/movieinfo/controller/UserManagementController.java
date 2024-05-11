@@ -26,4 +26,10 @@ public class UserManagementController {
     public String resetNewPasswordView() {
         return "resetNewPasswordView.html";
     }
+
+
+    @GetMapping("/signUpView")
+    public String signUpView() {
+        return "signUpView.html";
+    }
 }
