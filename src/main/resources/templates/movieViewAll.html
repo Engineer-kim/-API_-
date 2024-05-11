@@ -100,7 +100,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="yourClassName"></div>
+                <div class="boxOfficeHeader"></div>
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="blog_taital">지역 박스오피스 TOP10</h1>
+            <h1 class="blog_taital">박스오피스 TOP10</h1>
         </div>
     </div>
 </div>
@@ -167,46 +167,100 @@
 
     const todayDate = getTodayDate();
 
-
     $(document).ready(function(){
-
-        var cityCode = new URLSearchParams(window.location.search).get('cityCode');
-
-        if(cityCode) {
-            $.ajax({
-                url: urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101",
-                type: "GET",
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                success: function(response) {
-                    displayCityRank(response.dailyRankInfo);
-
-                    const regionName = response.regionInfo.korNm;
-                    const regionHeader = $('<h3>' + regionName + '</h3>');
-                    $('.yourClassName').prepend(regionHeader);
-                },
-                error: function(xhr, status, error) {
-                    alert("지역 별 영화 정보를 가져오는데 실패했습니다")
+        $.ajax({
+            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
+            type: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function(response) {
+                const divisionCode = getViewCodeFromUrl();
+                if(divisionCode === "1") {
+                    displayMoviesRank(response);
+                    addHeaderToPage("일간 박스오피스");
+                } else  {
+                    getWeeklyMovieRank();
+                    addHeaderToPage("주간 박스오피스");
                 }
-            });
-        } else {
-            alert("지역 별 영화 정보를 가져오는도중 알수없는 오류가 발생했습니다.")
-        }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: " + error);
+            }
+        });
     });
 
-    async function displayCityRank(movies) {
+    // URL에서 viewCode 값을 가져오기
+    function getViewCodeFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('divisionCode');
+    }
+
+    // 헤더 추가
+    function addHeaderToPage(headerText) {
+        const header = $('<h3>' + headerText + '</h3>');
+        $('.boxOfficeHeader').prepend(header);
+    }
+
+    /**일간 박스오피스 정보 불러오는 함수 */
+    async function displayMoviesRank(movies) {
         for (const movie of movies) {
+
             const posterContainer = $('#rank' + movie.rank + ' .posterContainer2');
             const infoContainer = $('#rank' + movie.rank + ' .infoContainer2');
+
+
             const imageUrl = await getImageFunction(movie.movieCd);
             const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
             posterContainer.append(moviePosterEl);
+
+
             infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
             infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-            posterContainer.on('click', function() {
+
+
+            $('#rank' + movie.rank).on('click', function() {
                 pageMove(movie.movieCd);
             });
+        }
+    }
+
+    //임시 변수(개발완료 후 함수에서 계산된 날짜로 변경해야함)
+    const targetDt = "20240101";
+
+    /**주간 영화 정보*/
+    function getWeeklyMovieRank() {
+        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${targetDt}`;
+        console.log("weeklyApiEndPoint:::::::::"+ weeklyApiEndPoint);
+        fetch(weeklyApiEndPoint)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }else{
+                    return response.json("Api Error");
+                }
+            })
+            .then(data => showWeeklyMovieRankingData(data))
+            .catch(error => {
+                return "Api Error";
+            });
+    }
+    //Default.png  ====> 이미지 없을떄 기본 이미지 웹상에서 하나 찿아서 넣어주셈
+    async function showWeeklyMovieRankingData(movies){
+        for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
+            const { rank, movieCd, movieNm, openDt } = movie;
+            const rankSelector = `#rank${rank}`;
+            const posterContainer = $(`${rankSelector} .posterContainer2`);
+            const infoContainer = $(`${rankSelector} .infoContainer2`);
+
+            getImageFunction(movieCd).then(imageUrl => {
+                const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
+                posterContainer.append(moviePosterEl);
+            }).catch(error => console.error("조회된 영화 포스터가 없습니다", "Default.png"));
+
+            infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
+
+            $(rankSelector).on('click', () => pageMove(movieCd));
         }
     }
 

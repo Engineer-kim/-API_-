@@ -29,5 +29,7 @@ public class MovieMainViewController {
     @GetMapping("/city")
     public String movieCity(@RequestParam("cityCode")  String cityCode) { return "movieCityRank"; }
 
-
+    /**전부 보기*/
+    @GetMapping("/view")
+    public String movieView(@RequestParam("divisionCode")  String viewCode) { return "movieViewAll"; }
 }
