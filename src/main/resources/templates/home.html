@@ -8,9 +8,10 @@
 <div class="container">
     <h1>인증이 성공<!</h1>
     <p>인증이 성공</p>
-    <p>안녕하세요, <span th:text="${session.userName}">사용자</span>님.</p>
+    <p>안녕하세요, <span th:text="${session.userName}">사용자</span>님.</p><!--${session.userName} 없으면 세션이 없는 것 또한 실제 로그인된
+    session.userName이랑 세션에 있는 session.userName이랑 같은지 비교-->
     <form id="logoutForm" action="/api/auth/logout" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!--${_csrf.token} 무조건 필요 보안상 hidden 타입 무조건 포함-->
         <input type="submit" value="Logout"/>
     </form>
 </div>
@@ -23,7 +24,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'CSRF-Token': csrfToken // CSRF 토큰 헤더에 포함
+                'CSRF-Token': csrfToken // CSRF 토큰 헤더에 포함 **중요함 로그인 관련 통신할 때 이 줄이 무조건 있어야함
             },
         })
             .then(response => response.json())

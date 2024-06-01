@@ -105,7 +105,7 @@ public class UserService implements UserDetailsService{
             String token = UUID.randomUUID().toString();
             savePasswordResetToken(token, user);
 
-            String resetLink = "http://localhost:8080/api/auth/v1/resetPassword?token=" + token;
+            String resetLink = "http://localhost:8080/userManagement/resetNewPasswordView?token=" + token;
             emailService.sendEmail(userEmail, resetLink);
     }
 

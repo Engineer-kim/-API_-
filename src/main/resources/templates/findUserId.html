@@ -2,9 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="/js/vendor/jquery/jquery.min.js"></script>
+    <script src="/js/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/assets/js/isotope.min.js"></script>
+    <script src="/js/assets/js/owl-carousel.js"></script>
+    <script src="/js/assets/js/counter.js"></script>
+    <script src="/js/assets/js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/js/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/js/assets/css/templatemo-lugx-gaming.css">
+    <link rel="stylesheet" href="/js/assets/css/owl.css">
+    <link rel="stylesheet" href="/js/assets/css/animate.css">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background: white;
+            padding: 20px 40px 40px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form .form-signin {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form p, form div {
+            margin-bottom: 15px;
+        }
+
+        form input[type="text"], form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #findUserIdButton {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #findUserIdButton:hover {
+            background-color: #0056b3;
+        }
+
+        form input[type="submit"] {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin: 10px auto;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #emailInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+
+    </style>
 </head>
 <body>
-dsadsa
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<div class="main-banner">
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <h2>Find ID</h2>
+                <div>
+                    <label for="emailInput">Email:</label>
+                    <input type="text" id="emailInput" name="email">
+                    <button id="findUserIdButton">Find User ID</button>
+                    <div id="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+    function encryptEmail(email) {
+        const secretKey = "your-secret-key"; // 실제 애플리케이션에서는 보안을 위해 복잡하고 안전한 키를 사용해야 합니다.
+        return CryptoJS.AES.encrypt(email, secretKey).toString();
+    }
+
+    $(document).ready(function() {
+        $("#findUserIdButton").click(function() {
+            var email = $("#emailInput").val();
+
+            $.ajax({
+                url: urlConfig.baseUrl+'/api/user/v1/findUserId',
+                type: "GET",
+                data: {
+                    email: email
+                },
+                success: function(response) {
+                    if (response.statusCode === 200) {
+                        $("#result").text("아이디는 " + response.message + "입니다.");
+                    } else {
+                        $("#result").text("회원정보가 없거나 email주소가 잘못되었습니다.");
+                    }
+                },
+                error: function() {
+                    $("#result").text("회원정보가 없거나 email주소가 잘못되었습니다.");
+                }
+            });
+        });
+    });
+</script>
 </html>
