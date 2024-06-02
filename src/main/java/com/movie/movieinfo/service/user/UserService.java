@@ -55,9 +55,10 @@ public class UserService implements UserDetailsService{
                 .userName(joinRequestDto.getUserName())
                 .userId(joinRequestDto.getUserId())
                 .userEmail(joinRequestDto.getUserEmail())
-                .password(passwordEncoder.encode(joinRequestDto.getUserPassword()))
+                .password(joinRequestDto.getUserPassword())
                 .signDate(LocalDateTime.now())
                 .build();
+        System.out.println(user.getPassword());
 
         // 사용자 저장
         userRepository.save(user);
@@ -105,7 +106,7 @@ public class UserService implements UserDetailsService{
             String token = UUID.randomUUID().toString();
             savePasswordResetToken(token, user);
 
-            String resetLink = "http://localhost:8080/api/auth/v1/resetPassword?token=" + token;
+            String resetLink = "http://localhost:8080/userManagement/resetNewPasswordView?token=" + token;
             emailService.sendEmail(userEmail, resetLink);
     }
 

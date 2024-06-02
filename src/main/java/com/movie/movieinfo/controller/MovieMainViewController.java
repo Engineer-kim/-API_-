@@ -31,5 +31,5 @@ public class MovieMainViewController {
 
     /**전부 보기*/
     @GetMapping("/view")
-    public String movieView(@RequestParam("divisionCode")  String viewCode) { return "movieViewAll"; }
+    public String movieView(@RequestParam("divisionCode")  String divisionCode) { return "movieViewAll"; }
 }

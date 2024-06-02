@@ -1,10 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="/js/vendor/jquery/jquery.min.js"></script>
+    <script src="/js/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/assets/js/isotope.min.js"></script>
+    <script src="/js/assets/js/owl-carousel.js"></script>
+    <script src="/js/assets/js/counter.js"></script>
+    <script src="/js/assets/js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/js/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/js/assets/css/templatemo-lugx-gaming.css">
+    <link rel="stylesheet" href="/js/assets/css/owl.css">
+    <link rel="stylesheet" href="/js/assets/css/animate.css">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background: white;
+            padding: 20px 40px 40px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form .form-signin {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form p, form div {
+            margin-bottom: 15px;
+        }
+
+        form input[type="text"],
+        form input[type="password"],
+        form input[type="email"] {
+            width: 100%; /* 가로 길이를 모두 같게 설정 */
+            height: 40px; /* 높이를 명시적으로 지정 */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form input[type="submit"], form button[type="button"] {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover, form button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin: 10px auto;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+    <title>Sign Up</title>
 </head>
 <body>
-회원가입 페이지  아이디 중복체크 기능 까먹지말고!
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<div class="main-banner">
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <h2>signup</h2>
+                <form id="signupForm">
+                    ID: <input type="text" id="userId" name="userId" required><br>
+                    <div id="userIdError" class="error-message"></div>
+                    <button type="button" onclick="checkDuplicate()">중복 체크</button><br>
+                    Password: <input type="password" id="userPassword" name="userPassword" required><br>
+                    Name: <input type="text" id="userName" name="userName" required><br>
+                    Email: <input type="email" id="userEmail" name="userEmail" required><br>
+                    <button type="button" onclick="registerUser()">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script src="/js/config.js"></script>
+<script>
+    function validateInput(userId) {
+        return /^[a-zA-Z0-9]*$/.test(userId);
+    }
+
+    async function checkUserIdDuplicate(userId) {
+        const encryptedUserId = userId;
+        try {
+            const response = await fetch(urlConfig.baseUrl + `/api/user/v1/duplicateCheckId?userId=${encryptedUserId}`);
+            if (response.status === 409) {
+                return true;
+            } else if (response.status === 200) {
+                return false;
+            } else {
+                throw new Error('Unexpected response status');
+            }
+        } catch (error) {
+            console.error('ID 중복 검사 중 에러 발생:', error);
+            alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+            return true;
+        }
+    }
+
+    async function checkDuplicate() {
+        const userId = document.getElementById('userId').value;
+
+        if (!userId) {
+            alert('아이디를 입력해주세요.');
+            return;
+        }
+
+        if (!validateInput(userId)) {
+            alert('ID에 특수문자를 포함할 수 없습니다.');
+            return;
+        }
+
+        const isDuplicate = await checkUserIdDuplicate(userId);
+        if (isDuplicate) {
+            document.getElementById('userIdError').textContent = '중복된 아이디로 해당 아이디로 가입 불가합니다.';
+        } else {
+            document.getElementById('userIdError').textContent = '사용 가능한 아이디입니다.';
+        }
+    }
+
+    async function registerUser() {
+        const userId = document.getElementById('userId').value;
+        const userPassword = document.getElementById('userPassword').value;
+        const userName = document.getElementById('userName').value;
+        const userEmail = document.getElementById('userEmail').value;
+        if (!userId || !userPassword || !userName || !userEmail) {
+            alert('모든 필드를 채워주세요.');
+            return;
+        }
+
+        if (!validateInput(userId)) {
+            alert('ID cannot contain special characters.');
+            return;
+        }
+
+
+
+        const isDuplicate = await checkUserIdDuplicate(userId);
+        if (isDuplicate) {
+            document.getElementById('userIdError').textContent = '중복된 아이디로 해당 아이디로 가입 불가합니다.';
+            return;
+        } else {
+            document.getElementById('userIdError').textContent = '';
+        }
+
+        const cryptoPassword = CryptoJS.SHA256(userPassword).toString();
+        const formData = { userId, userPassword: cryptoPassword, userName, userEmail };
+
+        try {
+            const response = await fetch(urlConfig.baseUrl + '/api/user/v1/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('Registration completed successfully.');
+                window.location.href = urlConfig.baseUrl + '/movieInfoMain/main';
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
 </body>
 </html>

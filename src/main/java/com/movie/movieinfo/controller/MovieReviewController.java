@@ -25,12 +25,7 @@ public class MovieReviewController {
      * 데이터 미존재 신규 작성으로 판단 -> 인서트 쿼리 실행
      */
     @PostMapping("/v1/saveMovieReview")
-    @LoggedIn
     public ResponseEntity<String> saveMovieReview(@RequestBody ReviewDto reviewDto) {
-        if (reviewDto.getUserId().isEmpty() || reviewDto.getUserId() == null) {
-            //유저 아이디가 없을때 인서트 및 수정 안되도록 ,-> 세션 과 더불어 더블체크
-            return ResponseEntity.status(UNAUTHORIZED).body("로그인후 시도 해주세요");
-        }
         ResponseEntity<String> response = movieReviewService.saveReview(reviewDto);
         return response;
     }
@@ -43,7 +38,6 @@ public class MovieReviewController {
      * 단건 출력
      */
     @GetMapping("/v1/getMovieReview")
-    @LoggedIn
     public boolean getMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         boolean hasReview = movieReviewService.findUserReview(userId, movieCd);
         if (!hasReview) {
@@ -62,7 +56,6 @@ public class MovieReviewController {
      * 단건 출력
      */
     @DeleteMapping("/v1/removeMovieReview")
-    @LoggedIn
     public boolean removeMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         boolean isDeleted = movieReviewService.deleteReview(userId, movieCd);
         if (!isDeleted) {
