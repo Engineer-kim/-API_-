@@ -109,8 +109,8 @@
                     <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
                     <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
                     <div><input type="submit" value="Sign In"/></div>
-                    <div><input type="submit" onclick="location.href='http://localhost:8080/userManagement/findUserIdView'" value="ID 찾기"></div>
-                    <div><input type="submit" onclick="location.href='http://localhost:8080/userManagement/resetPasswordView'" value="비밀번호 재설정"></div>
+                    <div><input type="submit" onclick="redirectToFindUserId()" value="ID 찾기"></div>
+                    <div><input type="submit" onclick="redirectToResetPassword()" value="비밀번호 재설정"></div>
                     <p th:if="${error}" style="color: red;" th:text="${error}"></p>
                 </form>
             </div>
@@ -127,5 +127,17 @@
     </div>
 </div>
 <script src="/js/config.js"></script>
+<script>
+    const findUserIdUrl  = urlConfig.baseUrl + "/userManagement/findUserIdView";
+    const resetPasswordUrl  = urlConfig.baseUrl + "/userManagement/resetPasswordView";
+
+    function redirectToFindUserId(){
+        location.href = findUserIdUrl;
+    }
+    function redirectToResetPassword(){
+        location.href = resetPasswordUrl;
+    }
+
+</script>
 </body>
 </html>
