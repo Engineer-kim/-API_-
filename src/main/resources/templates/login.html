@@ -108,9 +108,10 @@
                     <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} -->
                     <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
                     <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
-                    <div><input type="submit" value="Sign In"/></div>
                     <div><input type="submit" onclick="redirectToFindUserId()" value="ID 찾기"></div>
                     <div><input type="submit" onclick="redirectToResetPassword()" value="비밀번호 재설정"></div>
+                    <div><input type="submit" value="로그인"/></div>
+                    <div><input type="submit" onclick="location.href='http://localhost:8080/userManagement/signUpView'" value="회원가입"></div>
                     <p th:if="${error}" style="color: red;" th:text="${error}"></p>
                 </form>
             </div>

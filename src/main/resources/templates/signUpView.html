@@ -115,6 +115,7 @@
                 <form id="signupForm">
                     ID: <input type="text" id="userId" name="userId" required><br>
                     <div id="userIdError" class="error-message"></div>
+                    <button type="button" onclick="checkDuplicate()">중복 체크</button><br>
                     Password: <input type="password" id="userPassword" name="userPassword" required><br>
                     Name: <input type="text" id="userName" name="userName" required><br>
                     Email: <input type="email" id="userEmail" name="userEmail" required><br>
@@ -132,21 +133,43 @@
         return /^[a-zA-Z0-9]*$/.test(userId);
     }
 
-    function checkUserIdDuplicate(userId) {
-        return fetch(urlConfig.baseUrl+`/api/user/v1/duplicateCheckId?userId=${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.statusCode === 409) {
-                    return true;
-                } else if (data.statusCode === 200) {
-                    return false;
-                }
-            })
-            .catch(error => {
-                console.error('ID 중복 검사 중 에러 발생:', error);
-                alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+    async function checkUserIdDuplicate(userId) {
+        const encryptedUserId = userId;
+        try {
+            const response = await fetch(urlConfig.baseUrl + `/api/user/v1/duplicateCheckId?userId=${encryptedUserId}`);
+            if (response.status === 409) {
                 return true;
-            });
+            } else if (response.status === 200) {
+                return false;
+            } else {
+                throw new Error('Unexpected response status');
+            }
+        } catch (error) {
+            console.error('ID 중복 검사 중 에러 발생:', error);
+            alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+            return true;
+        }
+    }
+
+    async function checkDuplicate() {
+        const userId = document.getElementById('userId').value;
+
+        if (!userId) {
+            alert('아이디를 입력해주세요.');
+            return;
+        }
+
+        if (!validateInput(userId)) {
+            alert('ID에 특수문자를 포함할 수 없습니다.');
+            return;
+        }
+
+        const isDuplicate = await checkUserIdDuplicate(userId);
+        if (isDuplicate) {
+            document.getElementById('userIdError').textContent = '중복된 아이디로 해당 아이디로 가입 불가합니다.';
+        } else {
+            document.getElementById('userIdError').textContent = '사용 가능한 아이디입니다.';
+        }
     }
 
     async function registerUser() {
@@ -164,6 +187,8 @@
             return;
         }
 
+
+
         const isDuplicate = await checkUserIdDuplicate(userId);
         if (isDuplicate) {
             document.getElementById('userIdError').textContent = '중복된 아이디로 해당 아이디로 가입 불가합니다.';
@@ -176,7 +201,7 @@
         const formData = { userId, userPassword: cryptoPassword, userName, userEmail };
 
         try {
-            const response = await fetch(urlConfig.baseUrl+'/api/user/v1/register', {
+            const response = await fetch(urlConfig.baseUrl + '/api/user/v1/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -184,7 +209,7 @@
 
             if (response.ok) {
                 alert('Registration completed successfully.');
-                window.location.href = urlConfig.baseUrl+'/movieInfoMain/main';
+                window.location.href = urlConfig.baseUrl + '/movieInfoMain/main';
             } else {
                 throw new Error('Network response was not ok.');
             }
