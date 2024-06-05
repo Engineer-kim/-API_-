@@ -59,7 +59,7 @@
             border-radius: 5px;
         }
 
-        form input[type="submit"] {
+        form input[type="submit"], form input[type=button] {
             padding: 10px;
             background-color: #007bff;
             border: none;
@@ -68,7 +68,7 @@
             cursor: pointer;
         }
 
-        form input[type="submit"]:hover {
+        form input[type="submit"]:hover ,form input[type=button]:hover{
             background-color: #0056b3;
         }
 
@@ -108,10 +108,10 @@
                     <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} -->
                     <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
                     <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
-                    <div><input type="submit" onclick="redirectToFindUserId()" value="ID 찾기"></div>
-                    <div><input type="submit" onclick="redirectToResetPassword()" value="비밀번호 재설정"></div>
                     <div><input type="submit" value="로그인"/></div>
-                    <div><input type="submit" onclick="location.href='http://localhost:8080/userManagement/signUpView'" value="회원가입"></div>
+                    <div><input type="button" onclick="redirectToFindUserId()" value="ID 찾기"></div>
+                    <div><input type="button" onclick="redirectToResetPassword()" value="비밀번호 재설정"></div>
+                    <div><input type="button" onclick="redirectToSignUp()" value="회원가입"></div>
                     <p th:if="${error}" style="color: red;" th:text="${error}"></p>
                 </form>
             </div>
@@ -131,12 +131,16 @@
 <script>
     const findUserIdUrl  = urlConfig.baseUrl + "/userManagement/findUserIdView";
     const resetPasswordUrl  = urlConfig.baseUrl + "/userManagement/resetPasswordView";
+    const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
 
     function redirectToFindUserId(){
         location.href = findUserIdUrl;
     }
     function redirectToResetPassword(){
         location.href = resetPasswordUrl;
+    }
+    function redirectToSignUp(){
+        location.href = SignUpUrl;
     }
 
 </script>

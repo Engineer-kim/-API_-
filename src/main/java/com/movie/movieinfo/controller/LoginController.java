@@ -33,7 +33,7 @@ public class LoginController {
         if (userService.authenticateUser(userId, password)) {
             HttpSession session = request.getSession(); // 세션 생성 또는 기존 세션 가져오기
             session.setAttribute("userName", userId); // 로그인 성공 시 세션에 userName 설정
-            modelAndView.setViewName("home.html");
+            modelAndView.setViewName("movieInfoMain.html");
         } else {
             modelAndView.setViewName("login.html");
             modelAndView.addObject("error", "Invalid username or password.");
@@ -43,7 +43,7 @@ public class LoginController {
 
     @GetMapping("/loginSuccess")
     public String home() {
-        return "home.html";
+        return "movieInfoMain.html";
     }
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
