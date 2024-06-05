@@ -52,7 +52,7 @@ public class SecurityConfig {
                                 ,"/api/auth/login",
                                 "/api/auth/loginPoc",
                                 "/movieInfo/**" , "/movieInfoMain/**"  ,"/userManagement/**"
-                        ,"/api/user/v1/resetPassword/request" ,"/api/user/v1/resetPassword"
+                        ,"/api/user/v1/resetPassword/request" ,"/api/user/v1/resetPassword" ,"/movieReview/v1/getMovieAllReview"
                        )
                         .permitAll()
                         .requestMatchers(request ->

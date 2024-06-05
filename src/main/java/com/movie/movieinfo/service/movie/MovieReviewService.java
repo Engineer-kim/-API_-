@@ -8,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -76,12 +79,26 @@ public class MovieReviewService {
             throw new RuntimeException("DTO를 Entity로 변환하는 과정에서 오류가 발생했습니다: " + e.getMessage(), e);
         }
     }
-    public boolean findUserReview(String userId, String movieCd) {
+
+    /***
+     * Review 엔티티를 Review DTO 로 변환 하는 메서드
+     */
+    private ReviewDto convertEntityToDto(Review review) {
+        return new ReviewDto(
+                review.getTitle(), 
+                review.getStarCount() , 
+                review.getDetail() , 
+                review.getUserId(), 
+                review.getSeq() , 
+                review.getMovieCode());
+    }
+
+    public Optional<Review> findUserReview(String userId, String movieCd) {
         Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {
-            return false;
+            return movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
         }
-        return true;
+        return Optional.empty();
     }
 
     public boolean deleteReview(String userId, String movieCd) {
@@ -97,5 +114,12 @@ public class MovieReviewService {
     public Integer getMovieReviewCount(String movieCd) {
         Integer reviewCnt = movieReviewRepository.countByMovieCode(movieCd);
         return Objects.requireNonNullElse(reviewCnt, 0);
+    }
+
+    public List<ReviewDto> findUserReviewWithoutNoSession(String movieCd) {
+        List<Review> reviews = movieReviewRepository.findByMovieCode(movieCd);
+        return reviews.stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 }

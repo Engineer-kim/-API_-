@@ -1,6 +1,7 @@
 package com.movie.movieinfo.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.movie.movieinfo.entity.Review;
 import lombok.*;
 
 @Getter
@@ -20,4 +21,5 @@ public class ReviewDto {
     private Integer seq;
     /**영화 코드*/
     private String movieCode;
+
 }
