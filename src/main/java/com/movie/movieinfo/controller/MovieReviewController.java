@@ -42,10 +42,12 @@ public class MovieReviewController {
      * 있다면 200및 리뷰내용, 별점 등등의 정보 넘어감
      */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<Review> getMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+    public ResponseEntity<?> getMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         Optional<Review> hasReview = movieReviewService.findUserReview(userId, movieCd);
-        return hasReview.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if(hasReview.isPresent()){
+            return ResponseEntity.ok(hasReview.get());
+        }
+        return ResponseEntity.ok().body("해당 회원의 리뷰 작성 내역은 없습니다");
     }
 
 

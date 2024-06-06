@@ -96,9 +96,9 @@ public class MovieReviewService {
     public Optional<Review> findUserReview(String userId, String movieCd) {
         Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {
-            return movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
+            return Optional.empty();
         }
-        return Optional.empty();
+        return movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
     }
 
     public boolean deleteReview(String userId, String movieCd) {
