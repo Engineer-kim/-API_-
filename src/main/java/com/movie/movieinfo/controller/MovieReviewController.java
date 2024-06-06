@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,7 +78,11 @@ public class MovieReviewController {
      * 다른사람들이(세션있는사용자들) 이미 달아놓은 리뷰 볼수있게끔 하는 API
     **/
     @GetMapping("/v1/getMovieAllReview")
-    public List<ReviewDto> getMovieAllReviewWithoutNoSession(@RequestParam("movieCd") String movieCd) {
-        return movieReviewService.findUserReviewWithoutNoSession(movieCd);
+    public ResponseEntity<?> getMovieAllReviewWithoutNoSession(@RequestParam("movieCd") String movieCd) {
+        List<ReviewDto> writtenReviewList = movieReviewService.findUserReviewWithoutNoSession(movieCd);
+        if (writtenReviewList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 영화에 작성된 리뷰는 아직 없습니다");
+        }
+        return ResponseEntity.ok(writtenReviewList);
     }
 }
