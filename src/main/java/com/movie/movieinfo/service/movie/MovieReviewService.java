@@ -100,7 +100,7 @@ public class MovieReviewService {
         }
         return movieReviewRepository.findByUserIdAndMovieCode(userId, movieCd);
     }
-
+    @Transactional
     public boolean deleteReview(String userId, String movieCd) {
         Integer existReview = movieReviewRepository.countByUserIdAndMovieCode(userId, movieCd);
         if (existReview < 1) {

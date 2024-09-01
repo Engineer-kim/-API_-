@@ -44,7 +44,7 @@ public class MovieReviewController {
      * 있다면 200및 리뷰내용, 별점 등등의 정보 넘어감
      */
     @GetMapping("/v1/getMovieReview")
-    public ResponseEntity<?> getMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+    public ResponseEntity<?> getMovieReview(@RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         Optional<Review> hasReview = movieReviewService.findUserReview(userId, movieCd);
         if(hasReview.isPresent()){
             return ResponseEntity.ok(hasReview.get());
@@ -62,7 +62,7 @@ public class MovieReviewController {
      * 단건 출력
      */
     @DeleteMapping("/v1/removeMovieReview")
-    public ResponseEntity<String> removeMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
+    public ResponseEntity<String> removeMovieReview(@RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
         log.info("Received request to delete review for userId: {} and movieCd: {}", userId, movieCd);
 
         try {
