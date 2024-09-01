@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y dos2unix && dos2unix gradlew
 # 실행 권한 부여
 RUN chmod +x gradlew
 
-# Gradle 의존성 다운로드
+# Gradle 의존성 다운로드 (변경되지 않는 파일을 먼저 복사)
+COPY build.gradle .
+COPY settings.gradle .
 RUN ./gradlew dependencies --no-daemon
 
 # 애플리케이션 소스 코드 복사
