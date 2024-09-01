@@ -68,10 +68,8 @@ public class UserService implements UserDetailsService{
     public CustomResponse checkIfUserIdExists(String userId) {
         if (userRepository.findById(userId).isPresent() && findActivationUser(userId)) {
             return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
-        } else if (userRepository.findById(userId).isEmpty()) {
+        } else {
             return new CustomResponse(200, "사용 가능한 아이디입니다");
-        } else {// 오류 발생시
-            return new CustomResponse(404, "오류가 발생했습니다.");
         }
     }
 
