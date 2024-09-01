@@ -176,8 +176,51 @@
                                         <textarea class="form-control" id="reviewText" rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="starCount" class="form-label">별점 (0-5)</label>
-                                        <input type="number" class="form-control" id="starCount" min="0" max="5" step="0.5">
+                                        <label class="form-label">별점 (0-5)</label>
+                                        <label>
+                                            <input type="radio" id="star0" name="starCount" value="0">
+                                            <img src="/js/assets/images/reviewStar/0.png" alt="0점" style="width: 30px; height: 30px;"> 0
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star0.5" name="starCount" value="0.5">
+                                            <img src="/js/assets/images/reviewStar/0.5.png" alt="0.5점" style="width: 30px; height: 30px;"> 0.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star1" name="starCount" value="1">
+                                            <img src="/js/assets/images/reviewStar/1.png" alt="1점" style="width: 30px; height: 30px;"> 1
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star1.5" name="starCount" value="1.5">
+                                            <img src="/js/assets/images/reviewStar/1.5.png" alt="1.5점" style="width: 30px; height: 30px;"> 1.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star2" name="starCount" value="2">
+                                            <img src="/js/assets/images/reviewStar/2.png" alt="2점" style="width: 30px; height: 30px;"> 2
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star2.5" name="starCount" value="2.5">
+                                            <img src="/js/assets/images/reviewStar/2.5.png" alt="2.5점" style="width: 30px; height: 30px;"> 2.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star3" name="starCount" value="3">
+                                            <img src="/js/assets/images/reviewStar/3.png" alt="3점" style="width: 30px; height: 30px;"> 3
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star3.5" name="starCount" value="3.5">
+                                            <img src="/js/assets/images/reviewStar/3.5.png" alt="3.5점" style="width: 30px; height: 30px;"> 3.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star4" name="starCount" value="4">
+                                            <img src="/js/assets/images/reviewStar/4.png" alt="4점" style="width: 30px; height: 30px;"> 4
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star4.5" name="starCount" value="4.5">
+                                            <img src="/js/assets/images/reviewStar/4.5.png" alt="4.5점" style="width: 30px; height: 30px;"> 4.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star5" name="starCount" value="5">
+                                            <img src="/js/assets/images/reviewStar/5.png" alt="5점" style="width: 30px; height: 30px;"> 5
+                                        </label>
                                     </div>
                                     <input type="hidden" id="userId" name="userId" th:value="${session.userName}"/>
                                     <button type="submit" class="btn btn-primary">리뷰 작성</button>
@@ -329,7 +372,8 @@
             event.preventDefault();
 
             const reviewText = document.getElementById("reviewText").value;
-            const starCount = document.getElementById("starCount").value;
+            const starCount = document.querySelector('input[name="starCount"]:checked') ?
+                document.querySelector('input[name="starCount"]:checked').value : null;
 
             const reviewData = {
                 title: movieTitle,
