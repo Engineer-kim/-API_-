@@ -45,3 +45,8 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar{
+    archiveFileName = 'complete.jar'
+    mainClass.set('com.movie.movieinfo.MovieInfoApplication')
+}
