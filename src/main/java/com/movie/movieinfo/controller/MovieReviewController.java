@@ -63,13 +63,22 @@ public class MovieReviewController {
      */
     @DeleteMapping("/v1/removeMovieReview")
     public ResponseEntity<String> removeMovieReview(@UserIdNotEmptyInterface @RequestParam("userId") String userId, @RequestParam("movieCd") String movieCd) {
-        boolean isDeleted = movieReviewService.deleteReview(userId, movieCd);
-        if (!isDeleted) {
-            // 삭제 실패 시(해당 회원이 작성한 리뷰가 없는 경우)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 과정 중 오류가 발생했습니다");
+        log.info("Received request to delete review for userId: {} and movieCd: {}", userId, movieCd);
+
+        try {
+            boolean isDeleted = movieReviewService.deleteReview(userId, movieCd);
+            if (!isDeleted) {
+                // 삭제 실패 시(해당 회원이 작성한 리뷰가 없는 경우)
+                log.warn("Review not found for userId: {} and movieCd: {}", userId, movieCd);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리뷰를 찾을 수 없습니다.");
+            }
+            // 삭제 성공시
+            log.info("Review successfully deleted for userId: {} and movieCd: {}", userId, movieCd);
+            return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다");
+        } catch (Exception e) {
+            log.error("Error occurred while deleting review for userId: {} and movieCd: {}", userId, movieCd, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버(API) 통신 중 오류가 발생했습니다.");
         }
-        // 삭제 성공시
-        return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다");
     }
 
 

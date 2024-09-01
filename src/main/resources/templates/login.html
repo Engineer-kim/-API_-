@@ -104,8 +104,8 @@
         <div class="row">
             <div class="container">
                 <h2>Login</h2>
-                <form class="form-signin" method="post" action="/api/auth/loginPoc" autocomplete="off">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} -->
+                <form class="form-signin" method="post" action="/api/auth/loginProc" autocomplete="off">
+                    <<input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} --> <!-- ${_csrf.token} -->
                     <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
                     <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
                     <div><input type="submit" value="로그인"/></div>
