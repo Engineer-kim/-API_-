@@ -67,6 +67,8 @@
     </div>
 </div>
 <!-- ***** Preloader End ***** -->
+<a name="home"></a>
+
 
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
@@ -79,13 +81,18 @@
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="#" class="active">Home</a></li>
-                        <li><a href="#">DailyBest</a></li>
-                        <li><a href="#">WeeklyBest</a></li>
-                        <li><a href="#">Best by region</a></li>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#day">DailyBest</a></li>
+                        <li><a href="#week">WeeklyBest</a></li>
+                        <li><a href="#Region">Best by region</a></li>
                         <!-- <li><a class="listyle" href="#">Sign up<br></a></li> -->
-                        <li><a href="http://localhost:8080/userManagement/signUpView">회원가입</a></li>
-                        <li><a href="http://localhost:8080/api/auth/commonLogin">Login</a></li>
+                        <li class="listyle" th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToSignUp()">회원가입</a></li>
+                        <li th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToLogin()">로그인</a></li>
+                        <li th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}"><a th:text="${session.userName}"></a></li>
+                        <form th:if="${session.userName != null && session.sessionExists == true}" id="logoutForm" action="/api/auth/logout" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!--${_csrf.token} 무조건 필요 보안상 hidden 타입 무조건 포함-->
+                            <input type="submit" value="Logout"/>
+                        </form>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -128,176 +135,202 @@
 <div class="features">
     <div class="container">
         <div class="row">
+            <a name="Region"></a>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105001">
+                <label>
+                    <input type="checkbox" value="0105001">
                     <div class="item">
                         <div class="image">
                             <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;">
                         </div>
                         <h4>서울</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105002">
+                <label>
+                    <input type="checkbox" value="0105002">
                     <div class="item">
                         <div class="image">
                             <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>경기도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105003">
+                <label>
+                    <input type="checkbox" value="0105003">
                     <div class="item">
                         <div class="image">
                             <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>강원도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105004">
+                <label>
+                    <input type="checkbox" value="0105004">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Chungcheongbuk-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>충청북도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105005">
+                <label>
+                    <input type="checkbox" value="0105005">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Chungcheongnam-do.jpg" alt="" style="max-width: 44px;">
                         </div>
                         <h4>충청남도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105006">
+                <label>
+                    <input type="checkbox" value="0105006">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Gyeongsangbuk-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>경상북도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105007">
+                <label>
+                    <input type="checkbox" value="0105007">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Gyeongsangnam-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>경상남도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105008">
+                <label>
+                    <input type="checkbox" value="0105008">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Jeonbuk State.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>전라북도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105009">
+                <label>
+                    <input type="checkbox" value="0105009">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Jeollanam-do.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>전라남도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105010">
+                <label>
+                    <input type="checkbox" value="0105010">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Jeju.png" alt="" style="max-width: 44px;">
                         </div>
-                        <h4>제주시</h4>
+                        <h4>제주도</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105011">
+                <label>
+                    <input type="checkbox" value="0105011">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Busan.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>부산시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105012">
+                <label>
+                    <input type="checkbox" value="0105012">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Daegu.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>대구시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105013">
+                <label>
+                    <input type="checkbox" value="0105013">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Daejeon.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>대전시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105014">
+                <label>
+                    <input type="checkbox" value="0105014">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Ulsan.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>울산시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105015">
+                <label>
+                    <input type="checkbox" value="0105015">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Incheon.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>인천시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105016">
+                <label>
+                    <input type="checkbox" value="0105016">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Gwangju.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>광주시</h4>
                     </div>
-                </a>
+                </label>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="http://localhost:8080/movieInfoMain/city?cityCode=0105017">
+                <label>
+                    <input type="checkbox" value="0105017">
                     <div class="item">
                         <div class="image">
-                            <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                            <img src="/js/assets/images/Sejong.png" alt="" style="max-width: 44px;">
                         </div>
                         <h4>세종시</h4>
                     </div>
-                </a>
+                </label>
             </div>
+        </div>
+        <button id="compareButton">비교하기</button>
+
+        <div id="results" class="hidden">
+            <h3>도시별 박스오피스 영화 비교</h3>
+            <table border="1">
+                <tbody id="resultsBody"></tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -307,6 +340,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
+                    <a name="day"></a>
                     <h6>일간순위</h6>
                     <h2>오늘의 박스오피스 TOP10</h2>
                 </div>
@@ -429,6 +463,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
+                    <a name="week"></a>
                     <h6>주간순위</h6>
                     <h2>주간 박스오피스 TOP10</h2>
                 </div>
@@ -544,6 +579,7 @@
         </div>
     </div>
 </div>
+
 <!-- footer 영역 -->
 <footer>
     <div class="container">
@@ -556,6 +592,41 @@
 </body>
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
+    const LoginUrl  = urlConfig.baseUrl + "/api/auth/commonLogin";
+
+    function redirectToSignUp(){
+        location.href = SignUpUrl;
+    }
+
+    function redirectToLogin(){
+        location.href = LoginUrl;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutForm = document.getElementById('logoutForm');
+        if (logoutForm) {
+            logoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    credentials: 'include'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        window.location.href = urlConfig.baseUrl+'/movieInfoMain/main';
+                    });
+            });
+        }
+    });
+
+</script>
 <script>
 
     /**날짜 가져오는 함수*/
@@ -697,6 +768,68 @@
            $(rankSelector).on('click', () => pageMove(movieCd));
        }
     }
+
+    document.getElementById('compareButton').onclick = function() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const resultsBody = document.getElementById('resultsBody');
+        resultsBody.innerHTML = ''; // 기존 결과 초기화
+
+        if (checkboxes.length < 2) {
+            alert('두 개 이상의 도시를 선택해주세요.');
+            return;
+        }
+
+        const promises = Array.from(checkboxes).map(checkbox => {
+            const cityCode = checkbox.value;
+            return fetch(urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 응답이 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    return data.dailyRankInfo.map(movie => ({
+                        title: movie.movieNm,
+                        rank: movie.rank
+                    }));
+                });
+        });
+
+        Promise.all(promises)
+            .then(results => {
+                const maxLength = Math.max(...results.map(result => result.length));
+
+                for (let i = 0; i < maxLength; i++) {
+                    const row = document.createElement('tr');
+
+                    results.forEach((result, index) => {
+                        const movie = result[i] || { rank: '', title: '' };
+                        if (index === 0) {
+                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
+                        } else {
+                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
+                        }
+                    });
+
+                    resultsBody.appendChild(row);
+                }
+
+                // 도시 이름 추가
+                const cityNamesRow = document.createElement('tr');
+                checkboxes.forEach(checkbox => {
+                    const cityName = checkbox.nextElementSibling.querySelector('h4').innerText;
+                    cityNamesRow.innerHTML += `<td>${cityName}</td>`;
+                });
+                resultsBody.insertBefore(cityNamesRow, resultsBody.firstChild); // 도시 이름을 첫 번째 행으로 삽입
+
+                document.getElementById('results').classList.remove('hidden');
+            })
+            .catch(error => {
+                alert("영화 정보를 가져오는 도중 오류가 발생했습니다: " + error.message);
+            });
+    }
+
     /**영화 포스터*/
     async function getImageFunction(movieCd) {
         const response = await fetch(urlConfig.baseUrl +"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);

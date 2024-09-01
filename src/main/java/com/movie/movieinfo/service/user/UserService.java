@@ -10,15 +10,13 @@ import com.movie.movieinfo.response.CustomResponse;
 import com.movie.movieinfo.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -42,6 +40,7 @@ public class UserService implements UserDetailsService{
     private static final int EXPIRATION = 60 * 24;
     @Transactional
     public ResponseEntity<?> registerNewUserAccount(JoinRequestDto joinRequestDto) {
+
         // 사용자 ID로 기존 사용자 존재 여부를 확인
         Optional<User> existingUser = userRepository.findById(joinRequestDto.getUserId());
         if (existingUser.isPresent()) {
@@ -50,6 +49,7 @@ public class UserService implements UserDetailsService{
                     .badRequest()
                     .body(new CustomResponse(400, "해당 아이디로 가입된 사용자가 이미 존재합니다."));
         }
+
         User user = User.builder()
                 .dbSts(activationUserDiscrimination)
                 .userName(joinRequestDto.getUserName())
@@ -58,7 +58,6 @@ public class UserService implements UserDetailsService{
                 .password(joinRequestDto.getUserPassword())
                 .signDate(LocalDateTime.now())
                 .build();
-        System.out.println(user.getPassword());
 
         // 사용자 저장
         userRepository.save(user);
@@ -78,10 +77,10 @@ public class UserService implements UserDetailsService{
 
     /**이메일로 유저 아이디 찿기(단건 혹은 다건)*/
     public List<String> findUserByEmail(String email) {
-            return userRepository.findByDbStsAndUserEmail(activationUserDiscrimination, email)
-                    .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
-                    .map(User::getUserId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
-                    .collect(Collectors.toList()); //("id1", "id2")
+        return userRepository.findByDbStsAndUserEmail(activationUserDiscrimination, email)
+                .stream()//[User{id='id1', email='email1@email.com'}, User{id='id2', email='email2@email.com'}]
+                .map(User::getUserId)//User{id='id1', email='email1@email.com'}  , User{id='id2', email='email2@email.com'}
+                .collect(Collectors.toList()); //("id1", "id2")
     }
     public CustomResponse findUserIdsByEmailResponse(String email) {
         List<String> userIds = findUserByEmail(email);
@@ -91,23 +90,23 @@ public class UserService implements UserDetailsService{
             return new CustomResponse(200, userIds.toString());
         }
     }
-    
+
     /**패스워드 초기화 로직
-     * 
+     *
      *회원가입시 사용한 아이디에 토큰을 1대1 로 발급하고
      * 초기화 설정이 완료되면 발급했던 토큰은 삭제됨
      * 나중에 도메인 (http://localhost:8080) 바꿀것
      * */
     public void sendPasswordResetLink(String userEmail , String userId){
         System.out.println(userRepository.countByUserEmailAndUserId(userEmail ,userId));
-            User user = userRepository.findOneByDbStsAndUserEmailAndUserId(activationUserDiscrimination,userEmail, userId)
-                    .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
+        User user = userRepository.findOneByDbStsAndUserEmailAndUserId(activationUserDiscrimination,userEmail, userId)
+                .orElseThrow(() -> new UserEmailNotFoundException("이메일에 대한 계정 정보를 찾을 수 없습니다."));
 
-            String token = UUID.randomUUID().toString();
-            savePasswordResetToken(token, user);
+        String token = UUID.randomUUID().toString();
+        savePasswordResetToken(token, user);
 
-            String resetLink = "http://localhost:8080/userManagement/resetNewPasswordView?token=" + token;
-            emailService.sendEmail(userEmail, resetLink);
+        String resetLink = "http://localhost:8080/userManagement/resetNewPasswordView?token=" + token;
+        emailService.sendEmail(userEmail, resetLink);
     }
 
     private void savePasswordResetToken(String token, User user) {
@@ -136,8 +135,8 @@ public class UserService implements UserDetailsService{
     }
 
     public boolean isTokenExpired(PasswordResetToken token) {
-       Date expiryDate = calculateExpiryDate(EXPIRATION);
-       return  token.getExpiryDate().before(new Date());
+        Date expiryDate = calculateExpiryDate(EXPIRATION);
+        return  token.getExpiryDate().before(new Date());
     }
 
     public CustomResponse  resetPassword(String token, String newPassword) {
@@ -152,7 +151,7 @@ public class UserService implements UserDetailsService{
         if (user == null) {
             return new CustomResponse(404, "해당 토큰에 대응하는 사용자를 찾을 수 없습니다.");
         }
-        
+
         // 새 비밀번호 설정
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
@@ -166,21 +165,18 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("Attempting to load user: " + username);
+
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + username));
-        return new org.springframework.security.core.userdetails.User
-                (user.getUserName(), user.getUserId(), Collections.emptyList());
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUserId())
+                .password(user.getPassword())
+                .roles("USER")
+                .build();
     }
 
-    public boolean authenticateUser(String userId, String password) {
-        User user = userRepository.findByUserId(userId);
-        if (user != null) {
-            return passwordEncoder.matches(password, user.getPassword());
-        }
-        return false;
-    }
-
-    
     /**탈퇴한 유저인지 판단하는 메서드
      * dbSts 컬럼으로 소프트 딜리트 형식으로 탈퇴한 회원을 DB에 보관
      * A: 활성화
@@ -197,7 +193,7 @@ public class UserService implements UserDetailsService{
             } else {
                 return false;
             }
-        } else {  
+        } else {
             log.info("없는 사용자 계정 정보 입니다\n DB에 해당 사용자 계정이 있는지 체크 해주세요");
             return  false;
         }

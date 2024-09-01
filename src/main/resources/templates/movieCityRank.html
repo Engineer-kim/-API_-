@@ -142,6 +142,62 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="col-lg-3 col-md-6">
+        <label>
+            <input type="checkbox" value="0105001">
+            <div class="item">
+                <div class="image">
+                    <img src="/js/assets/images/seoul.jpg" alt="" style="max-width: 44px;">
+                </div>
+                <h4>서울</h4>
+            </div>
+        </label>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <label>
+            <input type="checkbox" value="0105002">
+            <div class="item">
+                <div class="image">
+                    <img src="/js/assets/images/gyeonggi-do.png" alt="" style="max-width: 44px;">
+                </div>
+                <h4>경기도</h4>
+            </div>
+        </label>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <label>
+            <input type="checkbox" value="0105003">
+            <div class="item">
+                <div class="image">
+                    <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                </div>
+                <h4>강원도</h4>
+            </div>
+        </label>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <label>
+            <input type="checkbox" value="0105004">
+            <div class="item">
+                <div class="image">
+                    <img src="/js/assets/images/Gangwon-do.png" alt="" style="max-width: 44px;">
+                </div>
+                <h4>충청북도</h4>
+            </div>
+        </label>
+    </div>
+</div>
+<button id="compareButton">비교하기</button>
+
+<div id="results" class="hidden">
+    <h3>박스오피스 영화 비교</h3>
+    <table border="1">
+        <tbody id="resultsBody"></tbody>
+    </table>
+</div>
+
+
 
 <footer>
     <div class="container">
@@ -167,46 +223,115 @@
 
     const todayDate = getTodayDate();
 
+    document.getElementById('compareButton').onclick = function() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const resultsBody = document.getElementById('resultsBody');
+        resultsBody.innerHTML = ''; // 기존 결과 초기화
 
-    $(document).ready(function(){
-
-        var cityCode = new URLSearchParams(window.location.search).get('cityCode');
-
-        if(cityCode) {
-            $.ajax({
-                url: urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101",
-                type: "GET",
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                success: function(response) {
-                    displayCityRank(response.dailyRankInfo);
-
-                    const regionName = response.regionInfo.korNm;
-                    const regionHeader = $('<h3>' + regionName + '</h3>');
-                    $('.yourClassName').prepend(regionHeader);
-                },
-                error: function(xhr, status, error) {
-                    alert("지역 별 영화 정보를 가져오는데 실패했습니다")
-                }
-            });
-        } else {
-            alert("지역 별 영화 정보를 가져오는도중 알수없는 오류가 발생했습니다.")
+        if (checkboxes.length < 2) {
+            alert('두 개 이상의 도시를 선택해주세요.');
+            return;
         }
+
+        const promises = Array.from(checkboxes).map(checkbox => {
+            const cityCode = checkbox.value;
+            return fetch(urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 응답이 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    return data.dailyRankInfo.map(movie => ({
+                        title: movie.movieNm,
+                        rank: movie.rank
+                    }));
+                });
+        });
+
+        Promise.all(promises)
+            .then(results => {
+                const maxLength = Math.max(...results.map(result => result.length));
+
+                for (let i = 0; i < maxLength; i++) {
+                    const row = document.createElement('tr');
+
+                    results.forEach((result, index) => {
+                        const movie = result[i] || { rank: '', title: '' };
+                        if (index === 0) {
+                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
+                        } else {
+                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
+                        }
+                    });
+
+                    resultsBody.appendChild(row);
+                }
+
+                // 도시 이름 추가
+                const cityNamesRow = document.createElement('tr');
+                checkboxes.forEach(checkbox => {
+                    const cityName = checkbox.nextElementSibling.querySelector('h4').innerText;
+                    cityNamesRow.innerHTML += `<td>${cityName}</td>`;
+                });
+                resultsBody.insertBefore(cityNamesRow, resultsBody.firstChild); // 도시 이름을 첫 번째 행으로 삽입
+
+                document.getElementById('results').classList.remove('hidden');
+            })
+            .catch(error => {
+                alert("영화 정보를 가져오는 도중 오류가 발생했습니다: " + error.message);
+            });
+    }
+
+
+
+
+
+    $(document).ready(function() {
+        $('#compareBtn').on('click', function() {
+            const cityCodes = $('input[name="city"]:checked').map(function() {
+                return this.value;
+            }).get();
+
+            if (cityCodes.length !== 2) {
+                alert("두 개의 도시를 선택해 주세요.");
+                return;
+            }
+
+            const promises = cityCodes.map(cityCode => {
+                return $.ajax({
+                    url: urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101",
+                    type: "GET",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                });
+            });
+
+            Promise.all(promises).then(responses => {
+                const moviesData = responses.map(response => response.dailyRankInfo);
+                displayMovieComparison(moviesData);
+            }).catch(() => {
+                alert("영화 정보를 가져오는 도중 오류가 발생했습니다.");
+            });
+        });
     });
 
-    async function displayCityRank(movies) {
-        for (const movie of movies) {
-            const posterContainer = $('#rank' + movie.rank + ' .posterContainer2');
-            const infoContainer = $('#rank' + movie.rank + ' .infoContainer2');
-            const imageUrl = await getImageFunction(movie.movieCd);
-            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl);
-            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
-            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-            posterContainer.on('click', function() {
-                pageMove(movie.movieCd);
+    function displayMovieComparison(moviesData) {
+        const tbody = $('#movieTable tbody');
+        tbody.empty(); // 기존 데이터 초기화
+
+        for (let i = 0; i < 10; i++) {
+            const row = $('<tr></tr>');
+            row.append(`<td>${i + 1}</td>`);
+
+            moviesData.forEach(movies => {
+                const movieTitle = movies[i] ? movies[i].movieNm : '없음';
+                row.append(`<td>${movieTitle}</td>`);
             });
+
+            tbody.append(row);
         }
     }
 
