@@ -65,7 +65,7 @@
 
         #resultsBody tr:first-child td {
             font-weight: bold; /* 도시 이름 강조 */
-            background-color: #3498db; /* 도시 이름 배경색 */
+            background-color: #0583fe; /* 도시 이름 배경색 */
             color: white; /* 글자 색상 */
             padding-left: 35px; /* 왼쪽 패딩 */
         }
@@ -116,7 +116,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-
+                    <a class="logo" onclick="redirectToMain()">
+                        <img src="/js/assets/images/logo2.png" alt="" style="width: 158px; height: 60px">
+                    </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -632,9 +634,13 @@
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-
+    const MainUrl = urlConfig.baseUrl + "/movieInfoMain/main";
     const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
     const LoginUrl  = urlConfig.baseUrl + "/api/auth/commonLogin";
+
+    function redirectToMain(){
+        location.href = MainUrl;
+    }
 
     function redirectToSignUp(){
         location.href = SignUpUrl;
