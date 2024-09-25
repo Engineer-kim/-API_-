@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <title>Lugx Gaming - Product Detail</title>
+    <title>영화 상세정보</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -54,14 +54,7 @@
 </head>
 
 <body>
-<!--<div id="movieDetails">
-    <img id="moviePoster" src="" alt="영화 포스터">
-    <h2 id="movieNm"></h2>
-    <h3 id="movieNmEn"></h3>
-    <p id="typeNm"></p>
-    <p id="genres"></p>
-    <p id="actors"></p>
-</div>-->
+
 
 <!-- ***** Preloader Start ***** -->
 <div id="js-preloader" class="js-preloader">
@@ -83,6 +76,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
+                    <a class="logo" onclick="redirectToMain()">
+                        <img src="/js/assets/images/logo2.png" alt="" style="width: 158px; height: 60px">
+                    </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -125,7 +121,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="divstyle">
-                    <img class="moviePoster" src="" alt="영화포스터" width="450px" height="500px">
+                    <img class="moviePoster" src="" alt="영화포스터" width="450px" height="600px">
                 </div>
             </div>
             <div class="col-lg-6 align-self-center">
@@ -134,7 +130,7 @@
                         <div class="movieNm"></div>
                     </div>
                 </h4>
-                <p>영화설명</p>
+                <p>영화정보</p>
                 <ul>
                     <li class="typeNm"><span>길이:</span></li>
                     <li class="genres"><span>장르:</span></li>
@@ -168,7 +164,7 @@
                             </ul>
                         </div>
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" style="max-height: 400px; overflow-y: scroll;">
+                            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" style="max-height: 460px; overflow-y: scroll;">
                                 <!-- 리뷰 작성 폼 -->
                                 <form th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}" id="reviewForm">
                                     <div class="mb-3">
@@ -177,61 +173,84 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">별점 (0-5)</label>
-                                        <label>
-                                            <input type="radio" id="star0" name="starCount" value="0">
-                                            <img src="/js/assets/images/reviewStar/0.png" alt="0점" style="width: 30px; height: 30px;"> 0
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star0.5" name="starCount" value="0.5">
-                                            <img src="/js/assets/images/reviewStar/0.5.png" alt="0.5점" style="width: 30px; height: 30px;"> 0.5
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star1" name="starCount" value="1">
-                                            <img src="/js/assets/images/reviewStar/1.0.png" alt="1점" style="width: 30px; height: 30px;"> 1
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star1.5" name="starCount" value="1.5">
-                                            <img src="/js/assets/images/reviewStar/1.5.png" alt="1.5점" style="width: 60px; height: 30px;"> 1.5
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star2" name="starCount" value="2">
-                                            <img src="/js/assets/images/reviewStar/2.0.png" alt="2점" style="width: 60px; height: 30px;"> 2
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star2.5" name="starCount" value="2.5">
-                                            <img src="/js/assets/images/reviewStar/2.5.png" alt="2.5점" style="width: 90px; height: 30px;"> 2.5
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star3" name="starCount" value="3">
-                                            <img src="/js/assets/images/reviewStar/3.0.png" alt="3점" style="width: 90px; height: 30px;"> 3
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star3.5" name="starCount" value="3.5">
-                                            <img src="/js/assets/images/reviewStar/3.5.png" alt="3.5점" style="width: 120px; height: 30px;"> 3.5
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star4" name="starCount" value="4">
-                                            <img src="/js/assets/images/reviewStar/4.0.png" alt="4점" style="width: 120px; height: 30px;"> 4
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star4.5" name="starCount" value="4.5">
-                                            <img src="/js/assets/images/reviewStar/4.5.png" alt="4.5점" style="width: 150px; height: 30px;"> 4.5
-                                        </label>
-                                        <label>
-                                            <input type="radio" id="star5" name="starCount" value="5">
-                                            <img src="/js/assets/images/reviewStar/5.0.png" alt="5점" style="width: 150px; height: 30px;"> 5
-                                        </label>
+
+                                        <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+                                            <div style="display: flex; gap: 20px; margin-right: 20px;"> <!-- 간격을 20px로 변경 -->
+                                                <label>
+                                                    <input type="radio" id="star0" name="starCount" value="0">
+                                                    <img src="/js/assets/images/reviewStar/0.png" alt="0점" style="width: 30px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star0.5" name="starCount" value="0.5">
+                                                    <img src="/js/assets/images/reviewStar/0.5.png" alt="0.5점" style="width: 30px; height: 30px;">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+                                            <div style="display: flex; gap: 20px; margin-right: 20px;"> <!-- 간격을 20px로 변경 -->
+                                                <label>
+                                                    <input type="radio" id="star1" name="starCount" value="1">
+                                                    <img src="/js/assets/images/reviewStar/1.0.png" alt="1점" style="width: 30px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star1.5" name="starCount" value="1.5">
+                                                    <img src="/js/assets/images/reviewStar/1.5.png" alt="1.5점" style="width: 60px; height: 30px;">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+                                            <div style="display: flex; gap: 20px; margin-right: 20px;">
+                                                <label>
+                                                    <input type="radio" id="star2" name="starCount" value="2">
+                                                    <img src="/js/assets/images/reviewStar/2.0.png" alt="2점" style="width: 60px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star2.5" name="starCount" value="2.5">
+                                                    <img src="/js/assets/images/reviewStar/2.5.png" alt="2.5점" style="width: 90px; height: 30px;">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+                                            <div style="display: flex; gap: 20px; margin-right: 20px;">
+                                                <label>
+                                                    <input type="radio" id="star3" name="starCount" value="3">
+                                                    <img src="/js/assets/images/reviewStar/3.0.png" alt="3점" style="width: 90px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star3.5" name="starCount" value="3.5">
+                                                    <img src="/js/assets/images/reviewStar/3.5.png" alt="3.5점" style="width: 120px; height: 30px;">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+                                            <div style="display: flex; gap: 20px; margin-right: 20px;">
+                                                <label>
+                                                    <input type="radio" id="star4" name="starCount" value="4">
+                                                    <img src="/js/assets/images/reviewStar/4.0.png" alt="4점" style="width: 120px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star4.5" name="starCount" value="4.5">
+                                                    <img src="/js/assets/images/reviewStar/4.5.png" alt="4.5점" style="width: 150px; height: 30px;">
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="star5" name="starCount" value="5">
+                                                    <img src="/js/assets/images/reviewStar/5.0.png" alt="5점" style="width: 150px; height: 30px;">
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <input type="hidden" id="userId" name="userId" th:value="${session.userName}"/>
                                     <button type="submit" class="btn btn-primary">리뷰 작성</button>
                                 </form>
                             </div>
                             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                                <!-- 여기에 리뷰들을 나열합니다. 스크롤바가 활성화됩니다. -->
                                 <div class="allReviews"></div>
                             </div>
                             <div class="tab-pane fade" id="Myreview" role="tabpanel" aria-labelledby="Myreview-tab" style="max-height: 400px; overflow-y: scroll;">
-                                <!-- 여기에 내 리뷰가 표시됩니다. 스크롤바가 활성화됩니다. -->
                                 <div class="userReview"></div>
                                 <button type="button" id="deleteReview" class="btn btn-danger">리뷰 삭제</button>
                             </div>
@@ -260,7 +279,11 @@
     const userId = '${userId}';
     const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
     const LoginUrl  = urlConfig.baseUrl + "/api/auth/commonLogin";
+    const MainUrl = urlConfig.baseUrl + "/movieInfoMain/main";
 
+    function redirectToMain(){
+        location.href = MainUrl;
+    }
     function redirectToSignUp(){
         location.href = SignUpUrl;
     }
@@ -273,7 +296,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const movieCd = urlParams.get('movieCd');
 
-        // userId 요소 존재 여부 확인
         let userId = null;
         const userIdElement = document.getElementById('userId');
         if (userIdElement) {
@@ -295,7 +317,7 @@
                 .then(data => showMovieDetail(data))
                 .catch(error => {
                     console.error('Error:', error);
-                    alert("영화 상세페이지 진입 도중 오류가 발생했습니다");
+                    //alert("영화 상세페이지 진입 도중 오류가 발생했습니다");
                 });
 
             function showMovieDetail(response) {
@@ -418,7 +440,7 @@
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('리뷰 삭제 도중 오류가 발생했습니다');
+                        //alert('리뷰 삭제 도중 오류가 발생했습니다');
                     });
             } else {
                 alert("로그인 후 리뷰를 삭제할 수 있습니다.");
