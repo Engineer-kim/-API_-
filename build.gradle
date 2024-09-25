@@ -9,6 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
+    targetCompatibility = '17'
 }
 
 configurations {
@@ -44,4 +45,9 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar{
+    archiveFileName = 'complete.jar'
+    mainClass.set('com.movie.movieinfo.MovieInfoApplication')
 }

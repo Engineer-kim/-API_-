@@ -99,7 +99,7 @@
     </div>
 </div>
 <!-- ***** Preloader End ***** -->
-
+<a name="home"></a>
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -110,8 +110,15 @@
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li class="listyle"><a href="contact.html">회원가입</a></li>
-                        <li><a href="#">로그인</a></li>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <!-- <li><a class="listyle" href="#">Sign up<br></a></li> -->
+                        <li class="listyle" th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToSignUp()">회원가입</a></li>
+                        <li th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToLogin()">로그인</a></li>
+                        <li th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}"><a th:text="${session.userName}"></a></li>
+                        <form th:if="${session.userName != null && session.sessionExists == true}" id="logoutForm" action="/api/auth/logout" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!--${_csrf.token} 무조건 필요 보안상 hidden 타입 무조건 포함-->
+                            <input type="submit" value="Logout"/>
+                        </form>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -145,7 +152,7 @@
 <footer>
     <div class="container">
         <div class="col-lg-12">
-            <p>Copyright © 2048 LUGX Gaming Company. All rights reserved. &nbsp;&nbsp; <a rel="nofollow" href="https://templatemo.com" target="_blank">Design: TemplateMo</a></p>
+            <p>정보 출처 : 영화진흥위원회</p>
         </div>
     </div>
 </footer>

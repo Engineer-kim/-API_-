@@ -33,6 +33,45 @@
             height: auto;
         }
 
+        #compareButton {
+            display: inline-block; /* 인라인 블록으로 설정 */
+            background-color: #ee626b; /* 배경색 설정 */
+            color: #fff; /* 텍스트 색상 설정 */
+            font-size: 14px; /* 폰트 크기 설정 */
+            font-weight: 600; /* 폰트 두께 설정 */
+            height: 50px; /* 높이 설정 */
+            line-height: 50px; /* 수직 정렬 */
+            padding: 0px 30px; /* 좌우 패딩 설정 */
+            border-radius: 25px; /* 모서리 둥글게 설정 */
+            border: none; /* 테두리 없애기 */
+            cursor: pointer; /* 마우스 포인터 변경 */
+            margin: 50px 0; /* 위아래 여백 200px 설정 */
+            transition: all .3s; /* 부드러운 전환 효과 */
+        }
+
+        #resultsBody {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #resultsBody tr {
+            height: 50px; /* 각 행의 높이 설정 */
+        }
+
+        #resultsBody td {
+            padding: 10px;
+            text-align: center; /* 가운데 정렬 */
+        }
+
+        #resultsBody tr:first-child td {
+            font-weight: bold; /* 도시 이름 강조 */
+            background-color: #0583fe; /* 도시 이름 배경색 */
+            color: white; /* 글자 색상 */
+            padding-left: 35px; /* 왼쪽 패딩 */
+        }
+
+
+
     </style>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -77,7 +116,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-
+                    <a class="logo" onclick="redirectToMain()">
+                        <img src="/js/assets/images/logo2.png" alt="" style="width: 158px; height: 60px">
+                    </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -584,7 +625,7 @@
 <footer>
     <div class="container">
         <div class="col-lg-12">
-            <p>Copyright © 2048 LUGX Gaming Company. All rights reserved. &nbsp;&nbsp; <a rel="nofollow" href="https://templatemo.com" target="_blank">Design: TemplateMo</a></p>
+            <p>정보 출처 : 영화진흥위원회</p>
         </div>
     </div>
 </footer>
@@ -593,9 +634,13 @@
 <script src="/js/config.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-
+    const MainUrl = urlConfig.baseUrl + "/movieInfoMain/main";
     const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
     const LoginUrl  = urlConfig.baseUrl + "/api/auth/commonLogin";
+
+    function redirectToMain(){
+        location.href = MainUrl;
+    }
 
     function redirectToSignUp(){
         location.href = SignUpUrl;
@@ -636,16 +681,23 @@
         const mm = ('0' + (today.getMonth() + 1)).slice(-2);
         const dd = ('0' + today.getDate()).slice(-2);
 
-        return yyyy + mm + dd;
+        return yyyy + mm + (dd-1);
+    }function getWeekDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
+
+        return yyyy + mm + (dd-7);
     }
-
     const todayDate = getTodayDate();
+    const weekDate = getWeekDate();
 
-    /**일별 정보 가져오는 함수*/
+
     $(document).ready(function(){
         $.ajax({
             //영화 정보 불러오는 API
-            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + "20230101",
+            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + todayDate,
             type: "GET",
             headers: {
                 "X-Requested-With": "XMLHttpRequest"
@@ -733,7 +785,7 @@
 
     /**주간 영화 정보*/
     function getWeeklyMovieRank() {
-        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${targetDt}`;
+        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${weekDate}`;
         fetch(weeklyApiEndPoint)
             .then(response => {
                 if (response.ok) {
@@ -781,7 +833,7 @@
 
         const promises = Array.from(checkboxes).map(checkbox => {
             const cityCode = checkbox.value;
-            return fetch(urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + "20230101")
+            return fetch(urlConfig.baseUrl + "/movieInfo/v1/" + cityCode + "/listRegionMovieRankInfo?targetDt=" + todayDate)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('네트워크 응답이 실패했습니다.');
@@ -800,28 +852,26 @@
             .then(results => {
                 const maxLength = Math.max(...results.map(result => result.length));
 
+                // 도시 이름 추가 (첫 번째 행)
+                const cityNamesRow = document.createElement('tr');
+                checkboxes.forEach((checkbox, index) => {
+                    const cityName = checkbox.nextElementSibling.querySelector('h4').innerText;
+                    const cityColumnIndex = index * 2; // 도시 이름 열 위치 조정
+                    cityNamesRow.innerHTML += `<td colspan="2" style="text-align: center;">${cityName}</td>`;
+                });
+                resultsBody.appendChild(cityNamesRow); // 도시 이름을 첫 번째 행으로 삽입
+
+                // 각 영화 순위를 추가
                 for (let i = 0; i < maxLength; i++) {
                     const row = document.createElement('tr');
 
-                    results.forEach((result, index) => {
+                    results.forEach((result) => {
                         const movie = result[i] || { rank: '', title: '' };
-                        if (index === 0) {
-                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
-                        } else {
-                            row.innerHTML += `<td>${movie.rank} ${movie.title}</td>`;
-                        }
+                        row.innerHTML += `<td>${movie.rank}</td><td>${movie.title}</td>`;
                     });
 
                     resultsBody.appendChild(row);
                 }
-
-                // 도시 이름 추가
-                const cityNamesRow = document.createElement('tr');
-                checkboxes.forEach(checkbox => {
-                    const cityName = checkbox.nextElementSibling.querySelector('h4').innerText;
-                    cityNamesRow.innerHTML += `<td>${cityName}</td>`;
-                });
-                resultsBody.insertBefore(cityNamesRow, resultsBody.firstChild); // 도시 이름을 첫 번째 행으로 삽입
 
                 document.getElementById('results').classList.remove('hidden');
             })

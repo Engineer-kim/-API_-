@@ -68,10 +68,8 @@ public class UserService implements UserDetailsService{
     public CustomResponse checkIfUserIdExists(String userId) {
         if (userRepository.findById(userId).isPresent() && findActivationUser(userId)) {
             return new CustomResponse(409, "중복된 아이디로 해당 아이디로 가입 불가합니다");
-        } else if (userRepository.findById(userId).isEmpty()) {
+        } else {
             return new CustomResponse(200, "사용 가능한 아이디입니다");
-        } else {// 오류 발생시
-            return new CustomResponse(404, "오류가 발생했습니다.");
         }
     }
 
@@ -165,9 +163,17 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        /*
+        SecurityConfig에서 설정한 .usernameParameter("userId") 로 인해 login.html에서 사용자가 입력한 userId 값이 loadUserByUsername의 username으로 전달됩니다.
+        loadUserByUsername은 전달받은 값을 이용해서 User 엔티티를 찾은 후, 이 엔티티를 이용해서 UserDetails 객체를 만들어서 반환합니다.
+        그러면 스프링 시큐리티는 이 메서드에서 반환한 객체를 이용해 비밀번호 대조를 한 후 로그인 성공 여부를 결정합니다.
+         */
         log.debug("Attempting to load user: " + username);
 
-        User user = userRepository.findByUserName(username)
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + username));
+
+        User user = userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자의 이름으로 가입된 계정이 있습니다: " + username));
 
         return org.springframework.security.core.userdetails.User
@@ -207,5 +213,6 @@ public class UserService implements UserDetailsService{
             return false;
         }
     }
-}
 
+
+}

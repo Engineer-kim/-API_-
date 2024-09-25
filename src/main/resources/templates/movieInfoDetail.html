@@ -75,7 +75,7 @@
     </div>
 </div>
 <!-- ***** Preloader End ***** -->
-
+<a name="home"></a>
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -86,10 +86,7 @@
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="#" class="active">Home</a></li>
-                        <li><a href="#">DailyBest</a></li>
-                        <li><a href="#">WeeklyBest</a></li>
-                        <li><a href="#">Best by region</a></li>
+                        <li><a href="#home" class="active">Home</a></li>
                         <!-- <li><a class="listyle" href="#">Sign up<br></a></li> -->
                         <li class="listyle" th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToSignUp()">회원가입</a></li>
                         <li th:if="${session.userName == null && session.sessionExists == null}"><a onclick="redirectToLogin()">로그인</a></li>
@@ -159,11 +156,11 @@
                     <div class="row">
                         <div class="nav-wrapper">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}" class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">리뷰 작성</button>
-                                </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+                                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">리뷰</button>
+                                </li>
+                                <li th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}" class="nav-item" role="presentation">
+                                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">리뷰 작성</button>
                                 </li>
                                 <li th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}" class="nav-item" role="presentation">
                                     <button class="nav-link" id="Myreview-tab" data-bs-toggle="tab" data-bs-target="#Myreview" type="button" role="tab" aria-controls="Myreview" aria-selected="false">내 리뷰</button>
@@ -171,7 +168,7 @@
                             </ul>
                         </div>
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" style="max-height: 400px; overflow-y: scroll;">
                                 <!-- 리뷰 작성 폼 -->
                                 <form th:if="${session.userName != null && session.userName.isEmpty() != true && session.sessionExists == true}" id="reviewForm">
                                     <div class="mb-3">
@@ -179,21 +176,64 @@
                                         <textarea class="form-control" id="reviewText" rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="starCount" class="form-label">별점 (0-5)</label>
-                                        <input type="number" class="form-control" id="starCount" min="0" max="5" step="0.5">
+                                        <label class="form-label">별점 (0-5)</label>
+                                        <label>
+                                            <input type="radio" id="star0" name="starCount" value="0">
+                                            <img src="/js/assets/images/reviewStar/0.png" alt="0점" style="width: 30px; height: 30px;"> 0
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star0.5" name="starCount" value="0.5">
+                                            <img src="/js/assets/images/reviewStar/0.5.png" alt="0.5점" style="width: 30px; height: 30px;"> 0.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star1" name="starCount" value="1">
+                                            <img src="/js/assets/images/reviewStar/1.0.png" alt="1점" style="width: 30px; height: 30px;"> 1
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star1.5" name="starCount" value="1.5">
+                                            <img src="/js/assets/images/reviewStar/1.5.png" alt="1.5점" style="width: 60px; height: 30px;"> 1.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star2" name="starCount" value="2">
+                                            <img src="/js/assets/images/reviewStar/2.0.png" alt="2점" style="width: 60px; height: 30px;"> 2
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star2.5" name="starCount" value="2.5">
+                                            <img src="/js/assets/images/reviewStar/2.5.png" alt="2.5점" style="width: 90px; height: 30px;"> 2.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star3" name="starCount" value="3">
+                                            <img src="/js/assets/images/reviewStar/3.0.png" alt="3점" style="width: 90px; height: 30px;"> 3
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star3.5" name="starCount" value="3.5">
+                                            <img src="/js/assets/images/reviewStar/3.5.png" alt="3.5점" style="width: 120px; height: 30px;"> 3.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star4" name="starCount" value="4">
+                                            <img src="/js/assets/images/reviewStar/4.0.png" alt="4점" style="width: 120px; height: 30px;"> 4
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star4.5" name="starCount" value="4.5">
+                                            <img src="/js/assets/images/reviewStar/4.5.png" alt="4.5점" style="width: 150px; height: 30px;"> 4.5
+                                        </label>
+                                        <label>
+                                            <input type="radio" id="star5" name="starCount" value="5">
+                                            <img src="/js/assets/images/reviewStar/5.0.png" alt="5점" style="width: 150px; height: 30px;"> 5
+                                        </label>
                                     </div>
                                     <input type="hidden" id="userId" name="userId" th:value="${session.userName}"/>
                                     <button type="submit" class="btn btn-primary">리뷰 작성</button>
-                                    <button type="button" id="deleteReview" class="btn btn-danger">리뷰 삭제</button>
                                 </form>
                             </div>
-                            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" style="max-height: 400px; overflow-y: scroll;">
+                            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                                 <!-- 여기에 리뷰들을 나열합니다. 스크롤바가 활성화됩니다. -->
                                 <div class="allReviews"></div>
                             </div>
                             <div class="tab-pane fade" id="Myreview" role="tabpanel" aria-labelledby="Myreview-tab" style="max-height: 400px; overflow-y: scroll;">
                                 <!-- 여기에 내 리뷰가 표시됩니다. 스크롤바가 활성화됩니다. -->
                                 <div class="userReview"></div>
+                                <button type="button" id="deleteReview" class="btn btn-danger">리뷰 삭제</button>
                             </div>
                         </div>
                     </div>
@@ -208,7 +248,7 @@
 <footer>
     <div class="container">
         <div class="col-lg-12">
-            <p>Copyright © 2048 LUGX Gaming Company. All rights reserved. &nbsp;&nbsp; <a rel="nofollow" href="https://templatemo.com" target="_blank">Design: TemplateMo</a></p>
+            <p>정보 출처 : 영화진흥위원회</p>
         </div>
     </div>
 </footer>
@@ -229,12 +269,21 @@
         location.href = LoginUrl;
     }
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         const urlParams = new URLSearchParams(window.location.search);
         const movieCd = urlParams.get('movieCd');
 
+        // userId 요소 존재 여부 확인
+        let userId = null;
+        const userIdElement = document.getElementById('userId');
+        if (userIdElement) {
+            userId = userIdElement.value;
+        }
+
+        let movieTitle = '';
+
         if (movieCd) {
-            // 영화 상세 정보 API 호출
+            // 영화 상세정보 가져오기
             fetch(urlConfig.baseUrl + "/movieInfo/v1/moviesDetail?movieCd=" + movieCd, {
                 method: 'GET',
                 headers: {
@@ -249,7 +298,7 @@
                     alert("영화 상세페이지 진입 도중 오류가 발생했습니다");
                 });
 
-            function showMovieDetail(response){
+            function showMovieDetail(response) {
                 $('.moviePoster').attr('src', response.moviePosterUrl);
                 $('.movieNm').text(response.movieInfoResult.movieInfo.movieNm);
                 $('.movieNmEn').text(response.movieInfoResult.movieInfo.movieNmEn);
@@ -258,48 +307,17 @@
                 const genres = response.movieInfoResult.movieInfo.genres.map(genre => genre.genreNm).join(', ');
                 $('.genres').text(genres);
 
-                const actors = response.movieInfoResult.movieInfo.actors.length > 0
-                    ? response.movieInfoResult.movieInfo.actors.map(actor => actor.peopleNm).join(', ')
-                    : '출연 배우 정보 없음';
-                $('.actors').text(actors);
+                if (response.movieInfoResult.movieInfo.actors.length > 0) {
+                    const actors = response.movieInfoResult.movieInfo.actors.map(actor => actor.peopleNm).join(', ');
+                    $('.actors').text(actors);
+                } else {
+                    $('.actors').text('출연 배우 정보 없음');
+                }
+
+                movieTitle = response.movieInfoResult.movieInfo.movieNm;
             }
 
-            // 모든 리뷰 API 호출 (로그인 불필요)
-            fetch(urlConfig.baseUrl + "/movieReview/v1/getMovieAllReview?movieCd=" + movieCd, {
-                method: 'GET',
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => showAllReviews(data))
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("영화 리뷰 정보를 가져오는 도중 오류가 발생했습니다");
-                });
-        } else {
-            alert("movieCd 값이 없습니다.");
-        }
-
-
-        function showAllReviews(response) {
-            if (Array.isArray(response) && response.length > 0) {
-                const reviews = response.map(review => `<li>리뷰: ${review.detail}, 별점: ${review.starCount}, 작성자: ${review.userId}</li>`).join('');
-                $('.allReviews').html(`<ul>${reviews}</ul>`);
-            } else {
-                $('.allReviews').text('리뷰가 없습니다.');
-            }
-        }
-    });
-
-    $(document).ready(function(){
-        const urlParams = new URLSearchParams(window.location.search);
-        const movieCd = urlParams.get('movieCd');
-        const userId = document.getElementById('userId').value;
-
-
-            // 사용자 리뷰 API 호출 (로그인 필요)
+            // 사용자 리뷰 가져오기 (로그인 시에만)
             if (userId) {
                 fetch(urlConfig.baseUrl + "/movieReview/v1/getMovieReview?userId=" + userId + "&movieCd=" + movieCd, {
                     method: 'GET',
@@ -311,11 +329,26 @@
                     .then(response => response.json())
                     .then(data => showUserReview(data))
                     .catch(error => {
-                        console.error('Error:', error);
-                        alert("사용자 리뷰 정보를 가져오는 도중 오류가 발생했습니다");
+
                     });
             }
 
+            // 모든 리뷰 가져오기 (로그인 여부와 관계없이)
+            fetch(urlConfig.baseUrl + "/movieReview/v1/getMovieAllReview?movieCd=" + movieCd, {
+                method: 'GET',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => showAllReviews(data))
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+            alert("movieCd 값이 없습니다.");
+        }
 
         function showUserReview(response) {
             if (typeof response === 'string') {
@@ -325,11 +358,21 @@
             }
         }
 
+        function showAllReviews(response) {
+            if (typeof response === 'string') {
+                $('.allReviews').text(response);
+            } else {
+                const reviews = response.map(review => `<li>리뷰: ${review.detail}, 별점: ${review.starCount}, 작성자: ${review.userId}</li>`).join('');
+                $('.allReviews').html(`<ul>${reviews}</ul>`);
+            }
+        }
+
         document.getElementById("reviewForm").onsubmit = function(event) {
             event.preventDefault();
 
             const reviewText = document.getElementById("reviewText").value;
-            const starCount = document.getElementById("starCount").value;
+            const starCount = document.querySelector('input[name="starCount"]:checked') ?
+                document.querySelector('input[name="starCount"]:checked').value : null;
 
             const reviewData = {
                 title: movieTitle,
@@ -339,7 +382,6 @@
                 movieCode: movieCd
             };
 
-            // 리뷰 저장 API 호출 (로그인 필요)
             if (userId) {
                 fetch('http://localhost:8080/movieReview/v1/saveMovieReview', {
                     method: 'POST',
@@ -362,7 +404,6 @@
         };
 
         document.getElementById("deleteReview").onclick = function() {
-            // HTML에서 userName을 읽어와서 userId에 할당
             if (userId) {
                 fetch('http://localhost:8080/movieReview/v1/removeMovieReview?userId=' + userId + '&movieCd=' + movieCd, {
                     method: 'DELETE',
@@ -384,6 +425,7 @@
             }
         };
     });
+
 
     document.addEventListener('DOMContentLoaded', function() {
         const logoutForm = document.getElementById('logoutForm');

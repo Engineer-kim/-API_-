@@ -26,16 +26,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100vh; /* 화면 전체 높이 */
             background-color: #f7f7f7;
+            margin: 0; /* 기본 여백 제거 */
         }
 
         .container {
             background: white;
-            padding: 20px 40px 40px 40px;
+            padding: 20px 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 600px; /* 원하는 폭 */
+            max-height: 90% !important; /* 최대 높이 설정 */
+            overflow-y: auto !important; /* 내용이 많을 경우 스크롤 가능 */
+        }
+
+        .main-banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 전체 높이 맞춤 */
         }
 
         h2 {
@@ -83,6 +93,12 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .header-area {
+            background: transparent !important; /* 배경을 투명하게 설정 */
+        }
+
+
     </style>
 </head>
 <body>
@@ -98,6 +114,21 @@
     </div>
 </div>
 <!-- ***** Preloader End ***** -->
+<header class="header-area header-sticky" style="background: transparent; box-shadow: none; border: none; margin-top: 20px">
+    <div class="container" style="background: transparent; box-shadow: none;">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a class="logo" onclick="redirectToMain()" style="border: none;">
+                        <img src="/js/assets/images/logo2.png" alt="" style="width: 356px; height: 120px; border: none;">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="main-banner">
     <div class="container">
@@ -105,24 +136,23 @@
             <div class="container">
                 <h2>Login</h2>
                 <form class="form-signin" method="post" action="/api/auth/loginProc" autocomplete="off">
-                    <<input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} --> <!-- ${_csrf.token} -->
-                    <p><label for="username">Username: </label><input type="text" id="username" name="userId" required/></p>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/> <!-- ${_csrf.token} -->
+                    <p><label for="userId">UserId: </label><input type="text" id="userId" name="userId" required/></p>
                     <div><label for="password">Password: </label><input type="password" id="password" name="password" required/></div>
-                    <div><input type="submit" value="로그인"/></div>
-                    <div><input type="button" onclick="redirectToFindUserId()" value="ID 찾기"></div>
-                    <div><input type="button" onclick="redirectToResetPassword()" value="비밀번호 재설정"></div>
-                    <div><input type="button" onclick="redirectToSignUp()" value="회원가입"></div>
+
+                    <!-- 중앙 정렬을 위한 스타일 추가 -->
+                    <div style="display: flex; justify-content: center; gap: 10px;">
+                        <input type="submit" value="로그인"/>
+                        <input type="button" onclick="redirectToSignUp()" value="회원가입">
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 10px;">
+                        <input type="button" onclick="redirectToFindUserId()" value="ID 찾기">
+                        <input type="button" onclick="redirectToResetPassword()" value="비밀번호 재설정">
+                    </div>
+
                     <p th:if="${error}" style="color: red;" th:text="${error}"></p>
                 </form>
-            </div>
-            <div style="padding-bottom: 20px">
-                <a href="/oauth2/authorization/google">Login with Google</a>
-            </div>
-            <div style="padding-bottom: 20px">
-                <a href="/oauth2/authorization/kakao">Login with KaKao</a>
-            </div>
-            <div style="padding-bottom: 20px">
-                <a href="/oauth2/authorization/naver">Login with Naver</a>
             </div>
         </div>
     </div>
@@ -133,6 +163,11 @@
     const resetPasswordUrl  = urlConfig.baseUrl + "/userManagement/resetPasswordView";
     const SignUpUrl  = urlConfig.baseUrl + "/userManagement/signUpView";
 
+    const MainUrl = urlConfig.baseUrl + "/movieInfoMain/main";
+
+    function redirectToMain(){
+        location.href = MainUrl;
+    }
     function redirectToFindUserId(){
         location.href = findUserIdUrl;
     }
