@@ -28,14 +28,26 @@
             align-items: center;
             height: 100vh;
             background-color: #f7f7f7;
+            margin: 0;
         }
 
         .container {
             background: white;
-            padding: 20px 40px 40px 40px;
+            padding: 20px 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 600px;
+        }
+
+        .header-area {
+            background: transparent !important;
+        }
+
+        .main-banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         h2 {
@@ -130,7 +142,9 @@
                 <div>
                     <label for="emailInput">Email:</label>
                     <input type="text" id="emailInput" name="email">
-                    <button id="findUserIdButton">Find User ID</button>
+                    <div style="display: flex; justify-content: center;">
+                        <button id="findUserIdButton" style="margin-top: 15px;">Find User ID</button>
+                    </div>
                     <div id="result"></div>
                 </div>
             </div>
@@ -142,8 +156,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 <script src="/js/config.js"></script>
 <script>
+    const MainUrl = urlConfig.baseUrl + "/movieInfoMain/main";
+
+    function redirectToMain(){
+        location.href = MainUrl;
+    }
+
     function encryptEmail(email) {
-        const secretKey = "your-secret-key"; // 실제 애플리케이션에서는 보안을 위해 복잡하고 안전한 키를 사용해야 합니다.
+        const secretKey = "your-secret-key";
         return CryptoJS.AES.encrypt(email, secretKey).toString();
     }
 

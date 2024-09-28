@@ -5,11 +5,18 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
+@Service
 public class CrawlingMoviePoster {
 
-    public static String getMoviePosterImageUrl(String movieCd) {
+
+    @Cacheable(value = "moviePosterImage", key = "#movieCd")
+    public String getMoviePosterImageUrl(String movieCd) {
         String url = "https://kobis.or.kr/kobis/business/mast/mvie/searchMovieDtl.do";
 
         try {
