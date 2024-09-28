@@ -28,8 +28,9 @@ public class MovieInfoController {
     private  final MovieDailyRankService movieDailyRankService;
     private  final MovieWeeklyRankService movieWeeklyRankService;
     private  final MovieSearchService movieSearchService;
-    private final MovieRegionInfoService movieRegionInfoService;
+    private  final MovieRegionInfoService movieRegionInfoService;
     private  final MovieReviewService movieReviewService;
+    private  final CrawlingMoviePoster crawlingMoviePoster;
 
 
     /**영화 상세정보 불러오는 엔드포인트(단건 출력)*/
@@ -42,7 +43,7 @@ public class MovieInfoController {
     @GetMapping("/v1/moviesDetail")
     public ResponseEntity<MovieInfoResponseWrapperDto> getMovieDetailInfo(@RequestParam("movieCd")  String movieCd){
       MovieInfoResponseWrapperDto response = movieDetailService.getDetail(movieCd);
-      String moviePosterImageUrl  = CrawlingMoviePoster.getMoviePosterImageUrl(movieCd);
+      String moviePosterImageUrl  = crawlingMoviePoster.getMoviePosterImageUrl(movieCd);
         System.out.println("movieImageUrl::::::::::::::::::::::::::::::::::::::::::::" +moviePosterImageUrl);
         System.out.println(response.toString());
         response.setMoviePosterUrl(moviePosterImageUrl);
@@ -89,7 +90,7 @@ public class MovieInfoController {
     /**영화 포스터 가져오는(크롤링) API 임*/
     @GetMapping("/v1/getMoviePosterImage")
     public String getMoviePosterImageUrl(@RequestParam("movieCd") String movieCd){
-        String response = CrawlingMoviePoster.getMoviePosterImageUrl(movieCd);
+        String response = crawlingMoviePoster.getMoviePosterImageUrl(movieCd);
         return  response;
     }
 
