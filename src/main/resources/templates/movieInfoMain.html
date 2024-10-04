@@ -674,76 +674,56 @@
 </script>
 <script>
 
-    /**날짜 가져오는 함수*/
+    /** 날짜 가져오는 함수 */
     function getTodayDate() {
         const today = new Date();
+        today.setDate(today.getDate() - 1);
         const yyyy = today.getFullYear();
         const mm = ('0' + (today.getMonth() + 1)).slice(-2);
         const dd = ('0' + today.getDate()).slice(-2);
 
-        return yyyy + mm + (dd-1);
-    }function getWeekDate() {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
-        const dd = ('0' + today.getDate()).slice(-2);
-
-        return yyyy + mm + (dd-7);
+        return yyyy + mm + dd;
     }
+
+    function getWeekDate() {
+        const today = new Date();
+        today.setDate(today.getDate() - 7);
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
+
+        return yyyy + mm + dd;
+    }
+
     const todayDate = getTodayDate();
     const weekDate = getWeekDate();
 
+    $(document).ready(function() {
+        const dailyMoviesApi = urlConfig.baseUrl + "/movieInfo/v1/moviesDailyRank?targetDt=" + todayDate;
+        const weeklyMoviesApi = urlConfig.baseUrl + "/movieInfo/v1/moviesWeeklyRank?targetDt=" + weekDate;
 
-    $(document).ready(function(){
-        $.ajax({
-            //영화 정보 불러오는 API
-            url: urlConfig.baseUrl +"/movieInfo/v1/moviesDailyRank?targetDt=" + todayDate,
-            type: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            success: function(response) {
-                displayMoviesRank(response);
-                displayMoviesBest(response);
-                getWeeklyMovieRank();
-            },
-            error: function(xhr, status, error) {
-                //alert("일별 정보를 가져오는데 실패하였습니다");
-            }
-        });
+        // API 호출
+        Promise.all([
+            $.ajax({ url: dailyMoviesApi, type: "GET", headers: { "X-Requested-With": "XMLHttpRequest" }}),
+            $.ajax({ url: weeklyMoviesApi, type: "GET", headers: { "X-Requested-With": "XMLHttpRequest" }})
+        ])
+            .then(([dailyResponse, weeklyResponse]) => {
+                displayMoviesBest(dailyResponse);
+                displayMoviesRank(dailyResponse);
+                showWeeklyMovieRankingData(weeklyResponse);
+            })
+            .catch(error => {
+                console.error("API 호출 중 오류 발생:", error);
+                alert("영화 정보를 가져오는 데 문제가 발생했습니다.");
+            });
 
         $('#search').on('submit', searchMovie);
     });
-    /**일간 박스오피스 정보 불러오는 함수 */
-    async function displayMoviesRank(movies) {
-        for (const movie of movies) {
-
-            const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
-            const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
-
-
-            const imageUrl = await getImageFunction(movie.movieCd);
-            const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
-            posterContainer.append(moviePosterEl);
-
-
-            infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
-            infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
-
-
-            $('#rank' + movie.rank).on('click', function() {
-                pageMove(movie.movieCd);
-            });
-        }
-    }
-
-    /**당일 박스오피스 1위 상세정보 불러오는 함수 */
+    /** 당일 박스오피스 1위 상세정보 불러오는 함수 */
     function displayMoviesBest(movies) {
         const container = $('.movieBestContainer');
         const posterContainer = $('.posterBestContainer');
-        const rankOneMovie = movies.filter(function(movie) {
-            return movie.rank === "1";
-        });
+        const rankOneMovie = movies.filter(movie => movie.rank === "1");
 
         rankOneMovie.forEach(function(movie) {
             var movieEl = $('<div class="movie"></div>');
@@ -758,7 +738,7 @@
             });
 
             $.ajax({
-                url:  urlConfig.baseUrl+"/movieInfo/v1/getMoviePosterImage?movieCd=" + movie.movieCd,
+                url: urlConfig.baseUrl + "/movieInfo/v1/getMoviePosterImage?movieCd=" + movie.movieCd,
                 type: "GET",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
@@ -768,58 +748,68 @@
                     posterContainer.append(posterEl);
                 },
                 error: function(xhr, status, error) {
-                    //alert("영화 포스터 이미지를 불러오는 데 실패했습니다");
+                    console.error("영화 포스터 이미지를 불러오는 데 실패했습니다:", error);
                 }
             });
         });
     }
-    function searchMovie(e){
+
+    /** 일간 박스오피스 정보 불러오는 함수 */
+    async function displayMoviesRank(movies) {
+        for (const movie of movies) {
+            const posterContainer = $('#rank' + movie.rank + ' .posterContainer');
+            const infoContainer = $('#rank' + movie.rank + ' .infoContainer');
+
+            try {
+                const imageUrl = await getImageFunction(movie.movieCd);
+                const moviePosterEl = $('<img src="' + imageUrl + '" alt="Movie Poster">');
+                posterContainer.append(moviePosterEl);
+
+                infoContainer.append('<p>제목: ' + movie.movieNm + '</p>');
+                infoContainer.append('<p>개봉일: ' + movie.openDt + '</p><br>');
+
+                $('#rank' + movie.rank).on('click', function() {
+                    pageMove(movie.movieCd);
+                });
+            } catch (error) {
+                console.error("포스터를 가져오는 데 실패했습니다:", error);
+            }
+        }
+    }
+
+    /** 주간 영화 순위 데이터 표시 */
+    async function showWeeklyMovieRankingData(movies) {
+        for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
+            const { rank, movieCd, movieNm, openDt } = movie;
+            const rankSelector = `#Weekrank${rank}`;
+            const posterContainer = $(`${rankSelector} .WposterContainer`);
+            const infoContainer = $(`${rankSelector} .WinfoContainer`);
+
+            try {
+                const imageUrl = await getImageFunction(movieCd);
+                const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
+                posterContainer.append(moviePosterEl);
+            } catch (error) {
+                const defaultImageUrl = "Default.png";
+                const moviePosterEl = $(`<img src="${defaultImageUrl}" alt="Movie Poster">`);
+                posterContainer.append(moviePosterEl);
+            }
+
+            infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
+            $(rankSelector).on('click', () => pageMove(movieCd));
+        }
+    }
+
+
+    function searchMovie(e) {
         e.preventDefault();
         const searchMovieText = document.getElementById('searchText').value;
         const encodeText = encodeURIComponent(searchMovieText);
-        window.location.href = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}`
+        window.location.href = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}`;
     }
-    
-    //임시 변수(개발완료 후 함수에서 계산된 날짜로 변경해야함)
-    const targetDt = "20240101";
 
-    /**주간 영화 정보*/
-    function getWeeklyMovieRank() {
-        const weeklyApiEndPoint = `${urlConfig.baseUrl}/movieInfo/v1/moviesWeeklyRank?targetDt=${weekDate}`;
-        fetch(weeklyApiEndPoint)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }else{
-                    return response.json("Api Error");
-                }
-            })
-            .then(data => showWeeklyMovieRankingData(data))
-            .catch(error => {
-                return "Api Error";
-            });
-    }
-    //Default.png  ====> 이미지 없을떄 기본 이미지 웹상에서 하나 찿아서 넣어주셈
-   async function showWeeklyMovieRankingData(movies){
-       for (const movie of movies.boxOfficeResult.weeklyBoxOfficeList) {
-           const { rank, movieCd, movieNm, openDt } = movie;
-           const rankSelector = `#Weekrank${rank}`;
-           const posterContainer = $(`${rankSelector} .WposterContainer`);
-           const infoContainer = $(`${rankSelector} .WinfoContainer`);
 
-           getImageFunction(movieCd).then(imageUrl => {
-               const moviePosterEl = $(`<img src="${imageUrl}" alt="Movie Poster">`);
-               posterContainer.append(moviePosterEl);
-           }).catch(error => {
-               const defaultImageUrl = "Default.png";
-               const moviePosterEl = $(`<img src="${defaultImageUrl}" alt="Movie Poster">`);
-               posterContainer.append(moviePosterEl);
-           });
-           infoContainer.append(`<p>제목: ${movieNm}</p><p>개봉일: ${openDt}</p><br>`);
 
-           $(rankSelector).on('click', () => pageMove(movieCd));
-       }
-    }
 
     document.getElementById('compareButton').onclick = function() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
@@ -856,7 +846,6 @@
                 const cityNamesRow = document.createElement('tr');
                 checkboxes.forEach((checkbox, index) => {
                     const cityName = checkbox.nextElementSibling.querySelector('h4').innerText;
-                    const cityColumnIndex = index * 2; // 도시 이름 열 위치 조정
                     cityNamesRow.innerHTML += `<td colspan="2" style="text-align: center;">${cityName}</td>`;
                 });
                 resultsBody.appendChild(cityNamesRow); // 도시 이름을 첫 번째 행으로 삽입
@@ -876,19 +865,24 @@
                 document.getElementById('results').classList.remove('hidden');
             })
             .catch(error => {
-                //alert("영화 정보를 가져오는 도중 오류가 발생했습니다: " + error.message);
+                console.error("영화 정보를 가져오는 도중 오류가 발생했습니다:", error);
             });
     }
 
-    /**영화 포스터*/
+    /** 영화 포스터 */
     async function getImageFunction(movieCd) {
-        const response = await fetch(urlConfig.baseUrl +"/movieInfo/v1/getMoviePosterImage?movieCd=" +  movieCd);
+        const response = await fetch(urlConfig.baseUrl + "/movieInfo/v1/getMoviePosterImage?movieCd=" + movieCd);
         const imageData = await response.text();
         return imageData;
     }
-    /** 상세페이지 이동 함수*/
-    function pageMove(movieCd){
-        window.location.href = urlConfig.baseUrl+"/movieInfoMain/detail?movieCd=" + movieCd;
+
+    /** 상세페이지 이동 함수 */
+    function pageMove(movieCd) {
+        if (movieCd) {
+            window.location.href = urlConfig.baseUrl + "/movieInfoMain/detail?movieCd=" + movieCd;
+        } else {
+            console.error("유효하지 않은 영화 코드입니다.");
+        }
     }
 </script>
 </html>

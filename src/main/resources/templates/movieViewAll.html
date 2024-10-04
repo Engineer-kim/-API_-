@@ -225,22 +225,25 @@
         location.href = MainUrl;
     }
 
-    /**날짜 가져오는 함수*/
+    /** 날짜 가져오는 함수 */
     function getTodayDate() {
-        var today = new Date();
-        var yyyy = today.getFullYear();
-        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
-        var dd = ('0' + today.getDate()).slice(-2);
+        const today = new Date();
+        today.setDate(today.getDate() - 1);
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
 
-        return yyyy + mm + (dd-1);
+        return yyyy + mm + dd;
     }
-    function getWeekDate() {
-        var today = new Date();
-        var yyyy = today.getFullYear();
-        var mm = ('0' + (today.getMonth() + 1)).slice(-2);
-        var dd = ('0' + today.getDate()).slice(-2);
 
-        return yyyy + mm + (dd-7);
+    function getWeekDate() {
+        const today = new Date();
+        today.setDate(today.getDate() - 7);
+        const yyyy = today.getFullYear();
+        const mm = ('0' + (today.getMonth() + 1)).slice(-2);
+        const dd = ('0' + today.getDate()).slice(-2);
+
+        return yyyy + mm + dd;
     }
 
     const todayDate = getTodayDate();
