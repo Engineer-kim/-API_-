@@ -173,17 +173,23 @@
     $(document).ready(function() {
         const urlParams = new URLSearchParams(window.location.search);
         const searchText = urlParams.get('searchText');
-        /** 검색 내용 출력*/
+        const searchType = urlParams.get('type');
+        console.log(searchText)
         if (searchText) {
             const searchTextElement = $('<h3>').text(`검색어: ${searchText}`);
             $('.search-text').append(searchTextElement);
         } else {
             alert("검색텍스트가 입력되지 않았습니다");
         }
-        /** 검색결과 출력 */
+        console.log("saaaaaaaaa"+searchText)
+        console.log(searchType)
         if (searchText) {
+            let apiUrl = urlConfig.baseUrl + "/movieInfo/v1/movieSearch?";
+            apiUrl += "searchText=" + encodeURIComponent(searchText) + "&type=" + encodeURIComponent(searchType)
+            console.log("apiUTL::::::::::::::::::::::::" + apiUrl)
+
             $.ajax({
-                url: urlConfig.baseUrl + "/movieInfo/v1/movieSearch?movieNm=" +searchText,
+                url: apiUrl,
                 type: "GET",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
