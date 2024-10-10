@@ -69,8 +69,44 @@
             color: white;
             padding-left: 42px;
         }
+        #search {
+            display: flex;
+            align-items: center;
+        }
 
-
+        #search input{
+            margin-right: 10px;
+            padding: 10px;
+        }
+        #search button {
+            margin-right: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            height: 50px;
+            line-height: 50px;
+            padding: 0 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: all .3s;
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            margin-top: 2px; /* 위쪽 여백 조정 */
+        }
+        #search select{
+            margin-right: 100px;
+            border-radius: 15px;
+            background: #fff;
+            border: 2px none #0583fe;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+            padding: 12px;
+        }
+        #search {
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+        }
 
     </style>
 
@@ -159,7 +195,7 @@
                                 <option value="movieNm">영화 제목</option>
                                 <option value="directorNm">감독</option>
                             </select>
-                            <button type="submit" role="button">검색</button>
+                            <button style="padding: 20px" type="submit" role="button">검색</button>
                         </form>
                     </div>
                     <div class="movieBestContainer"></div>
