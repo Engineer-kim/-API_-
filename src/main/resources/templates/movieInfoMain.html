@@ -155,6 +155,10 @@
                     <div class="search-input">
                         <form id="search" action="#" method="GET">
                             <input type="text" placeholder="제목" id='searchText' name="searchKeyword" />
+                            <select id="searchType">
+                                <option value="movieNm">영화 제목</option>
+                                <option value="directorNm">감독</option>
+                            </select>
                             <button type="submit" role="button">검색</button>
                         </form>
                     </div>
@@ -803,9 +807,26 @@
 
     function searchMovie(e) {
         e.preventDefault();
+        const searchType = document.getElementById('searchType').value;
         const searchMovieText = document.getElementById('searchText').value;
         const encodeText = encodeURIComponent(searchMovieText);
-        window.location.href = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}`;
+
+        let searchUrl = null
+        if (!searchMovieText) {
+            alert("검색어를 입력하세요.");
+            return;
+        }
+        if (searchType === "movieNm") {
+            searchUrl += `&movieNm=${encodeText}`;
+        } else if (searchType === "directorNm") {
+            searchUrl += `&directorNm=${encodeText}`;
+        } else if (searchType === "repGenreNm") {
+            searchUrl += `&repGenreNm=${encodeText}`;
+        }
+        searchUrl = `${urlConfig.baseUrl}/movieInfoMain/search?searchText=${encodeText}&type=${searchType}`
+
+        console.log("Search URL:", searchUrl)
+        window.location.href = searchUrl
     }
 
 

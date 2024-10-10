@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.naming.directory.SearchResult;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -22,27 +23,32 @@ public class MovieSearchService {
     private final String baseUrl = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
     private final String key = "1d0c83284fa09d1173eb87e683c896ee";
 
-    public List<MovieList> searchMovie(String movieName) {
+    public List<MovieList> searchMovie(String searchText , String type) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("key", key);
-        // 영화명이 주어진 경우, 쿼리 파라미터에 추가
-        Optional.ofNullable(movieName)
-                .filter(parameter -> !parameter.isBlank())
-                .ifPresent(parameter -> uriBuilder.queryParam("movieNm", movieName));
+        uriBuilder.queryParam("type", type);
 
-        // 감독명이 주어진 경우, 쿼리 파라미터에 추가
-//        Optional.ofNullable(directorName)
-//                .filter(parameter -> !parameter.isBlank())
-//                .ifPresent(parameter -> uriBuilder.queryParam("directorNm", directorName));
-        //각각의 파라미터를 합쳐서 url로 만들어서 호출 
+        switch (type) {
+            case "movieNm":
+                uriBuilder.queryParam("movieNm", searchText);
+                break;
+            case "directorNm":
+                uriBuilder.queryParam("directorNm", searchText);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid search type: " + type); // 잘못된 타입 처리
+        }
+
         //restTempate 은 한글과 같은 비아스키 코드는 인식을 못하므로 인코딩 가능하도록 설정
-        URI url = uriBuilder.encode().build().toUri();
+        URI url = uriBuilder.build().toUri();
+        log.info("API Request URL:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: " + url);
 
         try {
             MovieListResponseDto response = restTemplate.getForObject(url, MovieListResponseDto.class);
             if (response != null && response.getMovieListResult() != null) {
                 System.out.println("response.getMovieListResult().getMovieList():::::::::::"+ response.getMovieListResult().getMovieList());
-                return response.getMovieListResult().getMovieList();
+                List<MovieList> results = response.getMovieListResult().getMovieList();
+                return results.stream().limit(10).toList();
             }
             System.out.println("response.toString():::::::::::::::::::::::::::::::::::::::::::"+response.toString() );
         } catch (Exception e) {
